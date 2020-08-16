@@ -1,0 +1,9 @@
+@media (max-width: 767px){
+    
+}
+@media (min-width: 991px){
+	.sidebar {
+    	display: block;
+    	box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35);
+	}	
+}
