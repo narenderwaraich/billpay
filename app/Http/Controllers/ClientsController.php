@@ -17,9 +17,36 @@ use Toastr;
 
 class ClientsController extends Controller
 {
-   public function __construct(){
-     $this->middleware('auth');
-   }
+   // public function __construct(){
+   //   $this->middleware('auth');
+   // }
+
+  public function findClient(){
+     return view('find-client');
+  }
+  public function findClientData(Request $request){
+    $phone = $request->phone;
+    $route = "/find-client/".$phone; //dd($route);
+    return redirect()->to($route);
+  }
+
+  public function findClientDataDetails($phone){
+    $client = Clients::where('phone',$phone)->first();
+    $country_data =DB::table('countries')->select('id','name')->get();
+    $state_data = DB::table("states")->select('id','name')->get();
+    $city_data = DB::table("cities")->select('id','name')->get();
+    if($client){
+      return view('client',compact('client','phone','country_data','state_data','city_data'));
+    }else{
+      dd($client);
+      return view('new-client',compact('phone','country_data','state_data','city_data'));
+    }
+  }
+
+  public function newClient(){
+     return view('new-client');
+  }
+
     public function addClient(){
       if(Auth::user()->role == 'user'){
         if(!Auth::user()->is_activated == 'true'){
@@ -114,30 +141,13 @@ class ClientsController extends Controller
                                 Redirect::back()->withInput();
                                           } 
 
-                              $data = request(['fname','lname','email','email2','address','zipcode','city','country','state']);
-                              if($request->companies_id == "new"){
-                                Toastr::error("Please select or add Company", 'Error', ["positionClass" => "toast-top-right"]);
-                                // Redirect::back()->withInput();
-                                return back();
-                              }else{
-                                if($request->companies_id){
-                                $companyId = $request->companies_id;
-                                $data["companies_id"] = $companyId;
-                              }else{
-                                $CompanyData['name'] = $request->fname;
-                                $CompanyData['user_id'] = Auth::id();
-                                $CompanyData['created_at'] = Carbon::now();
-                                $CompanyData['updated_at'] = Carbon::now();
-                                $compny_id = DB::table('user_companies')->insertGetId($CompanyData);
-                                $data["companies_id"] = $compny_id;
-                              }
+                              $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']);
                               
-                              $data['user_id'] = Auth::id();
+                              $data['user_id'] = 1;//Auth::id();
                               $client=Clients::create($data);
                               Toastr::success('Client Add', 'Success', ["positionClass" => "toast-bottom-right"]);
 
                               return redirect()->to('/client/view');
-                              }
                               
                         }
                          public function showClient(){
@@ -201,14 +211,8 @@ class ClientsController extends Controller
                               ]); 
                               
                                $userId = Auth::id();
-                              if($request->logo){ 
-                                   $imageName = time().'.'.request()->logo->getClientOriginalExtension();
-                                    request()->logo->move(public_path('company_logo'), $imageName); 
-                                    UserCompany::updateOrCreate(['id' => $request->companies_id], ['logo' => $imageName]); 
-                                 }
-                                   UserCompany::updateOrCreate(['id' => $request->companies_id], ['name' => $request->name]);
                                   
-                              $data = request(['fname','lname','email','email2','address','zipcode','companies_id','city','country','state']);
+                              $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']);
                               $data = Clients::where('id',$id)->update($data);
                               Toastr::success('Client Updated', 'Success', ["positionClass" => "toast-bottom-right"]);
                               return redirect()->to('/client/view');

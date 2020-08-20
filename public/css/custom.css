@@ -776,7 +776,7 @@ p.description {
     text-align: center;
 }
 .card-user hr {
-    margin: 5px 15px;
+    margin: 10px 15px;
 }
 .home-logo{
     margin-top: 60px;
@@ -858,4 +858,23 @@ p.description {
     color: #e91e63;
     font-size: 22px;
     font-weight: 400;
+}
+.client-data {
+    text-align: left;
+    color: #757575;
+    font-weight: 500;
+    margin-left: 15px;
+    font-size: 12px;
+    display: none;
+}
+.add-btn{
+    width: 80%;
+    background-color: white;
+    color: grey; 
+    border: 1px dashed;
+    margin: 20px auto 35px;
+    display: block;
+}
+.focus-border:focus{
+    border: 2px dashed #e91e63 !important;
 }

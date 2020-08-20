@@ -80,17 +80,12 @@ Route::post('SignUp','RegistrationsController@signUpStore');
 Route::get('/Re-Send-Confirm-link','RegistrationsController@reSendConfirmMail');
 Route::get('/confirm_login/{token?}','RegistrationsController@showLoginForm');
 
-//Company
-Route::post('Company','CompanyController@store');
-Route::post('add-company','CompanyController@storeCompany');
-Route::get('/Company','CompanyController@create');
-Route::get('/ShowCompany','CompanyController@showCompany');
-Route::get("/getCompany", 'CompanyController@getCompany');
-Route::resource('Delete','CompanyController');
-Route::get('/update-company/{id}','CompanyController@editCompany');
-Route::post('update-company/{id}','CompanyController@updateCompany');
 
 //Client Controller
+Route::get('/find-client','ClientsController@findClient');
+Route::post('find-client','ClientsController@findClientData');
+Route::get('/find-client/{phone}','ClientsController@findClientDataDetails');
+Route::get('/add-client','ClientsController@newClient');
 Route::post('client','ClientsController@store');
 Route::get('/client','ClientsController@addClient');
 Route::get('/client/view','ClientsController@showClient');
@@ -109,7 +104,7 @@ Route::post('pay-payment','ClientPaymentController@storePayPage');
 
 
 /// Invoice Controller
-Route::get('/invoice','InvoiceController@addInvoice');
+Route::get('/invoice/{clientId}','InvoiceController@addInvoice');
 Route::post('invoice','InvoiceController@storeInvoice');
 
 Route::get('/invoice/view','InvoiceController@showInvoice'); 

@@ -30,42 +30,23 @@ use ZipArchive;
 
 class InvoiceController extends Controller
 {
-    public function addInvoice(){
-      if(Auth::check()){
-            if(Auth::user()->role == 'user'){
-              if(!Auth::user()->is_activated == 'true'){
-                Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
-                  return back();
-              }else{
+    public function addInvoice($clientId){
+      // if(Auth::check()){
+      //       if(Auth::user()->role == 'user'){
+      //         if(!Auth::user()->is_activated == 'true'){
+      //           Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
+      //             return back();
+      //         }else{
                     $id = Auth::id();
-                    $clients = Clients::where('user_id', $id)->get();
-                    $companies = UserCompany::where('user_id', $id)->get();
-                    $clientDD = [ ];
-                    $i=0;
-                    foreach ($clients as $client) {
-
-                      foreach ($companies as $company) {
-                        if($company->id == $client->companies_id)
-                        {
-                          $clientDD[$i]['fname']=$client->fname;
-                          $clientDD[$i]['lname']=$client->lname;
-                          $clientDD[$i]['id']=$client->id;
-                          $clientDD[$i]['email']=$client->email;
-                          $clientDD[$i]['logo']=$company->logo;
-                          $clientDD[$i]['name']=$company->name;
-                          $clientDD[$i]['companies_id']=$client->companies_id;
-                          $i++;
-                        }
-                      }
-                    }
-                    return view('Invoice',['clients' => $clients,'clientDD'=>$clientDD]);
-                  }
-            }else{
-              return redirect()->to('/dashboard');
-            }
-          }else{
-                  return redirect()->to('/login');
-                  }
+                    $client = Clients::find($clientId);
+                    return view('Invoice',['client' => $client]);
+          //         }
+          //   }else{
+          //     return redirect()->to('/dashboard');
+          //   }
+          // }else{
+          //         return redirect()->to('/login');
+          //         }
     }
    
 

@@ -9,7 +9,7 @@ use App\Invoice;
 
 class Clients extends Model
 {
-     protected $fillable = ['fname','lname','email','email2','country','city','state','address','zipcode','user_id','companies_id',];
+     protected $fillable = ['fname','lname','email','phone','country','city','state','address','zipcode','user_id'];
 
      public function user()
 		{

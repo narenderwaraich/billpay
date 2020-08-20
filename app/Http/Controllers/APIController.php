@@ -19,8 +19,10 @@ class APIController extends Controller
     }
     public function getCityList(Request $request)
     {
+        $stateName =$request->state_id;
+        $id = DB::table("states")->where("name",$stateName)->pluck("id");
         $cities = DB::table("cities")
-                    ->where("state_id",$request->state_id)
+                    ->where("state_id",$id)
                     ->pluck("name","id");
         return response()->json($cities);
     }
