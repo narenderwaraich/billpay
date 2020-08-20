@@ -52,7 +52,7 @@ class InvoiceController extends Controller
 
                            //// Send or Save Invoice data
                     public function storeInvoice(Request $request){ 
-                      // dd(Input::all());
+                       //dd(Input::all());
                           $this->validate(request(),[
                                 'tax_rate'=>'required|string|max:16',
                                 'client_id'=>'required|string|max:50',
@@ -60,7 +60,7 @@ class InvoiceController extends Controller
 
                              $invo = new Invoice();
           
-                             $userId = Auth::id(); 
+                        $userId = Auth::id(); 
                         $lastInvoiceID = Invoice::where('user_id', $userId)->orderBy('id', 'DESC')->pluck('invoice_number')->first();
                         //dd($lastInvoiceID);
                         if($lastInvoiceID){
@@ -83,10 +83,9 @@ class InvoiceController extends Controller
                         }
                         
 
-                                  $data = request(['tax_rate','notes','terms','net_amount','client_id','discount','due_amount','sub_total','taxInFlat','disInFlat','disInPer','taxInPer','payment_mode']);
+                                $data = request(['tax_rate','notes','terms','net_amount','client_id','discount','due_amount','sub_total','taxInFlat','disInFlat','disInPer','taxInPer','payment_mode']);
 
-                                  $companies_id = explode(",", $data['client_id'])[1];
-                                  $clientsId = explode(",", $data['client_id'])[0];
+                                  
                                 $InvoiceNo = $newInvoiceID; 
                                 $str = $newInvoiceID;
                                 $invoiceToken = md5($str);
@@ -101,8 +100,6 @@ class InvoiceController extends Controller
                                 $data['issue_date'] = $isuDate;
                                 $data['created_at']= now();
                                 $data['updated_at']= now();
-                                $data['companies_id'] = $companies_id;
-                                $data['client_id'] = $clientsId;
 
                                 if($request->deposit_amount){
                                   $data['deposit_amount'] = $request->deposit_amount;

@@ -878,3 +878,82 @@ p.description {
 .focus-border:focus{
     border: 2px dashed #e91e63 !important;
 }
+.in-label{
+    top: 19px;
+    left: 48px;
+    position: absolute;
+}
+.in-label2{
+    top: 60px;
+    left: 48px;
+    position: absolute;
+}
+.input-div{
+    position: absolute;
+    top: 17px;
+    /* left: 47px; */
+    right: 30px;
+    width: 100px;
+   /* border:1px solid #e91e63 !important;*/
+    border-radius: 6px !important;
+}
+.input-div2{
+    top: 60px;
+    position: absolute;
+    right: 30px;
+    
+}
+.add-discount-modal .modal-header {
+    border-bottom: 1px solid #e91e63 !important;
+    display: block !important;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 200;
+    padding: 10px !important;
+}
+.add-discount-modal .modal-btn{
+    background-color: #e91e63;
+    color: #fff;
+    width: 95px;
+}
+.add-discount-modal .modal-footer {
+    display: contents !important;
+    border-top: 1px solid #e91e63 !important;
+}
+.add-discount-modal .modal-content{
+    height: 240px !important;
+}
+.radio-btn{
+    position: absolute;
+    top: 17px;
+    left: 20px;
+}
+.radio-btn2{
+    position: absolute;
+    top: 58px;
+    left: 20px;
+}
+.close {
+    font-size: 3.5rem !important;
+    color: #524F62 !important;
+    font-weight: 300 !important;    
+}
+.dis-tax-modal input:focus{
+    outline: none !important;
+    color: #e91e63;
+    background-color: transparent !important;
+    border-color: #e91e63 !important;
+    box-shadow: none !important; 
+}
+.dis-tax-modal{
+    position: relative;
+}
+.dis-model-input{
+      width: 100px !important;
+      border: 1px solid #dadce0 !important;
+    border-radius: 4px !important;
+    padding: 0px 5px;
+}
+button#refresh {
+    border: 1px solid #e91e63;
+}

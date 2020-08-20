@@ -38,7 +38,6 @@ class ClientsController extends Controller
     if($client){
       return view('client',compact('client','phone','country_data','state_data','city_data'));
     }else{
-      dd($client);
       return view('new-client',compact('phone','country_data','state_data','city_data'));
     }
   }
@@ -143,7 +142,7 @@ class ClientsController extends Controller
 
                               $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']);
                               
-                              $data['user_id'] = 1;//Auth::id();
+                              $data['user_id'] = Auth::id();
                               $client=Clients::create($data);
                               Toastr::success('Client Add', 'Success', ["positionClass" => "toast-bottom-right"]);
 

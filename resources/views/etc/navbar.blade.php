@@ -4,20 +4,34 @@
     <a href="#" class="simple-text logo-mini">
       Mob
     </a>
-    <a href="index.html" class="simple-text logo-normal">
+    <a href="/dashboard" class="simple-text logo-normal">
       Dashboard
     </a>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
     <ul class="nav">
-      <li class="active ">
-        <a href="index.html">
+      <li class="{{ (request()->is('dashboard')) ? 'active' : '' }} {{ (request()->is('dashboard/*')) ? 'active' : '' }}">
+        <a href="/dashboard">
           <i class="menu-icon fa fa-dashboard"></i>
           <p>Dashboard</p>
         </a>
       </li>
+
+      <li class="{{ (request()->is('client')) ? 'active' : '' }} {{ (request()->is('client/*')) ? 'active' : '' }}">
+        <a href="/dashboard">
+          <i class="menu-icon fa fa-users"></i>
+          <p>Client</p>
+        </a>
+      </li>
+
+      <li class="{{ (request()->is('invoice')) ? 'active' : '' }}{{ (request()->is('invoice/*')) ? 'active' : '' }}">
+        <a href="/dashboard">
+          <i class="menu-icon fa fa-id-badge"></i>
+          <p>Invoice</p>
+        </a>
+      </li>            
       <li>
-        <a href="user.html">
+        <a href="/profile">
           <i class="menu-icon fa fa-user"></i>
           <p>User</p>
         </a>
