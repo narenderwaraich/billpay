@@ -33,7 +33,7 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input name="phone" type="text" id="phone" value="{{$client->phone}}" class="form-control" disabled="">
+                        <input name="phone" type="text" id="phone" value="{{$client->phone}}" class="form-control">
                         <label>Mobile</label>
                       </div>
                     </div>

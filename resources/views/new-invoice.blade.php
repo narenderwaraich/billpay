@@ -66,7 +66,7 @@
           <div class="card-body">
             <button type="submit" class="btn btn-success btn-lg">Save</button>
             <button type="button" class="btn btn-info btn-lg">Print</button>
-            <button type="button" class="btn btn-danger btn-lg">Cancel</button>
+            <a href="/dashboard"><button type="button" class="btn btn-danger btn-lg">Cancel</button></a>
           </div>
         </div>
       </div>
@@ -340,8 +340,6 @@
   }
 </style>
 
-    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
-    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
 <script>
   var nowDate = new Date();

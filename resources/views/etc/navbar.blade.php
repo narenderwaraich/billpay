@@ -18,15 +18,15 @@
       </li>
 
       <li class="{{ (request()->is('client')) ? 'active' : '' }} {{ (request()->is('client/*')) ? 'active' : '' }}">
-        <a href="/dashboard">
+        <a href="/client/view">
           <i class="menu-icon fa fa-users"></i>
           <p>Client</p>
         </a>
       </li>
 
       <li class="{{ (request()->is('invoice')) ? 'active' : '' }}{{ (request()->is('invoice/*')) ? 'active' : '' }}">
-        <a href="/dashboard">
-          <i class="menu-icon fa fa-id-badge"></i>
+        <a href="/invoice/view">
+          <i class="menu-icon fa fa-files-o"></i>
           <p>Invoice</p>
         </a>
       </li>            
@@ -34,6 +34,12 @@
         <a href="/profile">
           <i class="menu-icon fa fa-user"></i>
           <p>User</p>
+        </a>
+      </li>
+      <li>
+        <a href="/logout">
+          <i class="menu-icon fa fa-sign-out"></i>
+          <p>LogOut</p>
         </a>
       </li>
     </ul>

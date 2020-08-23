@@ -12,28 +12,33 @@
     <div class="col-lg-4">
       <div class="card card-chart">
         <div class="card-header">
-          <h5 class="card-category">Global Sales</h5>
-          <h4 class="card-title">Shipped Products</h4>
-          <div class="dropdown">
-            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
-              <i class="now-ui-icons fa fa-gear"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-              <a class="dropdown-item text-danger" href="#">Remove Data</a>
-            </div>
-          </div>
+          <h5 class="card-category">Genrate Bill</h5>
+          <h4 class="card-title">Invoice</h4>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="lineChartExample"></canvas>
+            <br><br>
+              <form action="/find-client" method="post" style="width: 70%;margin: auto;">
+                  {{ csrf_field() }}
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <input type="text" name="phone" class="form-control">
+                        <label>Mobile</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-info" style="margin-left: 15px;width: 100px;">Enter</button>
+                      </div>
+                    </div>
+                  </div>
+              </form>
           </div>
         </div>
         <div class="card-footer">
           <div class="stats">
-            <i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+            <i class="now-ui-icons arrows-1_refresh-69"></i> Today Genrate Bill
           </div>
         </div>
       </div>

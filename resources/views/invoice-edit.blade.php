@@ -1,201 +1,271 @@
 @extends('layouts.app')
 @section('content')
-<form action="{{action('InvoiceController@updateInvoices',$id) }}" method="post" id="MailData">
-  {{ csrf_field() }}
-    <div class="row">
-      <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-4">
-      <span class="clients-title">EDIT INVOICE {{$inv->invoice_number}}</span> 
-      </div>
-
-      <div class="col-12 col-sm-8 col-md-6 col-lg-7 col-xl-8">
-         <div class="top-btn">
-            <a href="{{ (request()->is('invoice/*')) ? '/invoice/view' : '/dashboard' }}"><button type="button" class="save-btn"><img src="/images/invoice-icons/cancel_btn.svg" class="form-top-btn-icon"><img src="/images/invoice-icons/cancel_btn-active.svg" class="form-top-btn-icon">
-              <span class="form-top-btn-icon-title">Cancel</span></button></a>
+<!-- top header -->
+<div class="panel-header panel-header-sm">
               
-            <a href="#"><button type="submit" class="save-btn"><img src="/images/invoice-icons/save-invoice-icon.svg" class="form-top-btn-icon"><img src="/images/invoice-icons/save-invoice-icon-active.svg" class="form-top-btn-icon"><span class="form-top-btn-icon-title">Save</span></button></a> 
+</div>
+<!-- end header    -->
+<!-- content section -->
+<div class="content">
+  <form action="{{action('InvoiceController@updateInvoices',$id) }}" method="post" autocomplete="">
+    {{ csrf_field() }}
+    <input type="hidden" name="client_id" value="{{$client->id}}">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card card-user">
+            <div class="image">
+                <img src="/images/bg.jpg" alt="">
+            </div>
+          <div class="card-body">
+              <div class="author">
+                <a href="#">
+                  <img class="avatar border-gray" src="/images/icon/user.jpg" alt="Client">
+                  <h5 class="title"><span id="first_name">{{$client->fname}}</span> <span id="last_name">{{$client->lname}}</span></h5>
+                </a>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-9">
+                    <div class="client-data" id="client_email">Email : <span id="client_email_data">{{$client->email}}</span></div>
+                    <div class="client-data" id="client_phone">Phone : <span id="client_phone_data">{{$client->phone}}</span></div>
+                    <div class="client-data" id="client_country">Country : <span id="client_country_data">{{$client->country}}</span></div>
+                    <div class="client-data" id="client_state">State : <span id="client_state_data">{{$client->state}}</span></div>
+                    <div class="client-data" id="client_city">City : <span id="client_city_data">{{$client->city}}</span></div>
+                    <div class="client-data" id="client_zip">ZipCode : <span id="client_zip_data">{{$client->zipcode}}</span></div>
+                    <div class="client-data" id="client_address">Address : <span id="client_address_data">{{$client->address}}</span></div>
+                  </div>
+                  <div class="col-lg-3">
+                    <br>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <input type="text" name="issue_date" value="{{ date('m/d/Y', strtotime($inv->issue_date)) }}" id="datepicker"  class="form-control datePick" width="150" />
+                          <label style="z-index: 2;">ISSUE DATE</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <input type="text" name="due_date" value="{{ date('m/d/Y', strtotime($inv->due_date)) }}" id="datepicker2" width="150" class="form-control datePick" />
+                          <label style="z-index: 2;">DUE DATE</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div> <!-- end row -->
-  <div class="row  edit-inv-area">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="row">  
-                
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-4">
-                    <div class="drop-down">
-                        <select id="client-div" name="client_id">
-                            @foreach ($clientDD as $client)     
-                             <option style="background-image:url('/company_logo/{{$client['logo']}}');background-size:20px" class="en icon_img" value="{{ $client['id'] }}, {{ $client['companies_id'] }}"
-                             {{ ( $client['id']== $inv->client->id) ? 'selected' : '' }} 
-                             >{{ $client['fname']}} {{ $client['lname']}}, {{$client['email']}}</option>
-                            @endforeach             
-                        </select>             
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-4 mob-date-div">
-                    <div class="edit-inv-date-title">ISSUE DATE</div>
-                    <div class="inv-date"><input type="text" name="issue_date" id="datepicker" value="{{ date('m/d/Y', strtotime($inv->issue_date)) }}" class="datePick" width="150" />
-                    <!-- <input type="text" name="" class="date-input" id="datepicker"><span><i class="fa fa-calendar clender-icon"></i></span>  --></div>
-                    <div class="edit-inv-date-title">DUE DATE</div>
-                    <div class="inv-date"><input type="text" name="due_date" value="{{ date('m/d/Y', strtotime($inv->due_date)) }}" id="datepicker2" width="150" class="datePick" />
-                    <!-- <input type="text" name="due_date" class="date-input"><span><i class="fa fa-calendar clender-icon"></i></span> --></div>
-                </div>
-
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                    <div id="hiddnbox">
-                      <div class="inv-name"><span id="fn">{{$inv->client->fname}}</span>&nbsp;<span id="ln">{{$inv->client->lname}}</span></div>
-                      <div id="companyName" class="copmany-name">{{$inv->companies->name}}</div>
-                      <div class="inv-email" id="em">{{$inv->client->email}} </div>
-                        <div>
-                            <div class="col-3 col-sm-2 col-md-4 col-lg-4 col-xl-4">
-                              <img src="/company_logo/{{$inv->companies->logo}}" class="edit-inv-logo" id="companyLogo">
-                              <div id="clientImage" style="display: none;"></div>
-                            </div>
-                            <div class="col-9 col-sm-10 col-md-8 col-lg-8 col-xl-8">
-                              <div class="inv-address" id="ad">{{$inv->client->address}}</div>
-                              <div class="inv-city" id="ci">{{$inv->client->city}}</div>
-                              <div class="inv-state" id="st">{{$inv->client->state}}</div>
-                              <div class="inv-country" id="cu">{{$inv->client->country}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-sm-12">
-                    <hr class="inv-line">
-                </div>
-            </div>
-          @foreach($invItem as $index => $item)
-            <div class="row .dlt_{{$item->id}} frmCount" id="frm{{ $index }}">
-                <div class="col-12 col-sm-6 col-md-5 col-lg-6 col-xl-6 edit-inv-heading" style="padding-left: 50px;">
-                      <div class="form-group">
-                        <label for="name">Item Description</label>
-                        <input name="arr[{{$index}}][item_name]" type="text" value="{{$item->item_name}}" class="form-control input-filed input-border" placeholder="Enter-item-Name" required>
-                        <textarea  class="form-control input-filed input-border" rows="2" id="comment" name="arr[{{$index}}][item_description]"  placeholder="Enter-item-description" required>{{$item->item_description}}</textarea>
-                      </div>
-                </div>
-          
-                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 edit-inv-heading">
-                        <div class="form-group">
-                          <label for="rate">Rate</label>
-                          <input min="0" id="rate{{ $index }}" name="arr[{{$index}}][rate]"  value="{{$item->rate}}" type="text" class="form-control input-amt input-border" placeholder="Rate" onkeyup="calc(this, {{ $index }})"   required>
-                        </div>
-                  </div>
-                  <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 edit-inv-heading">
-                          <div class="form-group">
-                            <label for="qty">Quantity</label>
-                            <input min="0" id="qty{{ $index }}" name="arr[{{$index}}][qty]" type="text" value="{{$item->qty}}" class="form-control input-amt input-border" placeholder="Quantity" onkeyup="calc(this, {{ $index }})" required>
-                          </div>
-                  </div>
-                  <div class="col-12 col-sm-2 col-md-3 col-lg-2 col-xl-2 edit-inv-heading">
-                          <p>Line Total</p>
-                            <strong>$ <input type="text" readonly name="arr[{{$index}}][total]" onkeyup="calc(this, {{ $index }})"  class="tot input-calculation input-amt"  id="total{{ $index }}" value="{{$item->total}}" style="border: 0px solid;"></strong>
-                              <span>       
-                                  <i class="fa fa-trash fa-lg btn_remove delete-Item" DeleteId="{{$item->id}}" style="font-size: 22px; color: red;cursor: pointer;" name="remove" id="{{ $index }}"></i>
-                              </span>
-                  </div>
-
-                    <input type="hidden" name="arr[{{$index}}][invoice_id]"  value='{{$item->invoice_id}}'>
-                    <input type="hidden" name="arr[{{$index}}][item_id]" value='{{$item->id}}'>
-
-                </div>
-                @endforeach
-                <input type="hidden" name="delete_id" id="storeId">
-          
-            <div class="row">
-                <div id="dynamic_field" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row-remove-pad dynamic-added-padding"></div>
-            </div>
-              <div class="row">
-                  <button data-total-items="{{ $index + 1 }}" type="button" name="add" id="addForm" class="btn add-btn remove-top focus-border"><i class="fa fa-plus-square"></i> Add a Line</button>
-              </div>
-            <!-- end div form -->
-          
-
-          
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-5 col-lg-6 col-xl-8 row-remove-pad padding-left-invoice edit-inv-heading">
-                            <div class="remove-top" style="margin-top: 50px;">
-                                <div class="form-group">
-                                     <label for="comment">Notes</label>
-                                      <textarea class="form-control input-border" rows="2" id="comment" name="notes" placeholder="Enter notes or bank transfer details (optional)">{{$inv->notes}}</textarea>
-                                </div>
-                            <div class="form-group">
-                             <label for="comment">Terms</label>
-                              <textarea class="form-control input-border" rows="2" id="comment" name="terms"  placeholder="Please write Terms of invoice here. it will go with invoice to client.">{{$inv->terms}}</textarea>
-                            </div>
-                        </div>   
-            </div>
-              <div class="col-12 col-sm-12 col-md-7 col-lg-6 col-xl-4 row-remove-pad">
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 add-inv-heading remove-top" style="margin-top: 50px;">Payment Method</div>
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount remove-top" style="margin-top: 50px;">
-                      <select name="payment_mode" class="form-control input-border" style="width: 110px;text-align: center;" required>
-                        <option value="STRIPE-PAYMENT" {{ $inv->payment_mode == 'STRIPE-PAYMENT' ? 'selected' : ''}}>STRIPE</option>
-                        <option value="BANKWIRE-PAYMENT" {{ $inv->payment_mode == 'BANKWIRE-PAYMENT' ? 'selected' : ''}}>BANK</option>
-                        <option value="OFFLINE-PAYMENT" {{ $inv->payment_mode == 'OFFLINE-PAYMENT' ? 'selected' : ''}}>OFFLINE</option>
-                      </select>
-                    </div>
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading remove-top" style="margin-top: 10px;">Sub Total</div>
-                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount remove-top" style="margin-top: 10px;">$ <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly value="{{$inv->sub_total}}" class="input-calculation" style="outline: none;"></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading"><span>Discount <span class="percentage-text"><input type="text" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount" class="invoice-dis-value-input" readonly></span></span></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ <input name="discount" id="discount" onchange="myFunction()"  readonly value="{{$inv->discount}}" class="input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" style="outline: none;cursor: pointer;"></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading"><span>Tax <span class="percentage-text"><input type="text" name="taxInPer" id="getValuePerTax" value="{{$inv->taxInPer}}" class="invoice-dis-value-input" readonly></span></span></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ <input name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="{{$inv->tax_rate}}" class="input-calculation" data-toggle="modal" data-target="#taxModal" style="outline: none;cursor: pointer;"></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading">Deposit Amount</div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ <input type="text" name="deposit_amount" id="deposit" value="{{$inv->deposit_amount}}"  placeholder="enter-amount" onchange="myFunction()"  class="input-calculation on-focus-border"></div>
-                  <div class="col-sm-12">
-                  <hr class="inv-line-cal">
-                  </div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading">Total Amount</div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">
-                      $ <input type="number" name="net_amount" id="net_amount"  readonly value="{{$inv->net_amount}}" onchange="myFunction()" class="input-calculation" style="outline: none;"></div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading">Amount Paid</div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">
-                      $ <input type="number" name="" id="totalAmount" readonly value="{{ $inv->net_amount - $inv->due_amount }}" class="input-calculation" style="outline: none;"></div> 
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 edit-inv-heading">Net Amount Due</div>
-                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount on-mob-pad-bottom" style="padding-bottom: 20px;">$ <input type="number" name="due_amount" value="{{$inv->due_amount}}" id="duePending"  readonly  onchange="myFunction()" class="input-calculation" style="outline: none;"></div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="title">Action</h5>
+            <hr>
           </div>
+          <div class="card-body">
+            <button type="submit" class="btn btn-success btn-lg">Update</button>
+            <button type="button" class="btn btn-info btn-lg">Print</button>
+            <a href="/dashboard"><button type="button" class="btn btn-danger btn-lg">Cancel</button></a>
           </div>
+        </div>
+      </div>
     </div>
-   </div> 
 
-   <input type="hidden" name="disInFlat" id="getValueFlatDiscount" value="{{$inv->disInFlat}}">
-   <input type="hidden" name="taxInFlat" id="getValueFlatTax" value="{{$inv->taxInFlat}}">
-   
-</form>
+    <!-- Invoice items add section -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="title">Invoice Items</h5>
+            <hr>
+          </div>
+          <div class="card-body">
+            @foreach($invItem as $index => $item)
+            <div class="dlt_{{$item->id}} frmCount" id="frm{{ $index }}">
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <input type="text" name="arr[{{$index}}][item_name]" value="{{$item->item_name}}" class="form-control" required>
+                    <label>Item Name</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input min="0" id="rate{{ $index }}" name="arr[{{$index}}][rate]"  value="{{$item->rate}}" type="text" class="form-control input-amt input-border" onkeyup="calc(this, {{ $index }})" required>
+                    <label>Rate</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input min="0" id="qty{{ $index }}" name="arr[{{$index}}][qty]" type="text" value="{{$item->qty}}" class="form-control input-amt" onkeyup="calc(this, {{ $index }})" required>
+                    <label>Quantity</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input type="text" name="arr[{{$index}}][total]" onkeyup="calc(this, {{ $index }})"  class="tot input-calculation input-amt"  id="total{{ $index }}" value="{{$item->total}}" readonly style="background-color: transparent;">
+                    <label>Total</label>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="form-group">
+                    <span><i class="fa fa-trash btn_remove delete-Item" DeleteId="{{$item->id}}" name="remove" id="{{ $index }}" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;"></i></span>
+                  </div>
+                </div>
+              </div>
+               <div class="row">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <textarea  class="form-control" rows="2" id="comment" name="arr[{{$index}}][item_description]">{{$item->item_description}}</textarea>
+                    <label>Description</label>
+                  </div>
+                </div>
+              </div>
+              <input type="hidden" name="arr[{{$index}}][invoice_id]"  value='{{$item->invoice_id}}'>
+              <input type="hidden" name="arr[{{$index}}][item_id]" value='{{$item->id}}'>
+            </div>
+             @endforeach
+            <input type="hidden" name="delete_id" id="storeId">
 
- 
+              <div class="dynamic-added-padding" id="dynamic_field"></div>
 
-                                  <!-- <div class="modal fade" id="myModal" role="dialog">
-                                      <div class="modal-dialog modal-sm">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <h4 class="modal-title">Send Invoice</h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                          </div>
-                                          <div class="modal-body">
-                                            
-                                            <div class="form-group">
-                                                <label>To</label>
-                                                <input type="text" name="email" readonly value="" id="email" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Additional Email</label>
-                                                <input type="text" name="additional_email" value=""  class="form-control" placeholder="Type email...">
-                                            </div>
-                                         
-                                          </div>
-                                          <div class="modal-footer">
-                                            <span><img src="/images/wait.gif" id="loading" style="height: 65px; display: none;"> </span>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="addOrRemoveEmail('remove')">Close</button>
-                                            <button type="button"  class="btn btn-info" id="saveForm">Send</button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div> -->
-      
-      <!-- discount Modal -->
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="button" name="add" data-total-items="{{ $index + 1 }}"  id="addForm" class="btn add-btn remove-top focus-border"><i class="fa fa-plus-square"></i> Add New Item</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                          <textarea class="form-control" rows="8" name="notes" style="width: 50%;">{{$inv->notes}}</textarea>
+                          <label>Notes (optional)</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                     <div class="form-group">
+                          <textarea class="form-control" rows="8" name="terms" style="width: 50%;">{{$inv->terms}}</textarea>
+                          <label>Terms</label>
+                     </div>
+                   </div>
+                 </div>
+                </div>
+                <div class="col-md-3">
+                   <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 8px;">Payment Method</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;height: unset;width: 75%;" required>
+                        <option value="Cash" {{ $inv->payment_mode == 'Cash' ? 'selected' : ''}}>Cash</option>
+                        <option value="Online" {{ $inv->payment_mode == 'Online' ? 'selected' : ''}}>Online</option>
+                      </select>
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Sub Total</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                       <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->sub_total}}" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Discount</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="discount" id="discount" onchange="myFunction()"  readonly value="{{$inv->discount}}" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                       <label style="margin-top: 6px;">Tax</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="{{$inv->tax_rate}}" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 8px;">Deposit Amount</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="deposit_amount" id="deposit" value="{{$inv->deposit_amount}}" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;width: 75%;"  class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+                 <hr>
+                  <div class="row">
+                   <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Amount Paid</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="number" name="net_amount" id="net_amount" value="{{$inv->net_amount}}"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                   <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Net Amount Due</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="number" name="due_amount" id="duePending"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->due_amount}}" onchange="myFunction()" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+
+
+                </div>
+              </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="disInFlat" id="getValueFlatDiscount" value="{{$inv->disInFlat}}">
+    <input type="hidden" name="taxInFlat" id="getValueFlatTax" value="{{$inv->taxInFlat}}">
+  </form>
+</div>
+
+<!-- discount Modal -->
 <div class="modal fade add-discount-modal" id="discountModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true" data-backdrop="static">
                     <div class="modal-dialog modal-sm dis-mdl" role="document">
                         <div class="modal-content" style="background-color: #fff !important;border-radius: 0.3rem !important;">
@@ -211,7 +281,7 @@
                                 Flat
                               </div>
                               <div class="input-div">
-                                <input type="text" name="disValueFlat" placeholder="0" id="disValueFlat" value="{{$inv->disInFlat}}" class="dis-model-input" onkeyup="myFunction()"  />
+                                <input type="text" name="disValueFlat" placeholder="0" value="{{$inv->disInFlat}}" id="disValueFlat" class="dis-model-input" onkeyup="myFunction()" />
                               </div>
                               <div class="radio-btn2">
                                 <input type="radio" name="dis_type" id="percentage_radio">
@@ -221,7 +291,7 @@
                                 Percentage
                               </div>
                               <div class="input-div2">
-                                <input type="text" name="disValuePer" value="{{$inv->disInPer}}" placeholder="0" id="disValuePer" onkeyup="myFunction()" onchange="myFunction()" class="dis-model-input"  disabled="disabled" />
+                                <input type="text" name="disValuePer" placeholder="0" id="disValuePer" class="dis-model-input" value="{{$inv->disInPer}}" onkeyup="myFunction()" onchange="myFunction()"  disabled="disabled" />
                               </div>
                             </div>
                             <div class="modal-footer" style="display: flex !important;">
@@ -242,24 +312,24 @@
                             </div>
                             <div class="modal-body dis-tax-modal">
                               <div class="radio-btn">
-                                <input type="radio" name="tax_type" id="tax_flat_radio" checked="checked">
+                                <input  type="radio" name="tax_type"  id="tax_flat_radio" checked="checked">
                               </div>
 
                               <div class="in-label">
                                 Flat
                               </div>
                               <div class="input-div">
-                                <input type="text" name="taxValueFlat" placeholder="0" id="taxValueFlat" value="{{$inv->taxInFlat}}" class="dis-model-input" onkeyup="myFunction()"  />
+                                <input type="text" name="taxValueFlat" value="{{$inv->taxInFlat}}" placeholder="0" id="taxValueFlat" class="dis-model-input" onkeyup="myFunction()" />
                               </div>
                               <div class="radio-btn2">
-                                <input type="radio" name="tax_type" id="tax_per_radio">
+                                <input  type="radio" name="tax_type" id="tax_per_radio">
                               </div>
 
                               <div class="in-label2">
                                 Percentage
                               </div>
                               <div class="input-div2">
-                                <input type="text" name="taxValuePer" value="{{$inv->taxInPer}}" class="dis-model-input" placeholder="0" id="taxValuePer" onkeyup="myFunction()" onchange="myFunction()"  disabled="disabled" />
+                                <input type="text" name="taxValuePer" value="{{$inv->taxInPer}}" placeholder="0" id="taxValuePer" class="dis-model-input" onkeyup="myFunction()" onchange="myFunction()" disabled="disabled" />
                               </div>
                             </div>
                             <div class="modal-footer" style="display: flex !important;">
@@ -270,26 +340,283 @@
                 </div>
 
 
-                          
 
-                  <script  src="{{ asset('js/invoice-edit.js') }}"></script> 
+<style>
+  .client-data{
+    display: block;
+  }
+</style>
 
-                  <script>
-                    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-                      $('#datepicker').datepicker({
-                          uiLibrary: 'bootstrap4',
-                          minDate: today,
-                          format: 'mm/dd/yyyy'
-                      });
-                  </script>
-               <script>
-                var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-                      $('#datepicker2').datepicker({
-                          uiLibrary: 'bootstrap4',
-                          minDate: today,
-                          format: 'mm/dd/yyyy'
-                      });
-                  </script>
+<script>
+              //// add multi items
+            $(document).ready(function(){      
+              var postURL = "<?php echo url('Invoice'); ?>";
+              var i=$("#addForm").data('total-items');  
+
+              $('#addForm').click(function(){    
+              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="form-control" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
+                   i++;
+              });
+            });  
+
+
+
+                    $(document).on('click', '.btn_remove', function(){  
+                       var button_id = $(this).attr("id");
+                       var msg = confirm('Are you sure? Delete Items');
+                       var invoiceItemId = $(this).attr("DeleteId");
+                      var currentDelItems = document.getElementById('storeId').value;
+                      var join_selected_values = '';
+                      var itemValue = $('.frmCount');
+                        if(currentDelItems)  
+                        {  
+                          join_selected_values = currentDelItems+","+invoiceItemId;
+                                
+                        }else {
+                          join_selected_values = invoiceItemId;
+                            
+                        }
+                               if(msg){   
+                                if(itemValue.length <=1){
+                                    toastr.error("Items can not Deleted","Sorry");
+                                  }else{
+                                    $('#frm'+button_id+'').remove();
+                                    document.getElementById('storeId').value = join_selected_values;
+                                    myFunction();
+                                  }     
+                               }
+                                 
+                          });  
+
+                        $(document).ready(function(){
+                              var checkDiscountPer = document.getElementById("disValuePer").value;
+                              var checkTaxPer = document.getElementById("taxValuePer").value;
+                              if(checkDiscountPer){
+                                $('#percentage_radio').prop('checked', true);
+                                $("#disValuePer").prop('disabled', false);
+                              }
+                              if(checkTaxPer){
+                                $('#tax_per_radio').prop('checked', true);
+                                $("#taxValuePer").prop('disabled', false);
+                              }
+                            });
+
+
+                        // discount modal radio button enable or disable
+
+                          $('#percentage_radio').on('click', function(e) {
+                               if($(this).is(':checked',true))  
+                               {
+                                $("#disValuePer").prop('disabled', false);
+                                $("#disValueFlat").prop('disabled', true);
+                                $("#disValueFlat").attr('value', '');
+                                document.getElementById('getValueFlatDiscount').value =  '';
+                                document.getElementById("disValueFlat").value = '';
+                               }else{
+                                $("#disValueFlat").prop('disabled', false);
+                                $("#disValuePer").prop('disabled', true);
+                                $("#disValuePer").attr('value', '');
+
+                               }
+                          });
+                          $('#flat_radio').on('click', function(e) {
+                               if($(this).is(':checked',true))  
+                               {
+                                $("#disValuePer").prop('disabled', true);
+                                $("#disValueFlat").prop('disabled', false);
+                                document.getElementById('getValuePerDiscount').value =  '';
+                                document.getElementById("disValuePer").value = '';
+                               }else{
+                                $("#disValueFlat").prop('disabled', true);
+                                $("#disValuePer").prop('disabled', false);
+                               }
+                          });
+
+
+                          // tax modal radio button enable or disable
+
+                          $('#tax_per_radio').on('click', function(e) {
+                               if($(this).is(':checked',true))  
+                               {
+                                $("#taxValuePer").prop('disabled', false);
+                                $("#taxValueFlat").prop('disabled', true);
+                                document.getElementById('getValueFlatTax').value =  '';
+                                document.getElementById("taxValueFlat").value = '';
+                               }else{
+                                $("#taxValueFlat").prop('disabled', false);
+                                $("#taxValuePer").prop('disabled', true);
+                               }
+                          });
+                          $('#tax_flat_radio').on('click', function(e) {
+                               if($(this).is(':checked',true))  
+                               {
+                                $("#taxValuePer").prop('disabled', true);
+                                $("#taxValueFlat").prop('disabled', false);
+                                document.getElementById('getValuePerTax').value =  '';
+                                document.getElementById("taxValuePer").value = '';
+                               }else{
+                                $("#taxValueFlat").prop('disabled', true);
+                                $("#taxValuePer").prop('disabled', false);
+                               }
+                          });
+
+                            
+
+                          //// Calculation form
+                           var rate = 0;
+                            var qty = 0;
+                            var lineTotal = 0;
+                            function calc(obj, i) {
+                                var e = obj.id.toString();
+                                console.log(e);
+                                e = e.slice(0, -1);
+                                if (e == 'rate') {
+                                    rate = Number(obj.value);
+                                    qty = Number(document.getElementById('qty'+i).value);
+                                } else {
+                                    rate = Number(document.getElementById('rate'+i).value);
+                                    qty = Number(obj.value);
+                                }
+                                lineTotal = rate * qty;
+                                var netTotal = lineTotal.toFixed(2);
+                                document.getElementById('total'+i).value = netTotal;
+                                 
+                                myFunction();   
+                            }
+
+                      //// Discount nd tax
+
+                          var total = 0;
+                          var net = 0;
+                          var val = 0;
+                          var discount = 0;
+                          var tax = 0;
+                          var disValuePer = 0;
+                          var taxValuePer = 0;
+                        var disValueFlat = 0;
+                        var taxValueFlat = 0;
+                        var netDiscount =0;
+                        var netTax = 0;
+                        var nowAmount = 0;
+                   
+                    function myFunction() {
+                        var itemTotals = $(".tot");
+                                var subTotal = 0;
+                                for(var i= 0; i < itemTotals.length; i++){
+                                  subTotal += Number(itemTotals[i].value);
+                                  // console.log(subTotal);
+                                }
+                                var nowTotal = subTotal.toFixed(2);
+                                $("#total").val(nowTotal); 
+                              //discount
+                              var disValuePer = document.getElementById("disValuePer").value;
+                              var disValueFlat = document.getElementById("disValueFlat").value;     
+                              //tax
+                              var taxValuePer = document.getElementById("taxValuePer").value;
+                              var taxValueFlat = document.getElementById("taxValueFlat").value;
+
+                              //var due = document.getElementById("deposit").value; //deposit value
+
+                              var total = document.getElementById("total").value;
+                              // var netAmount = document.getElementById("net_amount").value;
+                              if(document.getElementById("flat_radio").checked){
+                                discount = +disValueFlat;
+                                document.getElementById('getValueFlatDiscount').value =  disValueFlat;
+                              }
+                              if(document.getElementById("percentage_radio").checked){
+                                discount = total * disValuePer / 100;
+                                document.getElementById('getValuePerDiscount').value =  disValuePer;
+                              } 
+                              if(document.getElementById("tax_flat_radio").checked){
+                                tax = +taxValueFlat;
+                                document.getElementById('getValueFlatTax').value =  taxValueFlat;
+                              }
+                               if(document.getElementById("tax_per_radio").checked){
+                                  tax = total * taxValuePer / 100;
+                                  document.getElementById('getValuePerTax').value =  taxValuePer;
+                                }
+                                //console.log("Discount :"+discount+" - Tax :"+tax); 
+                                // console.log(total);
+                              net = total - discount + tax; /// Total = subtotal - discount + tax - due
+                                 netDiscount = discount.toFixed(2);
+                                 netTax = tax.toFixed(2);
+                                 nowAmount = net.toFixed(2);
+                              document.getElementById('discount').value = netDiscount; //total discount
+                              document.getElementById('tax_rate').value = netTax; // total tax 
+                              document.getElementById('net_amount').value = nowAmount; /// subtotal - discount + tax = Total
+
+                              /// total - deposit
+                              // var due = document.getElementById("deposit").value; //deposit value
+                              // pending = nowAmount - due;
+                               document.getElementById('duePending').value = nowAmount;
+
+                          }
+
+
+                   //// Show slied discount
+
+                      $('.slideButton').on('click',function() {
+                      $('#showmenu').toggle(
+                          function() {
+                              $('.menu').slideDown("fast");
+                          }
+                      );
+                  });
+                 
+
+                      //// Show slied tax
+      
+                      $('.slideButton2').on('click',function() {
+                      $('#showmenu2').toggle(
+                          function() {
+                              $('.menu2').slideDown("fast");
+                          }
+                      );
+                  });
+                        
+
+                ////Send data & mail
+                        $("#MailData").submit(function(){
+                          if($("select[name='client_id']").val() == ''){
+                            alert("Please select client!");
+                            return false;
+                          }
+                          return true;
+                        });
+                  
+                      // $("#saveForm").click(function(){
+                
+                      //   $("#MailData").submit();
+                      //   $('#loading').show();
+                      // });
+
+
+              function addOrRemoveEmail(action){
+                if(action=='add')
+                  $("#email").val($("#hiddnbox #em").text());
+                else
+                  $("#email").val();
+              }
+
+
+                    /// delete items in edit in voices 
+
+            
+              
+  var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap4',
+        minDate: today,
+        format: 'mm/dd/yyyy'
+    });
+
+  var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#datepicker2').datepicker({
+            uiLibrary: 'bootstrap4',
+            minDate: today,
+            format: 'mm/dd/yyyy'
+        });
+</script>
 
                   
 

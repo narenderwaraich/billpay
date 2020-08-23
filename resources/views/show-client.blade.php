@@ -1,343 +1,289 @@
 @extends('layouts.app')
-@section('content')
-                <div class="col-6 col-sm-4 col-md-4 col-lg-3 col-xl-2" style="padding-top: 15px;">
-                    <h5>Yours Clients</h5>
-                </div> 
-                <div class="col-6 col-sm-8 col-md-8 col-lg-9 col-xl-10 view-page-add-btn">
-                 <a href="/client"><button type="button" class="btn add-client-btn"><img src="/images/invoice-icons/add-client-icon.svg"><img src="/images/invoice-icons/add-client-icon-active.svg"></button></a>
-                </div>
-                
-
-                <div class="search-bar">
-                  <form action="/client/search" method="POST" id="SearchData" role="search" autocomplete="off">
+@section('content')  
+<!-- top header -->
+<div class="panel-header panel-header-sm">
+              
+</div>
+<!-- end header    -->
+<!-- content section -->
+  <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card client-show-card">
+              <div class="card-header">
+                <h4 class="card-title">Invoices</h4>
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+                      <i class="now-ui-icons fa fa-gear"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item editClient" href="#" id="editButton" style="display: none;">Edit</a>
+                      <a class="dropdown-item text-danger dropdown-item delete_all" href="#">Remove</a>
+                    </div>
+                  </div>
+              </div>
+              <div class="card-body">
+                 <form action="/client/search" method="POST" id="SearchData" role="search" autocomplete="off">
                     {{ csrf_field() }}
-                  <div class="col-xs-3 col-sm-12 col-md-3 col-lg-3 col-xl-2" style="clear: both;">
-                    <div class="dropdown btn-move">
-                      <button type="button" class="btn dropdown-toggle action-btn mobile-view-action-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="action-btn" disabled="disabled">
-                        ACTIONS <span class="caret"></span>
-                      </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item action-list editClient" href="#" id="editButton" style="display: none;">EDIT</a>
-                        <a class="dropdown-item  action-list delete_all" href="#">DELETE</a>
+                <div class="row">
+                  <div class="col-md-2">
+                    <input type="hidden" name="start" id="reqStartDate">
+                    <input type="hidden" name="end" id="reqEndDate">
+                      <div class="form-group">
+                        <input type="text" id="datepicker"  class="form-control datePick" width="150" />
+                        <label style="z-index: 2;">FROM</label>
                       </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <input type="text" id="datepicker2" width="150" class="form-control datePick" />
+                      <label style="z-index: 2;">TO</label>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-12 col-md-5 col-lg-6 col-xl-8">
-                    
-                  <input type="text" name="q" value="{{request('q')}}" id="search" class="form-control serach-input" placeholder="Search by client name, company Name">
+                  <div class="col-md-8">
+                      <div class="input-group">
+                        <input type="text" name="q" value="{{request('q')}}" id="search" class="form-control serach-input" placeholder="Search by client name">
+                        <div class="input-group-append">
+                          <button class="btn btn-secondary search-btn-css" type="submit">
+                            <i class="fa fa-search"></i>
+                          </button>
+                          <a href="/client/view">
+                            <button class="btn btn-warning clear-btn-css" id="clear-btn" type="button">
+                              <i class="fa fa-undo"></i>
+                            </button>
+                          </a>
+                        </div>
+                      </div>
                   </div>
-                  <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2 search-icon-div row-remove-pad m-t-15">
-                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <input  name="start" id="datepicker"  class="datePick" width="2" />
-                          <span class="cle-icon-title from-label">From</span>
-                      </div>
-                      <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                        <input  name="end" id="datepicker2"  class="datePick" width="2" />
-                          <span class="cle-icon-title2">To</span>
-                      </div>
-                      <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                         <button type="submit" class="search-btn" id="searchBtn"><img src="/images/search_btn.png"><span class="search-icon-title">Search</span></button>
-                      </div>
-                      <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                         <a href="/client/view"><button type="button" class="clear-btn-icon" id="clear-btn"><img src="/images/delete-invoice-icon.svg" width="34px"> <br><span class="clear-icon-title">Clear</span></button></a>
-                    </div>
-                    </div>
-                </form>
-              </div> <!-- end row -->
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="show-result-data">
-                  <div class="show-result"><span class="hide-data-mobile-view">From</span><span>
-                      <input type="text" readonly name="" value="{{request('start')}}" id="reqStartDate"> </span><span class="hide-data-mobile-view">To </span><span><input type="text" value="{{request('end')}}" readonly name="" id="reqEndDate"></span>
-                    </div>
                 </div>
-                  <div class="col-xs-6 col-md-12 col-sm-12 result-status">
-                    @if(isset($message))
+                </form>
+                <div class="row">
+                  <div class="col-md-12">
+                     @if(isset($message))
                          <p>{{ $message }}</p>
-                    @endif
-                    <!-- <span id="record">@if( ! empty( $total_row)) {{ $total_row}} Client found match your search @else Client not found match Your search @endif</span> --></div>
-                
-                <div class="col-sm-12 m-t-35">
-                   <div class="table-responsive">
-                        <table class="table">
-                              <thead>
-                                <tr>
-                                  
-                                  <th scope="col" class="table-heading"><input type="checkbox" id="master">  CLIENT <br>
-                                    <span style="padding-left: 15px;font-weight: 400;">(Name / email)</span></th>
-                                    <th scope="col" class="table-heading">COMPANY</th>
-                                  <th scope="col" class="table-heading hide-data-mobile-view">CREATED DATE</th>
-                                  <th scope="col" class="table-heading">INVOICES RAISED</th>
-                                  <th scope="col" class="table-heading">INVOICED AMOUNT</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                @if(isset($clients))
-                                @foreach ($clients as $key => $client)
-                                <tr id="tr_{{$client->id}}" class="clickable-row" data-href='/client/update/{{$client->id}}' style="cursor: pointer;">
-                                  
-                                  <td scope="row" class="td-inv-name"><input type="checkbox" class="sub_chk" data-id="{{$client->id}}">  {{ $client->fname}}  {{ $client->lname}}<br>
-                                   <span class="td-inv-no">{{ $client->email}}</span></td>
-                                  <td class="td-inv-name">{{ $client->companies->name}}</td>
-                                  <td class="td-inv-name hide-data-mobile-view">{{ $client->created_at->format('m/d/Y') }}</td>
-                                  <td class="td-inv-name"> {{ $client->totalInvoices }}</td>
-                                  <td class="td-inv-name">@if(empty($client->invoiceAmount)) $0 @else ${{ $client->invoiceAmount }} @endif</td>
-                                </tr>
-                                @endforeach
-                              </tbody>
-                            </table>
-                            @if($clients){!! $clients->render() !!}@endif
-          
-                            @endif
-                          </div>
-                       </div>
-                   <center>
-                    @if(isset($invoices))
-                    @foreach ($invoices->take(3) as $invoice)
-                
-                    <div class="col-sm-4">
-                     <div class="invoice-status-box2">
-
-                       <div class="inv-title-text2">{{ $invoice->client->fname }}  {{ $invoice->client->lname }} 
-                      <br>
-                      <div class="em">{{ $invoice->client->email }}</div>
-                      <div class="invoi-company-name">{{ $invoice->companies->name }}</div>
-                       <hr class="inv-box-line">
-                       <div class="amt">Invoiced Amount</div>
-                       <div class="amount-show">${{ $invoice->net_amount}}
-                       <br>
-                       USD </div>
-                       <hr class="inv-box-line">
-                       <div class="amount_PAID">PAID</div>
-                       <div class="tot-amt">${{ $invoice->paidInvAmount}} USD</div>
-                       </div>
-                     </div>
-                   </div>
-           
-                  @endforeach 
+                     @endif
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class=" text-primary">
+                      <th>
+                        <input type="checkbox" id="master">
+                        CLIENT<br>
+                         <span style="font-weight: 400;font-size: 12px;">(Name / email)</span>
+                      </th>
+                      <th>
+                        CREATED DATE
+                      </th>
+                      <th>
+                        INVOICES RAISED
+                      </th>
+                      <th class="text-right">
+                        INVOICED AMOUNT
+                      </th>
+                    </thead>
+                    <tbody>
+                    @if(isset($clients))
+                          @foreach ($clients as $key => $client)
+                      <tr id="tr_{{$client->id}}" class="clickable-row" data-href='/client/update/{{$client->id}}' style="cursor: pointer;">
+                        <td><input type="checkbox" class="sub_chk" data-id="{{$client->id}}">  {{ $client->fname}}  {{ $client->lname}}<br>
+                         <span class="td-inv-no">{{ $client->email}}</span>
+                        </td>
+                        <td>
+                          {{ $client->created_at->format('m/d/Y') }}
+                        </td>
+                        <td>
+                          {{ $client->totalInvoices }}
+                        </td>
+                        <td class="text-right">
+                          @if(empty($client->invoiceAmount)) $0 @else ${{ $client->invoiceAmount }} @endif
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                    @if($clients){!! $clients->render() !!}@endif
                   @endif
-                 </center>
-                   <!-- <div class="col-sm-4">
-                     <div class="invoice-status-box2">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+    <!-- end content section -->
+<script>
+  var nowDate = new Date();
+  var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            // minDate: today,
+             //value: nowDate.getMonth()+1+"/"+nowDate.getDate()+"/"+nowDate.getFullYear(),
+            value: "{{request('start')}}",
+            format: 'mm/dd/yyyy',
+            change: function (e) {
+          $("#reqStartDate").val(e.target.value);
+        }
+        });
 
-                       <div class="inv-title-text2">{{Auth::user()->fname}} {{Auth::user()->lname}}
-                      <br>
-                      <div class="em">{{Auth::user()->email}}</div>
-                       <hr class="inv-box-line">
-                       <div class="amt">Invoiced Amount</div>
-                       <div class="amount-show">123456.40
-                       <br>
-                       USD </div>
-                       <hr class="inv-box-line">
-                       <div class="amount_OVERDUE">Amount Overdue</div>
-                       <div class="tot-amt">458552.00 USD</div>
-                       </div>
-                     </div>
-                   </div>
-                   <div class="col-sm-4">
-                     <div class="invoice-status-box2">
+    var nowDate = new Date(); 
+    nowDate.setDate(nowDate.getDate() + 7);
+    // var mm = nowDate.getMonth();
+    // var y = nowDate.getFullYear();
 
-                       <div class="inv-title-text2">{{Auth::user()->fname}} {{Auth::user()->lname}}
-                      <br>
-                      <div class="em">{{Auth::user()->email}}</div>
-                       <hr class="inv-box-line">
-                       <div class="amt">Invoiced Amount</div>
-                       <div class="amount-show">123456.40
-                       <br>
-                       USD </div>
-                       <hr class="inv-box-line">
-                       <div class="amount_OVERDUE">Amount Overdue</div>
-                       <div class="tot-amt">458552.00 USD</div>
-                       </div>
-                     </div>
-                   </div>
-                  </center> -->
+    // var FormattedDate = dd + '/' + mm + '/' + y;
+    
+  var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#datepicker2').datepicker({
+            uiLibrary: 'bootstrap4',
+            maxDate: today,
+             //value: nowDate.getMonth()+1+"/"+nowDate.getDate()+"/"+nowDate.getFullYear(),
+            value: "{{request('end')}}",
+            format: 'mm/dd/yyyy',
+             change: function (e) {
+            $("#reqEndDate").val(e.target.value);
+          }
+        });
 
-</div> <!-- .content -->
-    </div><!-- /#right-panel -->
-    <style type="text/css">
-      .bk-clr{
-    background: linear-gradient(40deg,#2096ff,#05ffa3)!important;
-    width: auto;
-    height: auto;
-  }
-  .offer-div1{
-    background: #ffffff;
-    width: 250px;
-    height: 300px;
-    border-radius: 20px;
-    border: 2px solid #fff;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-  .offer-div2{
-    background: #ffffff;
-    width: 250px;
-    height: 300px;
-    border-radius: 20px;
-    border: 2px solid #fff;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-  .offer-div3{
-    background: #ffffff;
-    width: 250px;
-    height: 300px;
-    border-radius: 20px;
-    border: 2px solid #fff;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-  }
-  .box-inner-1{
-    padding: 35px;
-    /*background: linear-gradient(to top,#45cafc 0,#303f9f 100%);*/
-    background: linear-gradient(40deg,#45cafc,#303f9f)!important;
-    height: 230px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-  .box-inner-2{
-    padding: 35px;
-    background: linear-gradient(40deg,#ffd86f,#fc6262)!important;
-    height: 230px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-  .box-inner-3{
-    padding: 35px;
-    background: linear-gradient(40deg,#ff6ec4,#7873f5)!important;
-    height: 230px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-  .bok-now-1{
-    color: #0d47a1;
-    text-align: center;
-    padding-top: 18px;
-    font-weight: 700;
-  }
-  .bok-now-2{
-    color: #ff4444;
-    text-align: center;
-    padding-top: 18px;
-    font-weight: 700;
-  }
-  .bok-now-3{
-    color: #9933CC;
-    text-align: center;
-    padding-top: 18px;
-    font-weight: 700;
-  }
-  .title-txt{
-    color: #ffffff;
-    text-align: center;
-    margin-top: 15px;
-    font-weight: 700;
-  }
-  .ofr-txt-title{
-    color: #ffffff;
-  }
+            /// action button 
+    $(document).ready(function () {
 
-  /* Carousel Styles */
-.carousel-indicators .active {
-    background-color: #2980b9;
+          // select all 
+        $('#master').on('click', function(e) {
+         if($(this).is(':checked',true))  
+         {  
+            $(".sub_chk").prop('checked', true);
+            $("#action-btn").prop('disabled', false);
+            $("#sendButton").hide();
+            $("#editButton").hide();
+            $("#action-btn").addClass("add-border-click");
+            //onclick="document.getElementById('taxValueFlat').disabled = false";  
+         } else {  
+            $(".sub_chk").prop('checked',false);
+            $("#action-btn").prop('disabled', true);
+            $("#action-btn").removeClass("add-border-click");  
+         }  
+        });
+
+
+          // action button 
+
+        $(document).on('click','.sub_chk', function(e) {
+          if($(".sub_chk:checked").length ==0){
+            $("#action-btn").prop('disabled', true);
+            $("#action-btn").removeClass("add-border-click");  
+          }else{
+            $("#action-btn").prop('disabled', false);
+            $("#action-btn").addClass("add-border-click");
+          }
+        });
+
+        /// Show Mail send or edit button
+
+          $('.sub_chk').on('click', function(e) {
+         
+            if($(".sub_chk:checked").length >1){
+              $("#editButton").hide();
+            }else{
+              $("#editButton").show();
+            }
+            
+        });
+
+
+          // delete all 
+        $('.delete_all').on('click', function(e) {
+
+
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {  
+                allVals.push($(this).attr('data-id'));
+            });  
+
+
+            if(allVals.length <=0)  
+            {  
+                alert("Please select row.");  
+            }  else {  
+
+
+                var check = confirm("Are you sure you want to delete client?");  
+                if(check == true){  
+
+
+                    var join_selected_values = allVals.join(","); 
+                    console.log(join_selected_values);
+
+
+                    /// Delete all data
+
+                    $.ajax({
+                        url: '/delete-client',
+                        type: 'DELETE',
+                        dataType: 'json',
+                        method : 'post',
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        data: 'ids='+join_selected_values,
+                        success: function (data) {
+                            if (data['success']) {
+                                $(".sub_chk:checked").each(function() {  
+                                    $(this).parents("tr").remove();
+                                });
+                                toastr.success("Client deleted","Success");
+                                location.reload();
+                            } else if (data['error']) {
+                                toastr.error("Clients can not Deleted","Sorry");
+                            } else {
+                                alert('Whoops Something went wrong!!');
+                            }
+                        },
+                        error: function (data) {
+                          toastr.error(data.responseText,"error");
+                            //alert(data.responseText);
+                        }
+                    });
+
+
+                  $.each(allVals, function( index, value ) {
+                      $('table tr').filter("[data-row-id='" + value + "']").remove();
+                  });
+                }  
+            }  
+        });
+     });
+
+
+                                   //// edit loction page
+ 
+
+      $(document).ready(function () {
+        $('.editClient').on('click', function(e) {
+        var allVals = $(".sub_chk:checked").attr('data-id');
+        if($(".sub_chk:checked").length >1)  
+            {  
+                alert("Please select One");  
+            }  else {  
+                                         
+          window.location.href = '/client/update/'+allVals;
+        }
+               
+      });
+    });
+
+       /// hide search button
+if($('#search').val()!=""){
+  $('#clear-btn').show();
+}
+if($('#reqStartDate').val()!=""){
+  $('#clear-btn').show();
 }
 
-.carousel-inner img {
-    width: 100%;
-    max-height: 460px
-}
-
-.carousel-control {
-    width: 0;
-}
-
-.carousel-control.left,
-.carousel-control.right {
-  opacity: 1;
-  filter: alpha(opacity=100);
-  background-image: none;
-  background-repeat: no-repeat;
-  text-shadow: none;
-}
-
-.carousel-control.left span {
-  padding: 15px;
-}
-
-.carousel-control.right span {
-  padding: 15px;
-}
-
-.carousel-control .fa-chevron-left, 
-.carousel-control .fa-chevron-right, 
-.carousel-control .icon-prev, 
-.carousel-control .icon-next {
-  position: absolute;
-  top: 45%;
-  z-index: 5;
-  display: inline-block;
-}
-
-.carousel-control .fa-chevron-left,
-.carousel-control .icon-prev {
-  left: 70px;
-  font-size: 45px;
-}
-
-.carousel-control .fa-chevron-right,
-.carousel-control .icon-next {
-  right: 70px;
-  font-size: 45px;
-}
-
-.carousel-control.left span,
-.carousel-control.right span {
-  background-color: #000;
-}
-
-.carousel-control.left span:hover,
-.carousel-control.right span:hover {
-  opacity: .7;
-  filter: alpha(opacity=70);
-}
-</style>
-     <script  src="{{ asset('js/clientsPage.js') }}"></script>
-     <!-- <script>
-       ///// search client data 
-$(document).ready(function(){
-
- fetch_customer_data();
-
- function fetch_customer_data(query = '')
- {
-  $.ajax({
-   url:"{{ route('client_search.SearchClientData') }}",
-   method:'GET',
-   data:{query:query},
-   dataType:'json',
-   success:function(data)
-   {
-    $('tbody').html(data.table_data);
-   }
-  })
- }
-
- $(document).on('keyup', '#search', function(){
-  var query = $(this).val();
-  if($('#search').val()==""){
-      $('#page').show();
-    }else{
-      $('#page').hide();
+/// on checkboox click only
+jQuery(document).ready(function($) {
+  $(".clickable-row").click(function(e) {
+    if(e.target.tagName != 'INPUT'){
+      window.location = $(this).data("href");
     }
-  fetch_customer_data(query);
- });
+  });
 });
-
-     </script> -->
-
-        
-
-@endsection
-
+</script>
+@endsection 

@@ -39,7 +39,7 @@ class InvoiceController extends Controller
       //         }else{
                     $id = Auth::id();
                     $client = Clients::find($clientId);
-                    return view('Invoice',['client' => $client]);
+                    return view('new-invoice',['client' => $client]);
           //         }
           //   }else{
           //     return redirect()->to('/dashboard');
@@ -240,7 +240,6 @@ class InvoiceController extends Controller
                                   $data['due_amount'] = $inv->net_amount;
                                   $data['sub_total'] = $inv->sub_total;
                                   $data['payment_mode'] = $inv->payment_mode;
-                                  $data['companies_id'] = $inv->companies_id;
                                   $str = $newInvoiceID;
                                   $invoiceToken = md5($str);
                                   $data['invoice_number_token']= $invoiceToken;
@@ -458,19 +457,11 @@ class InvoiceController extends Controller
                               
                             }
 
-                            public function showInvoice(){
+                            public function showInvoiceList(){
                                    $id = Auth::id();
                                    //$invoices = User::find($id)->invoices; 
-                                  $invoices = Invoice::with('user')->where('user_id', $id)->where('is_deleted','=',0)->latest()->paginate(10);
-                                  foreach($invoices as $invoice){
-                                    $invoice->companyName = DB::table("user_companies")->where('id',$invoice->companies_id)->first()->name;
-                                  }
-
-                            return view ('show-invoice')->withInvoices($invoices);
-                                //->with('i', (request()->input('page', 1) - 1) * 5);
-
-                                
-
+                                  $invoices = Invoice::with('user')->where('user_id', $id)->where('is_deleted','=',0)->latest()->paginate(10); //dd($invoices);
+                                return view ('show-invoice',compact('invoices')); 
                             }
 
                             public function editInvoices($id){
@@ -478,32 +469,12 @@ class InvoiceController extends Controller
                                     $user = Auth::id();
                                     $inv = Invoice::find($id); //dd($inv);
                                     $invItem = InvoiceItem::where('invoice_id',$id)->get();
-                                    $clients = Clients::where('user_id', $user)->get(); 
-                                    $companies = UserCompany::where('user_id', $user)->get();
-                                    $clientDD = [ ];
-                                    $i=0;
-                                    foreach ($clients as $client) {
-
-                                      foreach ($companies as $company) {
-                                        if($company->id == $client->companies_id)
-                                        {
-                                          $clientDD[$i]['fname']=$client->fname;
-                                          $clientDD[$i]['lname']=$client->lname;
-                                          $clientDD[$i]['id']=$client->id;
-                                          $clientDD[$i]['email']=$client->email;
-                                          $clientDD[$i]['logo']=$company->logo;
-                                          $clientDD[$i]['companies_id']=$client->companies_id;
-                                          $i++;
-                                        }
-                                      }
-                                    }
-                                    return view('invoice-edit',compact('invItem','id'),['clientDD'=>$clientDD, 'inv'=>$inv]);
+                                    $client = Clients::where('id', $inv->client_id)->first(); 
+                                    return view('invoice-edit',compact('invItem','id'),['client'=>$client, 'inv'=>$inv]);
                                   }else{
                                   return redirect()->to('/');
                                  }
                               }
-
-
 
 
                               //// Update Invoice Data
@@ -513,10 +484,6 @@ class InvoiceController extends Controller
                                   'client_id'=>'required',
                                   ]);
                                       $data = request(['tax_rate','deposit_amount','notes','terms','net_amount','discount','client_id','due_amount','sub_total','taxInFlat','disInFlat','disInPer','taxInPer','payment_mode']);
-                                    $companies_id = explode(",", $data['client_id'])[1];
-
-                                    $data['client_id'] = explode(",", $data['client_id'])[0];
-                                    $data['companies_id'] = $companies_id;
                                     $due = $request->due_date; 
                                     $dueDate = Carbon::createFromFormat('m/d/Y', $due)->format('Y-m-d');
                                     $data['due_date'] = $dueDate;
@@ -621,7 +588,7 @@ class InvoiceController extends Controller
                                     $invoiceIds = [];
                                     foreach ($invoices as $invoice) {
                                       $chkStatus = $invoice->status;
-                                      if($chkStatus == "PAID-STRIPE" || $chkStatus == "DEPOSIT_PAID" || ($chkStatus == "OVERDUE" && $invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
+                                      if($chkStatus == "PAID" || $chkStatus == "DEPOSIT_PAID" || ($invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
                                         array_push($invoiceIds, $invoice->invoice_number);
                                       }else{
                                         DB::table("invoice_items")->where('invoice_id',$invoice->id)->delete();

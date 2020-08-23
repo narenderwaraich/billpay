@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
     <script src="{{ asset('jquery/jquery-3.2.1.min.js') }}"></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="wrapper ">

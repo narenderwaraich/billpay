@@ -16,7 +16,6 @@ use App\Mail\ResetPassword;
 use App\Mail\ForgetPassword;
 use App\Mail\ConfirmAccount;
 use App\Mail\UserNotify;
-use App\UserCompany;
 use Carbon\Carbon;
 use Toastr;
 use App\UserPayment;
@@ -24,21 +23,9 @@ use App\UserPayment;
 class RegistrationsController extends Controller
       {   
 
-          ///Admin Login Redirect Page
-        public function index(){
-            if(Auth::check()){
-              if(Auth::user()->role == 'admin'){
-              $totalUsers = User::count();
-          return view('Admin.Admin',['totalUsers' => $totalUsers]);
-          }
-        }
-          else{
-              redirect()->to('/login');
-          }
-      }
-        public function signUpPage(){
-            return view('signup');
-        }
+            public function signUpPage(){
+                return view('signup');
+            }
 
             public function signUpStore(Request $request){
                 $validate = $this->validate(request(),[
@@ -63,8 +50,8 @@ class RegistrationsController extends Controller
                 $user->token = $token;
                 $createDate = $user->created_at;
                 $userCreateDate = $createDate->toDateTimeString(); 
-                // add 30 days to the create date
-                $trialAddDate = $createDate->addDays(30);        //addMinutes(30);
+                // add 1 days to the create date
+                $trialAddDate = $createDate->addDays(1);        //addMinutes(30);
                 $trial = $trialAddDate->toDateTimeString();
                 $user->access_date = $trial;
                 $user->save();
@@ -76,7 +63,7 @@ class RegistrationsController extends Controller
                     Mail::to($adminMail)->send(new UserNotify($user));
                 }
                 
-                Toastr::success('Thank You for Singing Up!. We have sent you an confirmation email. You can now login to your account, But please confirm your email to start using your account.', 'Success',['timeOut' => 10000, "positionClass" => "toast-top-right"]);
+                Toastr::success('Thank You for Singing Up!. We have sent you an confirmation email. You can now login to your account, But please confirm your email to start using your account.', 'Success',['timeOut' => 20000, "positionClass" => "toast-top-right"]);
                 return Redirect::back();
                 
             }
@@ -150,7 +137,7 @@ class RegistrationsController extends Controller
               $createDate = $user->created_at;
               $userCreateDate = $createDate->toDateTimeString(); 
               // add 30 days to the create date
-              $trialAddDate = $createDate->addDays(30);        //addMinutes(30);
+              $trialAddDate = $createDate->addDays(1);        //addMinutes(30);
               $trial = $trialAddDate->toDateTimeString();
               $user->access_date = $trial;
               $user->save();
@@ -223,7 +210,8 @@ class RegistrationsController extends Controller
                       }else{
                             $country_data =DB::table('countries')->select('id','name')->get();
                             $state_data = DB::table("states")->select('id','name')->get();
-                            return view('User_update',compact('country_data','state_data'));
+                            $city_data = DB::table("cities")->select('id','name')->get();
+                            return view('user_profile',compact('country_data','state_data','city_data'));
                           }
               }
                else{
@@ -450,8 +438,8 @@ class RegistrationsController extends Controller
 
                                public function destroy($id)
                                   {
-                                    $checkCompany = UserCompany::where('user_id', '=', $id)->first();
-                                    if(!$checkCompany){
+                                    $client = "yes";
+                                    if(!$client){
                                       User::destroy($id);
                                       Toastr::success('Member Deleted', 'Success', ["positionClass" => "toast-bottom-right"]);
                                       return redirect()->to('/Show_User');

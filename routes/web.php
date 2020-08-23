@@ -70,8 +70,8 @@ Route::get('/password-reset', 'RegistrationsController@showForm'); //I did not c
 Route::post('Register','RegistrationsController@storeUser');
 Route::get('/Register','RegistrationsController@create');
 //Update User
-// Route::post('userUpdate/{id}','RegistrationsController@userUpdate');
-// Route::get('/Update','RegistrationsController@profileView');
+Route::post('user-update/{id}','RegistrationsController@userUpdate');
+Route::get('/profile','RegistrationsController@profileView');
 // // Change Password
 // Route::post('updatepassword/{id}','RegistrationsController@updatePass');
 // Route::get('/updatepassword','RegistrationsController@Pass');
@@ -87,15 +87,15 @@ Route::post('find-client','ClientsController@findClientData');
 Route::get('/find-client/{phone}','ClientsController@findClientDataDetails');
 Route::get('/add-client','ClientsController@newClient');
 Route::post('client','ClientsController@store');
-Route::get('/client','ClientsController@addClient');
-// Route::get('/client/view','ClientsController@showClient');
-// Route::get('/client/search','ClientsController@SearchClientData')->name('client_search.SearchClientData');
+// Route::get('/client','ClientsController@addClient');
+Route::get('/client/view','ClientsController@showClient');
+Route::get('/client/search','ClientsController@SearchClientData')->name('client_search.SearchClientData');
 // //Route::get('/live_search/action', 'ClientsController@action')->name('live_search.action');
 // Route::get('/getClient','ClientsController@getClient');
-// Route::get('/client/update/{id}','ClientsController@editClient');
-// Route::post('client/update/{id}','ClientsController@updateClient');
-// Route::post('DeleteCompany','ClientsController@destroy');
-// Route::any('/client/search','ClientsController@SearchData');
+Route::get('/client/update/{id}','ClientsController@editClient');
+Route::post('client/update/{id}','ClientsController@updateClient');
+Route::post('delete-client','ClientsController@destroy');
+Route::any('/client/search','ClientsController@searchClients');
 
 // /// Client Payment
 // Route::get('/pay-payment/{id}','ClientPaymentController@getPayPage');
@@ -104,15 +104,14 @@ Route::get('/client','ClientsController@addClient');
 
 
 // /// Invoice Controller
-// Route::get('/invoice/{clientId}','InvoiceController@addInvoice');
-// Route::post('invoice','InvoiceController@storeInvoice');
-
-// Route::get('/invoice/view','InvoiceController@showInvoice'); 
+Route::get('/invoice/view','InvoiceController@showInvoiceList');
+Route::get('/invoice/{clientId}','InvoiceController@addInvoice');
+Route::post('invoice','InvoiceController@storeInvoice'); 
 // //Route::post('searchInvoice','InvoiceController@showInvoice');
-// Route::any('/invoice/search','InvoiceController@SearchData');
+Route::any('/invoice/search','InvoiceController@SearchData');
 // Route::get('/inv_search','InvoiceController@SearchInvData')->name('inv_search.SearchInvData');
-// Route::get('/invoice/edit/{id}','InvoiceController@editInvoices');
-// Route::post('invoice/edit/{id}','InvoiceController@updateInvoices');
+Route::get('/invoice/edit/{id}','InvoiceController@editInvoices');
+Route::post('invoice/edit/{id}','InvoiceController@updateInvoices');
 // /// send mail
 // Route::post('/invoice/send/{id}','InvoiceController@SendInvoiceMail');
 // /// Send reminder
@@ -120,7 +119,7 @@ Route::get('/client','ClientsController@addClient');
 // /// delete
 // // Route::get('/invoice/delete/{id}','InvoiceController@deleteInvoicesData');
 // // Route::post('/invoice/delete/item/{id}','InvoiceController@destroy');
-// // Route::post('/invoice/delete','InvoiceController@deleteInvoices');
+Route::post('/invoice/delete','InvoiceController@deleteInvoices');
 // Route::post('/invoice/markSent','InvoiceController@markInvoices');
 // Route::post('/invoice/mark-Offline-Paid','InvoiceController@markOfflinePaid');
 // Route::post('/invoice/mark-paid-bankwire','InvoiceController@markBankWirePaid');
@@ -139,12 +138,12 @@ Route::get('/client','ClientsController@addClient');
 // Route::post('/invoice/download-mutli/PDF','InvoiceController@downloadMultiPDF');
 // Route::get('/invoice/zip-file-remove/{fileName}','InvoiceController@unlink_on_shutdown');
 // /// invoice copy data /copy-invoice-data/
-// Route::get('/invoice/copy/{id}','InvoiceController@copyData');
+Route::get('/invoice/copy/{id}','InvoiceController@copyData');
 // /// Cancel Invoice 
 // Route::get('/cancel-invoice/{id}','InvoiceController@cancelInvoice');
 
 // /// Delete Invoice Controller 
-// Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
+//Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
 // Route::get('/invoice/delete/{id}','DeleteInvoiceController@deleteInvoicesData');
 // Route::get('/delete/invoice/view','DeleteInvoiceController@showDeleteInvoice');
 // // Route::get('/delete/invoice/view/{id}','DeleteInvoiceController@invoiceView');
