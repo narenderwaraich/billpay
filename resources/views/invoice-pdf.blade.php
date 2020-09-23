@@ -12,6 +12,9 @@
     /*background-image: url("{{asset('/images/avatar/'.$inv->user->avatar)}}");*/
     background-position: center;
    }
+   hr{
+
+   }
    table{
      
    }
@@ -43,8 +46,12 @@
     width: 20%;
     height: auto;
   }
-  .td-50{
-    width: 50%;
+  .td-25{
+    width: 25%;
+    height: auto;
+  }
+  .td-40{
+    width: 40%;
     height: auto;
   }
   .td-1{
@@ -133,7 +140,6 @@
   .inv-date{
   color: #e91e63;
   font-weight: 400;
-  font-size: 12px;
   }
 /*  .inv-logo{
       width: 90px;
@@ -305,10 +311,10 @@ padding-top: 10px;
       <div class="col-12 company-address">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
     </div>
     <div class="row">
-      <div class="col-12 title-txt">TIN NO. <span class="GSTIN-number">{{$inv->user->gstin_number}}</span></div>
+      <div class="col-12 title-txt">E-Mail :<span class="inv-email">{{$inv->user->email}}</span></div>
     </div>
     <div class="row">
-      <div class="col-12 title-txt">E-Mail :<span class="inv-email">{{$inv->user->email}}</span></div>
+      <div class="col-12 title-txt">GST/TIN No. <span class="GSTIN-number">{{$inv->user->gstin_number}}</span></div>
     </div>
 
     <hr>
@@ -320,19 +326,19 @@ padding-top: 10px;
           <div class="pad-35">Address #</div>
           <div class="pad-35">E-Mail #</div>
         </td>
-        <td class="td-50">
+        <td class="td-40">
           <div class="">{{$inv->invoice_number}}</div>
           <div class="">{{$inv->client->fname}} {{$inv->client->lname}}</div>
           <div class="">{{$inv->client->address}}, {{$inv->client->state}}, {{$inv->client->city}}, {{$inv->client->country}}</div>
           <div class="">{{$inv->client->email}}</div>
         </td>
-        <td class="td-15">
+        <td class="td-20">
           <div class="pad-35">Issue Date #</div>
           <div class="pad-35">Due Date #</div>
           <div class="pad-35">Mobile #</div>
           <div class="pad-35">Status #</div>
         </td>
-        <td class="td-20">
+        <td class="td-25">
           <div class="inv-date">{{ date('m/d/Y', strtotime($inv->issue_date)) }}</div>
           <div class="inv-date">{{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
           <div class="">{{$inv->client->phone}}</div>
@@ -340,61 +346,6 @@ padding-top: 10px;
         </td>
       </tr>
     </table>
-
-
-<!--      <table class="table-w">
-      <tr class="tr-border-bottom">
-        <td class="td-1 t-l">
-          @if(!empty($inv->user->avatar))
-              <img src="{{asset('/images/avatar/'.$inv->user->avatar)}}" class="inv-logo">
-          @else
-              <div id="userImage">
-                {{$inv->user->fname[0]}} {{$inv->user->lname[0]}}
-              </div>
-          @endif
-          
-        </td>
-        <td class="td-3">
-          <div class="user-block">
-            <div class="inv-name">@if($inv->user->company_name){{$inv->user->company_name}} @else{{$inv->user->fname}} {{$inv->user->lname}}@endif</div>
-            <div class="inv-email">{{$inv->user->email}}</div>
-            <div class="inv-address">{{$inv->user->address}}</div>
-            <div class="inv-state">{{$inv->user->state}}</div>
-            <div class="inv-city">{{$inv->user->city}}</div>
-            <div class="inv-country">{{$inv->user->country}}</div>
-          </div>
-          
-        </td>
-        <td class="td-2 t-l">
-          <div class="date-block">
-            <div class="inv-date-title">ISSUE DATE</div>
-            <div class="inv-date">{{ date('m/d/Y', strtotime($inv->issue_date)) }}</div>
-            <div class="inv-date-title">DUE DATE</div>
-            <div class="inv-date">{{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
-          </div>
-          
-        </td>
-       <td class="td-1 t-r">
-
-        </td>
-        <td class="td-3">
-          <div class="client-block">
-            <div class="inv-name">{{$inv->client->fname}} {{$inv->client->lname}}</div>
-      
-            <div class="inv-email">{{$inv->client->email}}</div>
-            <div class="inv-address">{{$inv->client->address}}</div>
-            <div class="inv-state">{{$inv->client->state}}</div>
-            <div class="inv-city">{{$inv->client->city}}</div>
-            <div class="inv-country">{{$inv->client->country}}</div>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td class="GSTIN-number-div" colspan="5">
-          <div class="GSTIN-number">{{$inv->user->gstin_number}}</div>
-        </td>
-      </tr>
-    </table> -->
     <hr>
     <table class="item-table-w">
       <tr>

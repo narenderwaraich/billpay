@@ -114,12 +114,12 @@
           <div class="col-lg-4">
                         <div class="card card-user">
               <div class="image">
-                <img src="/images/bg.jpg" alt="">
+                <img src="/public/images/bg.jpg" alt="">
               </div>
               <div class="card-body">
                 <div class="author">
                   <a href="#">
-                    <img class="avatar border-gray" src="/images/icon/user.jpg" alt="Client">
+                    <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
                     <h5 class="title"><span id="first_name"></span> <span id="last_name"></span></h5>
                   </a>
                   <hr>

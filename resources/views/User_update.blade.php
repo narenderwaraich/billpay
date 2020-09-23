@@ -18,6 +18,14 @@
     </div> <!-- end row -->
 
     <div class="row user-profile-area user-updte">
+       <div class="row user-profile-row" >
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group">
+                  <label class="user-input-label">Company Name</label>
+                   <input type="text" class="form-control client-input input-border" name="company_name" value="{{ auth()->user()->company_name }}" placeholder="Company Name">
+                </div>
+              </div>
+          </div><!-- end row -->
       <div class="col-md-12">
         <div class="row user-profile-row2">
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">

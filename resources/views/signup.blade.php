@@ -26,49 +26,13 @@
 
 <div class="container" style="margin-top: 120px;">
   <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12">
-      <div id="demo" class="carousel slide"  data-ride="carousel">
-
-        <!-- Indicators -->
-<!--  <ul class="carousel-indicators">
-<li data-target="#demo" data-slide-to="0" class="active"></li>
-<li data-target="#demo" data-slide-to="1"></li>
-<li data-target="#demo" data-slide-to="2"></li>
-</ul> -->
-
-<!-- The slideshow -->
-<div class="carousel-inner home-slider">
-  <div class="carousel-item active">
-    <img src="/images/signup-card.png" alt="Los Angeles">
-  </div>
-  <div class="carousel-item">
-    <img src="/images/add-clients.png" alt="Chicago">
-  </div>
-  <div class="carousel-item">
-    <img src="/images/create-invoice.png" alt="New York">
-  </div>
-  <div class="carousel-item">
-    <img src="/images/get-paid-online.png" alt="New York">
-  </div>
-</div>
-
-<!-- Left and right controls -->
-<!-- <a class="carousel-control-prev" href="#demo" data-slide="prev">
-<span class="carousel-control-prev-icon"></span>
-</a>
-<a class="carousel-control-next" href="#demo" data-slide="next">
-<span class="carousel-control-next-icon"></span>
-</a> -->
-</div>
-</div>
-
 <div class="col-lg-4 col-md-4 col-sm-12">
   <center><img src="" alt="Logo" class="home-logo"></center>
   <div class="home-title">Online Bill</div>
   <div class="home-title-2">Go Paperless Invoices</div>
 </div>
 
-<div class="col-lg-4 col-md-4 col-sm-12">
+<div class="col-lg-8 col-md-8 col-sm-12">
   <div class="form-top-title">Signup Account</div>
   <div class="form-style shadow-lg">
     <form action="/SignUp" method="post">

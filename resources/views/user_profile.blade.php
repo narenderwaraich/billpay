@@ -17,6 +17,14 @@
                 <form action="/user-update/{{ auth()->user()->id }}" method="post" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="file" name="avatar" id="getFile" value="{{ auth()->user()->avatar }}" accept="image/*" class="form-control input-border" style="display: none;">
+                 <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <input type="text" value="{{auth()->user()->company_name}}" name="company_name" id="gstin_number" class="form-control">
+                        <label>Company Name</label>
+                      </div>
+                    </div>
+                  </div>
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
@@ -122,16 +130,16 @@
           <div class="col-lg-4">
                         <div class="card card-user">
               <div class="image">
-                <img src="/images/bg.jpg" alt="">
+                <img src="/public/images/bg.jpg" alt="">
               </div>
               <div class="card-body">
                 <div class="author">
                   @if(!empty(Auth::user()->avatar))
-                   <img src="/images/avatar/{{Auth::user()->avatar}}" id="" class="avatar border-gray show-user-logo profile-img-tag">
+                   <img src="/public/images/avatar/{{Auth::user()->avatar}}" id="" class="avatar border-gray show-user-logo profile-img-tag">
                   @else
                   <div class="avatar border-gray user-profile-logo" id="userImage">
                   </div>
-                  <img src="/images/avatar/{{Auth::user()->avatar}}" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
+                  <img src="/public/images/avatar/{{Auth::user()->avatar}}" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
                     <script type="text/javascript">
                         $(document).ready(function(){
                         var dot = '.';
