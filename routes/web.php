@@ -115,35 +115,36 @@ Route::post('invoice/edit/{id}','InvoiceController@updateInvoices');
 // /// send mail
 // Route::post('/invoice/send/{id}','InvoiceController@SendInvoiceMail');
 // /// Send reminder
-// Route::post('/invoice/reminder/send/{id}','InvoiceController@SendInvoiceReminder');
+Route::post('/invoice/reminder/send/{id}','InvoiceController@SendInvoiceReminder');
 // /// delete
 // // Route::get('/invoice/delete/{id}','InvoiceController@deleteInvoicesData');
 // // Route::post('/invoice/delete/item/{id}','InvoiceController@destroy');
 Route::post('/invoice/delete','InvoiceController@deleteInvoices');
-// Route::post('/invoice/markSent','InvoiceController@markInvoices');
+Route::post('/invoice/markSent','InvoiceController@markInvoices');
 // Route::post('/invoice/mark-Offline-Paid','InvoiceController@markOfflinePaid');
 // Route::post('/invoice/mark-paid-bankwire','InvoiceController@markBankWirePaid');
-// Route::post('/invoice/mark-deposit-invoice','InvoiceController@depositPaid');
-// Route::post('/invoice/mark-stripe-paid','InvoiceController@markStripePaid');
+Route::post('/invoice/mark-deposit-invoice','InvoiceController@depositPaid');
+Route::post('/invoice/mark-online-paid','InvoiceController@markOnlinePaid');
 // Route::post('/invoice/mark-overdue','InvoiceController@markOverdue');
 // /// view invoice ditials
-// Route::get('/invoice/view/{id}','InvoiceController@invoiceView');
+Route::get('/invoice/view/{id}','InvoiceController@invoiceView');
 // 		///dashbord via
 // Route::get('/dashboard/invoice/view/{id}','InvoiceController@invoiceView');
 // Route::get('/dashboard/invoice/edit/{id}','InvoiceController@editInvoices'); 
 
 // // download PDF
-// Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceController@downloadPDF');
-// //Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceController@downloadPDFfile');
-// Route::post('/invoice/download-mutli/PDF','InvoiceController@downloadMultiPDF');
-// Route::get('/invoice/zip-file-remove/{fileName}','InvoiceController@unlink_on_shutdown');
+Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceController@downloadPDF');
+//Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceController@downloadPDFfile');
+Route::post('/invoice/download-mutli/PDF','InvoiceController@downloadMultiPDF');
+Route::get('/invoice/zip-file-remove/{fileName}','InvoiceController@unlink_on_shutdown');
+Route::get('/invoice/print/PDF/{id}/{invoice_number_token}','InvoiceController@printPDF');
 // /// invoice copy data /copy-invoice-data/
 Route::get('/invoice/copy/{id}','InvoiceController@copyData');
 // /// Cancel Invoice 
 // Route::get('/cancel-invoice/{id}','InvoiceController@cancelInvoice');
 
 // /// Delete Invoice Controller 
-//Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
+Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
 // Route::get('/invoice/delete/{id}','DeleteInvoiceController@deleteInvoicesData');
 // Route::get('/delete/invoice/view','DeleteInvoiceController@showDeleteInvoice');
 // // Route::get('/delete/invoice/view/{id}','DeleteInvoiceController@invoiceView');

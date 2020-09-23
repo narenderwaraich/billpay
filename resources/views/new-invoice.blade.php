@@ -181,7 +181,7 @@
                   <div class="row">
                     <div class="col-md-5">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                      <label style="margin-top: 6px;">Discount</label>
+                      <label style="margin-top: 6px;">Discount<span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7">
@@ -194,7 +194,7 @@
                   <div class="row">
                     <div class="col-md-5">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                       <label style="margin-top: 6px;">Tax</label>
+                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7">
@@ -511,6 +511,7 @@
                               if(document.getElementById("percentage_radio").checked){
                                 discount = total * disValuePer / 100;
                                 document.getElementById('getValuePerDiscount').value =  disValuePer;
+                                $('#show-percentage-val').show();
                               } 
                               if(document.getElementById("tax_flat_radio").checked){
                                 tax = +taxValueFlat;
@@ -519,6 +520,7 @@
                                if(document.getElementById("tax_per_radio").checked){
                                   tax = total * taxValuePer / 100;
                                   document.getElementById('getValuePerTax').value =  taxValuePer;
+                                  $('#show-tax-val').show();
                                 }
                                 // console.log(discount);
                                 //console.log("Discount :"+discount+" - Tax :"+tax);

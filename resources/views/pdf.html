@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Invoice PDF</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ <style>
+   .container{
+    padding: 50px 50px;
+   }
+   .company-name{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 40px;
+   }
+   .company-address{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+   }
+   .company-gst-number{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+   }
+   .company-contact-phn{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+   }
+   .company-contact-email{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 25px;
+   }
+   .company-gst-number span{
+    font-size: 16px;
+    font-weight: 400;
+   }
+   .company-contact-phn span{
+    font-size: 16px;
+    font-weight: 400;
+   }
+   .company-contact-email span{
+    font-size: 16px;
+    font-weight: 400;
+   }
+   hr{
+    border-style: 2px dashed;
+   }
+   .inv-heading{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 40px;
+   }
+   .table{
+    width: 100%
+   }
+</style>
+</head>
+<body>
+<div class="container">
+   <div class="company-name">Dynamic Beneficial Accord Marketing Pvt. Ltd.</div> 
+   <div class="company-address">Plot 580, Industrial Area, Phase 9, Mohali - 160059</div> 
+   <div class="company-gst-number">TIN/GST NO. : <span>03352099280</span></div> 
+   <div class="company-contact-phn">Mobile : <span>9017109900</span></div> 
+   <div class="company-contact-email">E-Mail : <span>singh4narender@gmail.com</span></div> 
+   <hr>
+   <div class="inv-heading">Invoice</div>
+   <hr>
+   <table class="table">
+     <thead>
+       <tr>
+         <th>Sr.</th>
+         <th>Name/Description</th>
+         <th>Rate</th>
+         <th>Qty</th>
+         <th>SubTotal</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+       </tr>
+     </tbody>
+   </table>
+   <hr>
+</div>
+</body>
+</html>

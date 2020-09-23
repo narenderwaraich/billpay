@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use App\Clients;
 use App\User;
 use App\UserPayment;
 use App\Invoice;
 use Carbon\Carbon;
 use Redirect;
-use Illuminate\Support\Facades\Input;
 use Toastr;
 
 class ClientsController extends Controller

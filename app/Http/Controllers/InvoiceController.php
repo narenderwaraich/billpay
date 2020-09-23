@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Filesystem\Filesystem;
 use App\User;
 use App\Clients;
-use App\UserCompany;
 use App\Invoice;
 use App\InvoiceItem;
 use App\UserInvoiceNotification;
 use Mail;
 use App\Mail\SendInvoice;
 use App\Mail\InvoiceReminder;
-use App\UserPaymentAccount;
+use App\UserPayment;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use Toastr;
@@ -31,22 +30,22 @@ use ZipArchive;
 class InvoiceController extends Controller
 {
     public function addInvoice($clientId){
-      // if(Auth::check()){
-      //       if(Auth::user()->role == 'user'){
-      //         if(!Auth::user()->is_activated == 'true'){
-      //           Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
-      //             return back();
-      //         }else{
+      if(Auth::check()){
+            if(Auth::user()->role == 'user'){
+              if(!Auth::user()->is_activated == 'true'){
+                Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
+                  return back();
+              }else{
                     $id = Auth::id();
                     $client = Clients::find($clientId);
                     return view('new-invoice',['client' => $client]);
-          //         }
-          //   }else{
-          //     return redirect()->to('/dashboard');
-          //   }
-          // }else{
-          //         return redirect()->to('/login');
-          //         }
+                  }
+            }else{
+              return redirect()->to('/dashboard');
+            }
+          }else{
+                  return redirect()->to('/login');
+                  }
     }
    
 
@@ -145,38 +144,14 @@ class InvoiceController extends Controller
                                     $allMail = $mail;
                                    }
 
-                                $paymentMetod = $inv->payment_mode;
-                                if($paymentMetod == "OFFLINE-PAYMENT" || $paymentMetod == "BANKWIRE-PAYMENT"){
-                                    $invItem = $inv->invoiceItems;
-                                     $companies_id = $inv->companies_id;
-                                     $companyData = UserCompany::find($companies_id);
-                                    Mail::to($allMail)->send(new SendInvoice($invItem, $inv, $companyData));
-                                    if($inv->status =="DRAFT"){
-                                      $status['status'] = "SENT";
-                                      $chk =  Invoice::where('id',$id)->update($status);
-                                     }
-                                    
-                                      return response()->json(['success'=>"Mail Sent successfully."]);
-                                }else{
-
-                                    $findkey = UserPaymentAccount::where('user_id','=', $userId)->first();
-                                      if(!$findkey){
-                                        
-                                        return response()->json(['error'=>"Sorry First Connect to Stripe Account"]);
-                                          
-                                      }else{
-                                         $invItem = $inv->invoiceItems;
-                                         $companies_id = $inv->companies_id;
-                                         $companyData = UserCompany::find($companies_id);
-                                        Mail::to($allMail)->send(new SendInvoice($invItem, $inv, $companyData));
-                                        if($inv->status =="DRAFT"){
-                                          $status['status'] = "SENT";
-                                          $chk =  Invoice::where('id',$id)->update($status);
-                                         }
-                                        
-                                          return response()->json(['success'=>"Mail Sent successfully."]);
-                                      }
-                                  }
+                                 $invItem = $inv->invoiceItems;
+                                Mail::to($allMail)->send(new SendInvoice($invItem, $inv));
+                                if($inv->status =="DRAFT"){
+                                  $status['status'] = "SENT";
+                                  $chk =  Invoice::where('id',$id)->update($status);
+                                 }
+                                
+                                  return response()->json(['success'=>"Mail Sent successfully."]);
                                   
                             } 
 
@@ -192,23 +167,13 @@ class InvoiceController extends Controller
                                    }
                                  // first check status OVERDUE 
                                    if($inv->status =="OVERDUE"){
-                                        $findkey = UserPaymentAccount::where('user_id','=', $userId)->first();
-                                      if(!$findkey){
-                                        
-                                        return response()->json(['error'=>"Sorry First Connect to Stripe Account"]);
-                                          
-                                      }else{
-                                         
                                          $invItem = $inv->invoiceItems;
-                                         $companies_id = $inv->companies_id;
-                                         $companyData = UserCompany::find($companies_id);
                                          /// Days get old overdue 
                                          $dueDate = Carbon::parse($inv->due_date);
                                          $nowDate = Carbon::now();
                                          $day =  $nowDate->diffInDays($dueDate);
-                                         Mail::to($allMail)->send(new InvoiceReminder($invItem, $inv, $companyData, $day));
+                                         Mail::to($allMail)->send(new InvoiceReminder($invItem, $inv, $day));
                                           return response()->json(['success'=>"Mail Sent successfully."]);
-                                        }
                                    }else{
                                       
                                         return response()->json();
@@ -296,8 +261,8 @@ class InvoiceController extends Controller
                                     return back();
                                    }
                                  $invItem = $inv->invoiceItems;
-                               // return view('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv, 'clientData' => $clientData, 'companyData' => $companyData, 'user' =>$user]);
-                               // exit();
+                                //return view('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv]);
+                                //exit();
                                  $invDate = $inv->created_at;
                                  $invoiceDate = $invDate->format('mdY');
                                  $invNumber = $inv->invoice_number;
@@ -305,6 +270,34 @@ class InvoiceController extends Controller
                                  //return $pdf->stream();
                                  //exit();
                                  return $pdf->download($invNumber.'-'.$invoiceDate.'.pdf');
+
+                                 }else{
+                                  Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
+                                    return redirect()->to('/');
+                                }
+
+                              }  
+
+
+                              /// print PDF file
+                            public function printPDF($id,$invoice_number_token){
+                              $inv = Invoice::findOrFail($id);
+                              if($inv->is_deleted ==0){
+                                    $token = $inv->invoice_number_token; 
+                                   if($token != $invoice_number_token){
+                                    Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
+                                    return back();
+                                   }
+                                 $invItem = $inv->invoiceItems;
+                                //return view('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv]);
+                                //exit();
+                                 $invDate = $inv->created_at;
+                                 $invoiceDate = $invDate->format('mdY');
+                                 $invNumber = $inv->invoice_number;
+                                 $pdf = PDF::loadView('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv])->setPaper('A4');
+                                 return $pdf->stream();
+                                 exit();
+                                 //return $pdf->download($invNumber.'-'.$invoiceDate.'.pdf');
 
                                  }else{
                                   Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
@@ -426,7 +419,8 @@ class InvoiceController extends Controller
                                 if(Auth::check()){
                                    $inv = Invoice::find($id); //dd($inv);
                                    $invItem = $inv->invoiceItems; /// Relation with invoice has many function
-                                  return view('invoice-view',['invItem' => $invItem, 'inv' => $inv]);
+                                   $client = Clients::where('id',$inv->client_id)->first(); //dd($client);
+                                  return view('invoice-view',['invItem' => $invItem, 'inv' => $inv, 'client' => $client]);
                                 }else{
                                   return redirect()->to('/');
                                 }
@@ -441,10 +435,9 @@ class InvoiceController extends Controller
                                     return back();
                                    }
                                    $invItem = $inv->invoiceItems;
-                                   $companies_id = ($inv->companies_id);
-                                   $companyData = UserCompany::find($companies_id);
+                                   
                                    if($inv->is_deleted ==0){
-                                    return view('view-and-pay',['invItem' => $invItem, 'inv' => $inv, 'companyData' => $companyData]);
+                                    return view('view-and-pay',['invItem' => $invItem, 'inv' => $inv]);
                                   }else{
                                     Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
                                     return redirect()->to('/');
@@ -709,7 +702,7 @@ class InvoiceController extends Controller
 
 
                                 ///// invoice mark Stripe Paid
-                                public function markStripePaid(Request $request){
+                                public function markOnlinePaid(Request $request){
                                     $ids = $request->ids;
                                     $id = explode(",",$ids);
                                     $chkData =  Invoice::where('id',$id)->first();

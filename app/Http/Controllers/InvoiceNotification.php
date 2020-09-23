@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\UserInvoiceNotification;
 use App\User;
 use App\Clients;
-use App\UserCompany;
 use App\Invoice;
 use App\InvoiceItem;
 use Mail;
@@ -32,7 +31,6 @@ class InvoiceNotification extends Controller
                          $invItem = InvoiceItem::where('invoice_id', $id)->get();
                          $companies_id = $inv->companies_id;
                          $clientsId = $inv->client_id;
-                         $companyData = UserCompany::find($companies_id);
                          $clientData = Clients::find($clientsId);
                          $mail = $clientData->email;
                          $userData = User::find($userId);
@@ -40,6 +38,6 @@ class InvoiceNotification extends Controller
                          $dueDate = Carbon::parse($inv->due_date);
                          $nowDate = Carbon::now();
                          $day =  $nowDate->diffInDays($dueDate);
-                         Mail::to($mail)->send(new InvoiceReminder($invItem, $inv, $clientData, $companyData, $userData, $day));                      
+                         Mail::to($mail)->send(new InvoiceReminder($invItem, $inv, $clientData, $userData, $day));                      
               }
 }

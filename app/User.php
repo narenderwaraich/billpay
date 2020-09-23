@@ -6,7 +6,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Mail;
-use App\UserCompany;
 use App\Clients;
 use App\Invoice;
 use App\UserPayment;
@@ -22,8 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'fname','lname','email','avatar','password','phone_no','country','city','state','address','zipcode','company_name','status',
-    'is_activated','access_date','gstin_number'];
+        'fname','lname','email','avatar','password','phone_no','country','city','state','address','zipcode','company_name','status','account_type','is_activated','access_date','gstin_number'];
     
     // protected $casts = [
     //     'is_activated' => 'boolean'
@@ -47,11 +45,6 @@ class User extends Authenticatable
     {
       // Generate random string and encrypt it. 
       return bcrypt(str_random(35));
-    }
-        // company
-    public function company()
-    {
-        return $this->hasMany(UserCompany::class); 
     }
     
     //// clients

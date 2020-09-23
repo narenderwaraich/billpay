@@ -39,6 +39,7 @@ class CreateUsersTable extends Migration
             $table->boolean('suspend')->default(false);
             $table->string('password')->nullable();
             $table->string('phone_no', 45)->nullable();
+             $table->string('account_type', 100)->nullable();
             $table->string('cin_number', 100)->nullable();
             $table->string('gstin_number', 100)->nullable();
             $table->string('company_name', 45)->nullable();

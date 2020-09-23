@@ -104,7 +104,7 @@
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
-                    <input type="text" name="arr[{{$index}}][total]" onkeyup="calc(this, {{ $index }})"  class="tot input-calculation input-amt"  id="total{{ $index }}" value="{{$item->total}}" readonly style="background-color: transparent;">
+                    <input type="text" name="arr[{{$index}}][total]" onkeyup="calc(this, {{ $index }})"  class="tot input-calculation input-amt form-control"  id="total{{ $index }}" value="{{$item->total}}" readonly style="background-color: transparent;">
                     <label>Total</label>
                   </div>
                 </div>
@@ -188,7 +188,7 @@
                   <div class="row">
                     <div class="col-md-5">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                      <label style="margin-top: 6px;">Discount</label>
+                      <label style="margin-top: 6px;">Discount <span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7">
@@ -201,7 +201,7 @@
                   <div class="row">
                     <div class="col-md-5">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                       <label style="margin-top: 6px;">Tax</label>
+                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" value="{{$inv->taxInPer}}" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7">
@@ -357,6 +357,22 @@
               $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="form-control" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
                    i++;
               });
+
+              //// Check percentage value
+              var percentageStoreValue = $('#getValuePerDiscount').val();
+              var taxpStoreValue = $('#getValuePerTax').val();
+              if(percentageStoreValue){
+                $('#show-percentage-val').show();
+              }else{
+                $('#show-percentage-val').hide();
+              }
+
+              if(taxpStoreValue){
+                $('#show-tax-val').show();
+              }else{
+                $('#show-tax-val').hide();
+              }
+
             });  
 
 
@@ -526,6 +542,7 @@
                               if(document.getElementById("percentage_radio").checked){
                                 discount = total * disValuePer / 100;
                                 document.getElementById('getValuePerDiscount').value =  disValuePer;
+                                $('#show-percentage-val').show();
                               } 
                               if(document.getElementById("tax_flat_radio").checked){
                                 tax = +taxValueFlat;
@@ -534,6 +551,7 @@
                                if(document.getElementById("tax_per_radio").checked){
                                   tax = total * taxValuePer / 100;
                                   document.getElementById('getValuePerTax').value =  taxValuePer;
+                                  $('#show-tax-val').show();
                                 }
                                 //console.log("Discount :"+discount+" - Tax :"+tax); 
                                 // console.log(total);
@@ -549,6 +567,23 @@
                               // var due = document.getElementById("deposit").value; //deposit value
                               // pending = nowAmount - due;
                                document.getElementById('duePending').value = nowAmount;
+
+
+                               //// Check percentage value
+                                var percentageStoreValue = $('#getValuePerDiscount').val();
+                                var taxpStoreValue = $('#getValuePerTax').val();
+                                if(percentageStoreValue){
+                                  $('#show-percentage-val').show();
+                                }else{
+                                  $('#show-percentage-val').hide();
+                                }
+
+                                if(taxpStoreValue){
+                                  $('#show-tax-val').show();
+                                }else{
+                                  $('#show-tax-val').hide();
+                                }
+
 
                           }
 

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use App\User;
 use App\Clients;
-use App\UserCompany;
 use App\Invoice;
 use App\InvoiceItem;
 use Carbon\Carbon;
@@ -65,7 +64,6 @@ class DeleteInvoiceController extends Controller
               $data['discount'] = $inv->discount;
               $data['due_amount'] = $inv->due_amount;
               $data['sub_total'] = $inv->sub_total;
-              $data['companies_id'] = $inv->companies_id;
               $data['invoice_number_token']= $inv->invoice_number_token;
               $data['invoice_number']= $inv->invoice_number; 
               $data['user_id'] = $inv->user_id;
@@ -165,7 +163,6 @@ class DeleteInvoiceController extends Controller
               $data['discount'] = $inv->discount;
               $data['due_amount'] = $inv->due_amount;
               $data['sub_total'] = $inv->sub_total;
-              $data['companies_id'] = $inv->companies_id;
               $data['invoice_number_token']= $inv->invoice_number_token;
               $data['invoice_number']= $inv->invoice_number; 
               $data['user_id'] = $inv->user_id;
@@ -383,7 +380,6 @@ class DeleteInvoiceController extends Controller
                     $data['discount'] = $inv->discount;
                     $data['due_amount'] = $inv->due_amount;
                     $data['sub_total'] = $inv->sub_total;
-                    $data['companies_id'] = $inv->companies_id;
                     $data['invoice_number_token']= $inv->invoice_number_token;
                     $data['invoice_number']= $inv->invoice_number; 
                     $data['user_id'] = $inv->user_id;
@@ -454,7 +450,6 @@ class DeleteInvoiceController extends Controller
                     $data['discount'] = $inv->discount;
                     $data['due_amount'] = $inv->due_amount;
                     $data['sub_total'] = $inv->sub_total;
-                    $data['companies_id'] = $inv->companies_id;
                     $data['invoice_number_token']= $inv->invoice_number_token;
                     $data['invoice_number']= $inv->invoice_number; 
                     $data['user_id'] = $inv->user_id;

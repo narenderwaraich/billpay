@@ -61,7 +61,7 @@ class SessionController extends Controller
             }
             $userSuspend = User::where('email', '=', $email)->first();
             if($userSuspend->suspend == 1){ // check account Suspend or not 
-              Toastr::warning('Your Account is suspend please contact Admin MapleEbooks at admin@mapleebooks.com', 'Account Suspend', ["positionClass" => "toast-top-right"]);
+              Toastr::warning('Your Account is suspend please contact Admin', 'Account Suspend', ["positionClass" => "toast-top-right"]);
             return back();
             }
             // $userSelect = User::where('email', '=', $email)->first();

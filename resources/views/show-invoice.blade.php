@@ -21,7 +21,7 @@
                       <a class="dropdown-item sendReminder" href="#" data-toggle="modal" data-target="#sendReminderModel" id="reminderButton" style="display: none;">SEND REMINDER</a>
                        <a class="dropdown-item" id="markSent" href="#">MARK AS SENT</a>
                        <a class="dropdown-item" id="depositPaid" href="#">DEPOSIT PAID</a>
-                       <a class="dropdown-item" id="markStripePaid" href="#">PAID</a>
+                       <a class="dropdown-item" id="markOnlinePaid" href="#">PAID</a>
                        <a class="dropdown-item downloadInvoice" href="#" id="downloadButton" style="display: none;">DOWNLOAD INVOICE</a>
                       <a class="dropdown-item copyInvoice" href="#" id="copyButton" style="display: none;">Copy</a>
                       <a class="dropdown-item editInvoice" href="#" id="editButton" style="display: none;">Edit</a>
@@ -826,7 +826,7 @@
 
                       //// mark invoice Stripe paid
                       $(document).ready(function () {
-                          $('#markStripePaid').on('click', function(e) {
+                          $('#markOnlinePaid').on('click', function(e) {
                               var allVals = [];  
                               var join_selected_values =[];
                                 $(".sub_chk:checked").each(function() {  
@@ -844,7 +844,7 @@
   
 
                                  $.ajax({
-                                              url: '/invoice/mark-stripe-paid',
+                                              url: '/invoice/mark-online-paid',
                                               dataType: 'json',
                                               method : 'post',
                                               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

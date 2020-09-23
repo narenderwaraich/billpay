@@ -8,9 +8,10 @@
   <title>Invoice PDF</title>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
  <style>
-   /*.container{
-    padding: 5%;
-   }*/
+   .container{
+    /*background-image: url("{{asset('/images/avatar/'.$inv->user->avatar)}}");*/
+    background-position: center;
+   }
    table{
      
    }
@@ -27,12 +28,24 @@
     text-align: center;
    }
    .invoice-amount-pay-status{
-  color: #df59f9;
+  color: #e91e63;
   } 
   .table-w{
     width: 100%;
     height: auto;
     margin-top:10px;
+  }
+  .td-15{
+    width: 15%;
+    height: auto;
+  }
+  .td-20{
+    width: 20%;
+    height: auto;
+  }
+  .td-50{
+    width: 50%;
+    height: auto;
   }
   .td-1{
     width: 10%;
@@ -106,7 +119,7 @@
     padding-top: 10px;
     font-weight: 100;
     font-size: 14px;
-    color: #df59f9;
+    color: #e91e63;
     margin-left: 35px;
   }
   .inv-to{
@@ -114,17 +127,21 @@
     padding-top: 10px;
     font-weight: 100;
     font-size: 14px;
-    color: #df59f9;
+    color: #e91e63;
     margin-right: 180px;
   }
   .inv-date{
-  color: #df59f9;
+  color: #e91e63;
   font-weight: 400;
   font-size: 12px;
   }
-  .inv-logo{
+/*  .inv-logo{
       width: 90px;
     height: 90px;
+  }*/
+  img{
+    width: 100px;
+    height: auto;
   }
   .inv-name{
     text-transform: uppercase;
@@ -132,14 +149,14 @@
      padding-left: 10px;
 }
 .copmany-name{
-  color: #df59f9;
+  color: #e91e63;
     font-size: 14px;
     font-weight: 100;
     padding-left: 10px;
 }
 .inv-email{
   padding-bottom: 3px;
-  color: #df59f9;
+  color: #e91e63;
   font-weight: 400;
   font-size: 13px;
    padding-left: 10px;
@@ -219,7 +236,7 @@ padding-top: 10px;
     height: 70px;
     text-align: center;
     text-transform: uppercase;
-    border: 2px solid #df59f9;
+    border: 2px solid #e91e63;
     display: inline-block;
 }
 #userImage{
@@ -231,7 +248,7 @@ padding-top: 10px;
     height: 70px;
     text-align: center;
     text-transform: uppercase;
-    border: 2px solid #df59f9;
+    border: 2px solid #e91e63;
     display: inline-block;
 }
 .GSTIN-number-div{
@@ -242,7 +259,23 @@ padding-top: 10px;
 .GSTIN-number{
   font-weight: 400;
     font-size: 14px;
-    color: #df59f9;
+    color: #e91e63;
+}
+.user-company-name{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+.company-address{
+  font-weight: 100;
+  text-align: center;
+}
+.title-txt{
+  font-weight: 100;
+  text-align: center;
+}
+.pad-35{
+  padding-left: 35px;
 }
 </style>
 </head>
@@ -250,13 +283,13 @@ padding-top: 10px;
 <div class="container">
     <div class="row">
         <div class="col-12 t-center">
-           Invoice ({{$inv->invoice_number}}) from {{$inv->user->fname}} {{$inv->user->lname}} ({{$inv->user->company_name}})
+           Invoice ({{$inv->invoice_number}}) from <!-- {{$inv->user->fname}} {{$inv->user->lname}}  -->{{$inv->user->company_name}}
        </div> 
     </div>
 
     <div class="row">
         <div class="col-12 t-center">
-           @if($inv->status == "PAID-STRIPE")
+           @if($inv->status == "PAID")
             <div class="invoice-amount-pay-status">HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
             @endif
 
@@ -265,17 +298,51 @@ padding-top: 10px;
             @endif
        </div> 
     </div>
+    <div class="row">
+      <div class="col-12 user-company-name">{{$inv->user->company_name}}</div>
+    </div>
+    <div class="row">
+      <div class="col-12 company-address">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
+    </div>
+    <div class="row">
+      <div class="col-12 title-txt">TIN NO. <span class="GSTIN-number">{{$inv->user->gstin_number}}</span></div>
+    </div>
+    <div class="row">
+      <div class="col-12 title-txt">E-Mail :<span class="inv-email">{{$inv->user->email}}</span></div>
+    </div>
 
-     <div class="row">
-           <div class="col-6">
-             <span class="inv-from">From INVOICE</span>
-           </div> 
-           <div class="col-6">
-               <span class="inv-to">INVOICE TO</span>
-           </div>
-     </div>
-     <br><br>
-     <table class="table-w">
+    <hr>
+    <table class="table-w">
+      <tr class="tr-border-bottom">
+        <td class="td-15">
+          <div class="pad-35">Invoice #</div>
+          <div class="pad-35">Client #</div>
+          <div class="pad-35">Address #</div>
+          <div class="pad-35">E-Mail #</div>
+        </td>
+        <td class="td-50">
+          <div class="">{{$inv->invoice_number}}</div>
+          <div class="">{{$inv->client->fname}} {{$inv->client->lname}}</div>
+          <div class="">{{$inv->client->address}}, {{$inv->client->state}}, {{$inv->client->city}}, {{$inv->client->country}}</div>
+          <div class="">{{$inv->client->email}}</div>
+        </td>
+        <td class="td-15">
+          <div class="pad-35">Issue Date #</div>
+          <div class="pad-35">Due Date #</div>
+          <div class="pad-35">Mobile #</div>
+          <div class="pad-35">Status #</div>
+        </td>
+        <td class="td-20">
+          <div class="inv-date">{{ date('m/d/Y', strtotime($inv->issue_date)) }}</div>
+          <div class="inv-date">{{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
+          <div class="">{{$inv->client->phone}}</div>
+          <div class="">{{$inv->status}}</div>
+        </td>
+      </tr>
+    </table>
+
+
+<!--      <table class="table-w">
       <tr class="tr-border-bottom">
         <td class="td-1 t-l">
           @if(!empty($inv->user->avatar))
@@ -289,8 +356,7 @@ padding-top: 10px;
         </td>
         <td class="td-3">
           <div class="user-block">
-            <div class="inv-name">{{$inv->user->fname}} {{$inv->user->lname}}</div>
-            <div class="copmany-name">{{$inv->user->company_name}}</div>
+            <div class="inv-name">@if($inv->user->company_name){{$inv->user->company_name}} @else{{$inv->user->fname}} {{$inv->user->lname}}@endif</div>
             <div class="inv-email">{{$inv->user->email}}</div>
             <div class="inv-address">{{$inv->user->address}}</div>
             <div class="inv-state">{{$inv->user->state}}</div>
@@ -309,18 +375,12 @@ padding-top: 10px;
           
         </td>
        <td class="td-1 t-r">
-          @if(!empty($inv->companies->logo))
-              <img src="{{asset('/company_logo/'.$inv->companies->logo)}}" class="inv-logo" id="clientimg">
-          @else
-              <div id="clientImage">
-                {{$inv->client->fname[0]}} {{$inv->client->lname[0]}}
-              </div>
-          @endif
+
         </td>
         <td class="td-3">
           <div class="client-block">
             <div class="inv-name">{{$inv->client->fname}} {{$inv->client->lname}}</div>
-            <div class="copmany-name">{{$inv->companies->name}}</div>
+      
             <div class="inv-email">{{$inv->client->email}}</div>
             <div class="inv-address">{{$inv->client->address}}</div>
             <div class="inv-state">{{$inv->client->state}}</div>
@@ -334,7 +394,7 @@ padding-top: 10px;
           <div class="GSTIN-number">{{$inv->user->gstin_number}}</div>
         </td>
       </tr>
-    </table>
+    </table> -->
     <hr>
     <table class="item-table-w">
       <tr>
