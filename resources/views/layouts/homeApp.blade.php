@@ -7,17 +7,17 @@
     <meta name="description" content="Online Bill Pay">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="/public/css/app.css">
   <!--   <link rel="apple-touch-icon" href="apple-icon.png"> -->
    <!--  <link rel="shortcut icon" href="favicon.ico"> -->
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
-    <!-- <link rel="stylesheet" href="{{ asset('css/themify-icons.css') }}"> -->
-    <link rel="stylesheet" href="{{ asset('css/design.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
-    <script src="{{ asset('jquery/jquery-3.2.1.min.js') }}"></script>
+    <link rel="stylesheet" href="/public/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="/public/css/themify-icons.css"> -->
+    <link rel="stylesheet" href="/public/css/design.css">
+    <link rel="stylesheet" href="/public/css/custom.css">
+    <link rel="stylesheet" href="/public/css/responsive.css">
+    <link rel="stylesheet" href="/public/css/toastr.min.css">
+    <script src="/public/jquery/jquery-3.2.1.min.js"></script>
 </script>
 </head>
 <body>
@@ -39,10 +39,10 @@
   }
 });
 </script>
-<script src="{{ asset('js/popper.min.js') }}"></script>        
-<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/custom.js') }}"></script>
-<script src="{{ asset('js/toastr.min.js') }}"></script>
+<script src="/public/js/popper.min.js"></script>        
+<script src="/public/bootstrap/js/bootstrap.min.js"></script>
+<script src="/public/js/custom.js"></script>
+<script src="/public/js/toastr.min.js"></script>
 {!! Toastr::message() !!}
     </body>
 </html>  
