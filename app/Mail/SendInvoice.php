@@ -20,13 +20,11 @@ class SendInvoice extends Mailable
 
     public $invItem;
     public $inv;
-    public $companyData;
 
-public function __construct($invItem, $inv, $companyData)
+public function __construct($invItem, $inv)
     {
         $this->invItem = $invItem;
         $this->inv = $inv;
-        $this->companyData = $companyData;
     }
     /**
      * Build the message.
@@ -37,7 +35,7 @@ public function __construct($invItem, $inv, $companyData)
     {
          $mail = Auth::user()->email;
          $userName = Auth::user()->fname;
-         $subject = "Invoice (".$this->inv->invoice_number.") from ".$userName."(".$this->companyData->name.")"; //"Invoice (IN000211) from Username (company name)";
+         $subject = "Invoice (".$this->inv->invoice_number.") from ".$userName.""; //"Invoice (IN000211) from Username (company name)";
          return $this->from($mail)->subject($subject)->view('emails.invoice');
     }
 }

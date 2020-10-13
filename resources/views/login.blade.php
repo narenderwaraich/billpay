@@ -24,15 +24,14 @@
   </div>
 </nav>
 
-<div class="container" style="margin-top: 120px;">
+<div class="container">
   <div class="row">
-<div class="col-lg-4 col-md-4 col-sm-12">
-  <center><img src="" alt="Logo" class="home-logo"></center>
-  <div class="home-title">Online Bill</div>
-  <div class="home-title-2">Go Paperless Invoices</div>
-</div>
-
-    <div class="col-lg-8 col-md-8 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <section style="width: 100%;height: auto;max-width: 650px;min-width: 290px;text-align: center;margin: auto;">
+      <center><img src="" alt="Logo" class="home-logo"></center>
+      <div class="home-title">Online Bill</div>
+      <div class="home-title-2">Go Paperless Invoices</div>
+      <hr>
       <div class="form-top-title">SignIn Account</div>
       <div class="form-style shadow-lg">
         <div class="login-title">Login</div>

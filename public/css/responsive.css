@@ -1,5 +1,36 @@
 @media (max-width: 767px){
-    
+    .sidebar {
+    	width: 135px;
+	}
+	.sidebar .logo {
+    	padding: 2px 5px;
+	}
+	.sidebar .sidebar-wrapper {
+    	width: 135px;
+	}
+	.sidebar .nav {
+    	margin-top: 15px;
+	}
+/*	.sidebar .nav li:first-child>a {
+	    margin: 0 5px;
+	}*/
+	.sidebar .nav li>a{
+		font-size: 16px;
+    	padding: 7px 3px;
+	}
+	.sidebar .nav p {
+	    line-height: 15px;
+	    font-size: 11px;
+    }
+    .main-panel {
+    	width: calc(100% - 135px);
+    }
+    .menu-icon {
+    	margin: 0 1px;
+    }
+    .main-panel>.content {
+    	padding: 0 20px 30px;
+    }	
 }
 @media (min-width: 991px){
 	.sidebar {

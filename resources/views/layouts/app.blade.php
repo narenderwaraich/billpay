@@ -7,17 +7,18 @@
     <meta name="description" content="Online Bill Pay">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" type="text/css" href="/public/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/css/app.css">
   <!--   <link rel="apple-touch-icon" href="apple-icon.png"> -->
    <!--  <link rel="shortcut icon" href="favicon.ico"> -->
-    <link rel="stylesheet" href="/public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/public/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <!-- <link rel="stylesheet" href="/css/themify-icons.css"> -->
-    <link rel="stylesheet" href="/public/css/design.css">
-    <link rel="stylesheet" href="/public/css/custom.css">
-    <link rel="stylesheet" href="/public/css/responsive.css">
-    <link rel="stylesheet" href="/public/css/toastr.min.css">
-    <script src="/public/jquery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="/css/design.css">
+    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/toastr.min.css">
+    <link rel="stylesheet" href="/css/jquery.auto-complete.css">
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
     <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 </head>
@@ -48,10 +49,10 @@
     @endif
   </div>
 </div>
-<script src="/public/bootstrap/js/popper.min.js"></script>
-<script src="/public/bootstrap/js/bootstrap.min.js"></script>
-<script src="/public/js/custom.js"></script>
-<script src="/public/js/toastr.min.js"></script>
+<script src="/bootstrap/js/popper.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/toastr.min.js"></script>
 {!! Toastr::message() !!}
     </body>
 </html>  

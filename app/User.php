@@ -10,6 +10,7 @@ use App\Clients;
 use App\Invoice;
 use App\UserPayment;
 use App\DeleteInvoice;
+use App\Item;
 
 class User extends Authenticatable
 {
@@ -58,6 +59,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invoice::class); 
     }
+
+    //// items
+    public function items()
+    {
+        return $this->hasMany(Item::class); 
+    }
+
 
     //user Payments
     public function payments()

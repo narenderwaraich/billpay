@@ -33,8 +33,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input name="phone" type="text" id="phone" value="{{$phone}}" class="form-control" disabled="">
+                        <input name="phone" type="text" id="phone" value="{{$phone}}" class="form-control {{ $errors->has('phone') ? ' is-invalid' : '' }}" readonly>
                         <label>Mobile</label>
+                        @if ($errors->has('phone'))
+                          <span class="invalid-feedback" role="alert">
+                              <strong>{{ $errors->first('phone') }}</strong>
+                          </span>
+                        @endif
                       </div>
                     </div>
                     <div class="col-md-6">

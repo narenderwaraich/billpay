@@ -1,118 +1,102 @@
-<div id="showmenu" class="discountSlide">
-        <div style="text-align: center; margin-top: 3px;">Add Discount <span><i class="fa fa-remove slideButton" style="color: red; font-size: 20px; margin-left: 20px; margin-top: 2px; position: absolute; cursor: pointer;"></i></span></div>
-                        <div style="margin-left: 10px; float: left; width: 120px; color: white; margin-top: 2px" class="menu">
-                          <input onclick="document.getElementById('disValueFlat').disabled = false; document.getElementById('disValuePer').disabled = true;" type="radio" name="dis_type" id="flat_radio">
-                          <span style="margin-left: 10px;">Flat</span><br>
-                          <input onclick="document.getElementById('disValueFlat').disabled = true; document.getElementById('disValuePer').disabled = false;" type="radio" name="dis_type" id="percentage_radio">
-                          <span style="margin-left: 10px;">Percentage</span> <br>
-                          </div>
-                          <div>
-                            <span><input type="text" name="disValueFlat" placeholder="0" id="disValueFlat" onkeyup="myFunction()" style="width: 30%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /></span>
-                          <span>
-                            <input type="text" name="disValuePer" placeholder="0" id="disValuePer" onkeyup="myFunction()" style="width: 20%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /><span>&nbsp; %</span>
-                           <!-- <select name="disValuePer" id="disValuePer" onchange="myFunction()" style="width: 30%;  margin-top: 4px; color:black;" disabled="disabled">
-                                  <option value="">select</option>
-                                  <option value="10">10%</option>
-                                  <option value="15">15%</option>
-                                  <option value="20">20%</option>
-                                  <option value="25">25%</option>
-                                  <option value="35">35%</option>
-                                  <option value="50">50%</option>
-                                  <option value="60">60%</option>
-                                  <option value="70">70%</option>
-                              </select> -->
-                          </span>
-                           </div>
-                    </div>  
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laravel 5.7 Autocomplete Search using Bootstrap Typeahead JS - ItSolutionStuff.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+<!--      
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" /> -->
+  <link rel="stylesheet" href="/css/jquery.auto-complete.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="/js/jquery.auto-complete.js"></script>
+</head>
+<body>
+   
+<div class="container">
+     <h2>Laravel 5 - Dynamic autocomplete search using select2 JS Ajax</h2>
+  <br/>
+  <select class="itemName form-control" style="width:500px;" name="itemName"></select>
+
+  <br>
+    <h1>Laravel 5.7 Autocomplete Search using Bootstrap Typeahead JS - ItSolutionStuff.com</h1>   
+    <input class="typeahead form-control" type="text" id="rate">
+
+    <br>
+    <br>
+    
+    <input type='text' class='automplete' placeholder='e.g. Math' value='' required>
+    <input type='hidden' name='semester' id='Item_name'>
+</div>
+
+ 
+<script>
+    //var path = "{{ route('autocomplete') }}";
+    // $('input.typeahead').typeahead({
+    //     source:  function (query, process) {
+    //     return $.get(path, { query: query }, function (data) {
+    //             return process(data);
+    //         });
+    //     }
+    // });
+
+      // $('.itemName').select2({
+      //   placeholder: 'Select an item',
+      //   ajax: {
+      //     url: '/select2-autocomplete-ajax',
+      //     dataType: 'json',
+      //     delay: 250,
+      //     processResults: function (data) {
+      //       return {
+      //         results:  $.map(data, function (item) {
+      //               return {
+      //                   text: item.name,
+      //                   id: item.id
+      //               }
+      //           })
+      //       };
+      //     },
+      //     cache: true
+      //   }
+      // });
 
 
+let allItems = $(".automplete").siblings("input#Item_name");
+    for(let i = 0; i < allItems.length; i++){
+        if(allItems[i].value == ''){
+            isValid = false;
+        }
+    }
+     // auto complete 
+    
+    $(function() {
+            initAutoComplete(); 
+         });
 
-                 <div id="showmenu2" class="taxSlide">
-                  <div style="text-align: center; margin-top: 3px;">Add Taxes<span><i class="fa fa-remove slideButton2" style="color: red; font-size: 20px; margin-left: 35px; margin-top: 2px; position: absolute; cursor: pointer;"></i></span> </div>
-                        <div style="margin-left: 10px; float: left; width: 120px; color: white; margin-top: 2px" class="menu2">
-                          <input onclick="document.getElementById('taxValueFlat').disabled = false; document.getElementById('taxValuePer').disabled = true;" type="radio" name="tax_type"  id="tax_flat_radio">
-                          <span style="margin-left: 10px;">Flat</span>  <br>
-                          <input onclick="document.getElementById('taxValueFlat').disabled = true; document.getElementById('taxValuePer').disabled = false;" type="radio" name="tax_type" id="tax_per_radio">
-                          <span style="margin-left: 10px;">Percentage</span> <br>
-                          </div>
-                          <div>
-                            <span><input type="text" name="taxValueFlat" placeholder="0" id="taxValueFlat" onkeyup="myFunction()" style="width: 30%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /></span>
-                          <span>
-                            <input type="text" name="taxValuePer" placeholder="0" id="taxValuePer" onkeyup="myFunction()" style="width: 20%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /><span>&nbsp; %</span>
-                      <!--    <select name="taxValuePer" id="taxValuePer" onchange="myFunction()" style="width: 30%;  margin-top: 4px; color:black;" disabled="disabled">
-                            <option value="">select</option>
-                            <option value="5">5%</option>
-                            <option value="7">7%</option>
-                            <option value="9">9%</option>
-                            <option value="10">10%</option>
-                            <option value="12">12%</option>
-                            <option value="15">15%</option>
-                          </select> -->
-                          </span>
-                           </div>
-                      </div> 
-
-
-                      <div id="showmenu" class="discountSlide">
-                                      <div style="text-align: center; margin-top: 3px;">Add Discount 
-                                            <span>
-                                              <i class="fa fa-remove slideButton" style="color: red; font-size: 20px; margin-left: 20px; margin-top: 2px; position: absolute; cursor: pointer;"></i>
-                                            </span>
-                                      </div>
-
-                                      <div style="margin-left: 10px; float: left; width: 120px; color: white; margin-top: 2px" class="menu">
-                                                <input onclick="document.getElementById('disValueFlat').disabled = false; document.getElementById('disValuePer').disabled = true;" type="radio" name="dis_type" id="flat_radio">
-                                            <span style="margin-left: 10px;">Flat</span>
-                                            <br>
-                                                <input onclick="document.getElementById('disValueFlat').disabled = true; document.getElementById('disValuePer').disabled = false;" type="radio" name="dis_type" id="percentage_radio">
-                                            <span style="margin-left: 10px;">Percentage</span> 
-                                            <br>
-                                      </div>
-                                      <div>
-                                        <span>
-                                          <input type="text" name="disValueFlat" placeholder="0" id="disValueFlat" onkeyup="myFunction()" style="width: 30%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" />
-                                        </span>
-                                      <span>
-                                        <input type="text" name="disValuePer" value="{{$inv->disValuePer}}" placeholder="0" id="disValuePer" onkeyup="myFunction()" onchange="myFunction()"   style="width: 20%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" />
-                                        <span>&nbsp; %</span>
-                                       <!-- <select name="disValuePer" id="disValuePer" onchange="myFunction()" style="width: 30%;  margin-top: 4px; color:black;" disabled="disabled">
-                                              <option value="">select</option>
-                                              <option value="10">10%</option>
-                                              <option value="15">15%</option>
-                                              <option value="20">20%</option>
-                                              <option value="25">25%</option>
-                                              <option value="35">35%</option>
-                                              <option value="50">50%</option>
-                                              <option value="60">60%</option>
-                                              <option value="70">70%</option>
-                                          </select> -->
-                                      </span>
-                                       </div>
-                                </div>  
+         function initAutoComplete() {
+              var allItems = <?php echo json_encode($allItem) ?>; 
+              
+                var Items = [];
+                for (Item in allItems){
+                    let subData = {
+                        "label" : allItems[Item]['item_name'], 
+                        "value": allItems[Item]['item_name'],
+                        "rate": allItems[Item]['sale']
+                    };
+                    Items.push(subData);
+                }
+                
+                $( ".automplete" ).autocomplete({
+                    source: Items,
+                    select: function(event, ui){
+                        $(this).siblings('input').val(ui.item.value);
+                        $(this).val(ui.item.label);
+                        $('#rate').val(ui.item.rate);
+                        return false;
+                     }
+            });
+         }
+</script>
 
 
-
-                                 <div id="showmenu2" class="taxSlide">
-                                  <div style="text-align: center; margin-top: 3px;">Add Taxes<span><i class="fa fa-remove slideButton2" style="color: red; font-size: 20px; margin-left: 35px; margin-top: 2px; position: absolute; cursor: pointer;"></i></span> </div>
-                                        <div style="margin-left: 10px; float: left; width: 120px; color: white; margin-top: 2px" class="menu2">
-                                          <input onclick="document.getElementById('taxValueFlat').disabled = false; document.getElementById('taxValuePer').disabled = true;" type="radio" name="tax_type" id="tax_flat_radio">
-                                          <span style="margin-left: 10px;">Flat</span>  <br>
-                                          <input onclick="document.getElementById('taxValueFlat').disabled = true; document.getElementById('taxValuePer').disabled = false;" type="radio" name="tax_type" id="tax_per_radio">
-                                          <span style="margin-left: 10px;">Percentage</span> <br>
-                                          </div>
-                                          <div>
-                                            <span><input type="text" name="taxValueFlat" placeholder="0" id="taxValueFlat" onkeyup="myFunction()" style="width: 30%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /></span>
-                                          <span>
-                                            <input type="text" name="taxValuePer" value="{{$inv->taxValuePer}}" placeholder="0" id="taxValuePer" onkeyup="myFunction()" onchange="myFunction()" style="width: 20%; color: black; margin-top: 4px; height: 22px;" disabled="disabled" /><span>&nbsp; %</span>
-                                      <!--    <select name="taxValuePer" id="taxValuePer" onchange="myFunction()" style="width: 30%;  margin-top: 4px; color:black;" disabled="disabled">
-                                            <option value="">select</option>
-                                            <option value="5">5%</option>
-                                            <option value="7">7%</option>
-                                            <option value="9">9%</option>
-                                            <option value="10">10%</option>
-                                            <option value="12">12%</option>
-                                            <option value="15">15%</option>
-                                          </select> -->
-                                          </span>
-                                           </div>
-                                    </div> 
+</body>
+</html>

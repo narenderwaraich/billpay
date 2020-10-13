@@ -31,7 +31,7 @@ class ConfirmAccount extends Mailable
      */
     public function build()
     {
-        $subject = "Welcome to MapleEbooks";
-        return $this->from('admin@mapleebooks.com')->subject($subject)->view('emails.ConfirmAccount');
+        $subject = "Welcome to Bill Pay";
+        return $this->subject($subject)->view('emails.ConfirmAccount');
     }
 }

@@ -31,14 +31,27 @@
         </a>
       </li>            
       <li>
-        <a href="/profile">
+      <li class="{{ (request()->is('payment/list')) ? 'active' : '' }}">
+        <a href="/payment/list">
+          <i class="menu-icon fa fa-inr"></i>
+          <p>Payment</p>
+        </a>
+      </li>            
+      <li>
+        <a href="/items" class="{{ (request()->is('items')) ? 'active' : '' }}">
+          <i class="menu-icon fa fa-book"></i>
+          <p>Item</p>
+        </a>
+      </li>
+      <li>
+        <a href="/profile" class="{{ (request()->is('profile')) ? 'active' : '' }}{{ (request()->is('profile/*')) ? 'active' : '' }}">
           <i class="menu-icon fa fa-user"></i>
           <p>User</p>
         </a>
       </li>
       <li>
         <a href="/logout">
-          <i class="menu-icon fa fa-sign-out"></i>
+          <i class="menu-icon fa fa-power-off"></i>
           <p>LogOut</p>
         </a>
       </li>

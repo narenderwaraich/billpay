@@ -59,7 +59,7 @@ class RegistrationsController extends Controller
                 //// Send Notification to Admin
                 $getAdminMail = GeneralSetting::where('id','=',1)->first();
                 if($getAdminMail){
-                    $adminMail = $getAdminMail->value; //garrysingh7@gmail.com Admin Email
+                    $adminMail = $getAdminMail->value; //singh4narender@gmail.com Admin Email
                     Mail::to($adminMail)->send(new UserNotify($user));
                 }
                 

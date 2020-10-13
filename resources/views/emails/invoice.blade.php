@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Invoice</title>
-<meta name="description" content="MapleBooks">
+<meta name="description" content="Bill Pay">
 <style>
 body{
   margin-left:100px;
@@ -47,7 +47,7 @@ button:focus {
 <div>Hi {{$inv->client->fname}} {{$inv->client->lname}}</div>
 <br>
 
-<p class="inv-heading-text">{{$inv->user->fname}} {{$inv->user->lname}}  @if(!empty($inv->user->company_name))({{$inv->user->company_name}}) @endif <span class="inv-text">sent you an invoice ({{$inv->invoice_number}}) for</span>@if($inv->status =="PAID-STRIPE") $0 @else @if($inv->status =="OVERDUE" && $inv->net_amount != $inv->due_amount) ${{$inv->due_amount}} @elseif((!empty($inv->deposit_amount))&& $inv->status !="DEPOSIT_PAID") ${{$inv->deposit_amount}} @else ${{$inv->due_amount}} @endif @endif <span class="inv-text">that's due on</span>  {{ date('m/d/Y', strtotime($inv->due_date)) }}.</p>
+<p class="inv-heading-text">{{$inv->user->fname}} {{$inv->user->lname}}  @if(!empty($inv->user->company_name))({{$inv->user->company_name}}) @endif <span class="inv-text">sent you an invoice ({{$inv->invoice_number}}) for</span>@if($inv->status =="ONLINE") $0 @else @if($inv->status =="OVERDUE" && $inv->net_amount != $inv->due_amount) ${{$inv->due_amount}} @elseif((!empty($inv->deposit_amount))&& $inv->status !="DEPOSIT_PAID") ${{$inv->deposit_amount}} @else ${{$inv->due_amount}} @endif @endif <span class="inv-text">that's due on</span>  {{ date('m/d/Y', strtotime($inv->due_date)) }}.</p>
 <center>
   <a href="{{env('APP_URL')}}/view-and-pay-invoice/{{$inv->id}}/{{$inv->invoice_number_token}}"><input type="button" name="" class="pay-btn" value="SEE INVOICE AND PAY"></a>
 </center>

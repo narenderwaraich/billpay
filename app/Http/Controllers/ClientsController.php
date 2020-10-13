@@ -30,7 +30,8 @@ class ClientsController extends Controller
   }
 
   public function findClientDataDetails($phone){
-    $client = Clients::where('phone',$phone)->first();
+    $userId = Auth::id();
+    $client = Clients::where('phone',$phone)->where('user_id',$userId)->first(); //dd($client);
     $country_data =DB::table('countries')->select('id','name')->get();
     $state_data = DB::table("states")->select('id','name')->get();
     $city_data = DB::table("cities")->select('id','name')->get();
@@ -49,6 +50,7 @@ class ClientsController extends Controller
         $validate = $this->validate(request(),[
         'fname'=>'required|string|max:50',
         'email'=>'required|string|email|max:255',
+        'phone' => 'required|min:10|max:10',
       ]);
         if(!$validate){
             Redirect::back()->withInput();
@@ -56,11 +58,11 @@ class ClientsController extends Controller
 
           $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']);
           
-          $data['user_id'] = Auth::id();
+          $data['user_id'] = Auth::id(); //dd($data);
           $client=Clients::create($data);
           Toastr::success('Client Add', 'Success', ["positionClass" => "toast-bottom-right"]);
-
-          return redirect()->to('/client/view');
+          $route ="/invoice/".$client->id;
+          return redirect()->to($route);
           
     }
        public function showClient(){
@@ -68,7 +70,7 @@ class ClientsController extends Controller
             $user = User::find($id);
             $clients = $user->clients()->latest()->paginate(10); //dd($clients);
             foreach($clients as $index => $client){
-                    $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+                    $query = Invoice::where('client_id', $client->id)->where('user_id',$id)->where('is_deleted','=',0);
                     $invoiceData = $query->latest()->first();
                     $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->where('is_deleted','=',0)->sum('net_amount') : '';
                     $client->totalInvoices = $query->count();
@@ -95,14 +97,19 @@ class ClientsController extends Controller
   }
 
  public function updateClient(Request $request, $id){
-    $this->validate(request(),[
+    $validate = $this->validate(request(),[
     'fname'=>'required|string|max:50',
     'email'=>'required|string|email|max:255',
-    ]); 
+    'phone' => 'required|min:10|max:10',
+    ]);
+
+    if(!$validate){
+            Redirect::back()->withInput();
+      }  
     
      $userId = Auth::id();
         
-    $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']);
+    $data = request(['fname','lname','email','phone','address','zipcode','city','country','state']); //dd($data);
     $data = Clients::where('id',$id)->update($data);
     Toastr::success('Client Updated', 'Success', ["positionClass" => "toast-bottom-right"]);
     return redirect()->to('/client/view');

@@ -6,8 +6,8 @@
 <head>
   <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MapleBooks</title>
-    <meta name="description" content="MapleBooks">
+    <title>Bill Pay</title>
+    <meta name="description" content="Online Bill Pay">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
@@ -23,48 +23,325 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <script type="text/javascript"> //<![CDATA[ 
-      var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.trust-provider.com/" : "http://www.trustlogo.com/");
-      document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
-      //]]>
-    </script>
 </head>
 <body>
- <nav class="navbar navbar-expand-lg navbar-dark static-top nav-bottom-border fix-navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-          <img src="/images/mapleebooks_logo.svg" alt="Logo" class="nav-logo">
-        </a>
-    <button class="navbar-toggler m-right-15" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto nav-m-r">
-        <li class="nav-item">
-          <a class="nav-link nav-text" href="/about-us">About US</a>
-        </li>
-        <li class="nav-item nav-text">
-          <a class="nav-link" href="/Contact-Us">Contact Us</a>
-        </li>
-        <li class="nav-item nav-text">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-      </ul>
-    </div>
+<div class="wrapper ">
+  <div class="main-panel" id="main-panel">
+<!-- sidebar with menu -->
+<div class="sidebar">
+  <div class="logo">
+    <a href="#" class="simple-text logo-mini">
+      Mob
+    </a>
+    <a href="/dashboard" class="simple-text logo-normal">
+      Dashboard
+    </a>
   </div>
-</nav>
-<div class="invoice-pay-css">
+  <div class="sidebar-wrapper" id="sidebar-wrapper">
+    <ul class="nav">
+      <li class="active">
+        <a href="#">
+          <i class="menu-icon fa fa-dashboard"></i>
+          <p>Dashboard</p>
+        </a>
+      </li>
+
+      <li class="{{ (request()->is('about-us')) ? 'active' : '' }}">
+        <a href="/about-us">
+          <i class="menu-icon fa fa-users"></i>
+          <p>About Us</p>
+        </a>
+      </li>
+
+      <li class="{{ (request()->is('contact-Us')) ? 'active' : '' }}">
+        <a href="/contact-Us">
+          <i class="menu-icon fa fa-files-o"></i>
+          <p>Contact Us</p>
+        </a>
+      </li>            
+      <li>
+        <a href="/login">
+          <i class="menu-icon fa fa-user"></i>
+          <p>Login</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- end sidebar -->
+
+
+<!-- top header -->
+<div class="panel-header panel-header-sm">
+              
+</div>
+<!-- end header    -->
+<!-- content section -->
+<div class="content">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card card-user">
+            <div class="image">
+                <img src="/public/images/bg.jpg" alt="">
+            </div>
+          <div class="card-body">
+              <div class="author">
+                <a href="#">
+                  <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
+                  <h5 class="title"><span id="first_name">{{$client->fname}}</span> <span id="last_name">{{$client->lname}}</span></h5>
+                </a>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-9">
+                    <div class="client-data" id="client_email">Email : <span id="client_email_data">{{$client->email}}</span></div>
+                    <div class="client-data" id="client_phone">Phone : <span id="client_phone_data">{{$client->phone}}</span></div>
+                    <div class="client-data" id="client_country">Country : <span id="client_country_data">{{$client->country}}</span></div>
+                    <div class="client-data" id="client_state">State : <span id="client_state_data">{{$client->state}}</span></div>
+                    <div class="client-data" id="client_city">City : <span id="client_city_data">{{$client->city}}</span></div>
+                    <div class="client-data" id="client_zip">ZipCode : <span id="client_zip_data">{{$client->zipcode}}</span></div>
+                    <div class="client-data" id="client_address">Address : <span id="client_address_data">{{$client->address}}</span></div>
+                  </div>
+                  <div class="col-lg-3">
+                    <br>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <input type="text" name="issue_date" value="{{ date('m/d/Y', strtotime($inv->issue_date)) }}" id="datepicker"  class="form-control datePick" width="150" />
+                          <label style="z-index: 2;">ISSUE DATE</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <input type="text" name="due_date" value="{{ date('m/d/Y', strtotime($inv->due_date)) }}" id="datepicker2" width="150" class="form-control datePick" />
+                          <label style="z-index: 2;">DUE DATE</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="title">Action</h5>
+            <hr>
+          </div>
+          <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12" style="margin: auto;text-align: center;">
+                @if($inv->payment_mode == "Online")
+                <a href="/invoice/pay/{{$inv->id}}" class="btn-success btn-lg">Pay</a>
+                @endif
+                <a href="/invoice/download/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-primary btn-lg">Download</a>
+            </div>
+        </div>
+        <br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice items add section -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="title">Invoice Items <span>@if($inv->status == "ONLINE")
+          HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}. @if($inv->deposit_amount > 0)   DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
+          @endif
+
+          @if($inv->status == "ONLINE" || $inv->is_cancelled ==1)
+            HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
+          @endif
+
+          @if($inv->status == "DEPOSIT_PAID" || ($inv->status == "OVERDUE" && $inv->net_amount != $inv->due_amount) || $inv->is_cancelled ==2)
+            DEPOSIT $ {{$inv->deposit_amount}} USD PAID ON {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
+          @endif  </span></h5>
+            <hr>
+          </div>
+          <div class="card-body">
+            @foreach($invItem as $index => $item)
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <input type="text" name="arr[{{$index}}][item_name]" value="{{$item->item_name}}" class="form-control" readonly style="background-color: transparent;">
+                    <label>Item Name</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input min="0" id="rate{{ $index }}" name="arr[{{$index}}][rate]"  value="{{$item->rate}}" type="text" class="form-control input-amt input-border" onkeyup="calc(this, {{ $index }})" readonly style="background-color: transparent;">
+                    <label>Rate</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input min="0" id="qty{{ $index }}" name="arr[{{$index}}][qty]" type="text" value="{{$item->qty}}" class="form-control input-amt" onkeyup="calc(this, {{ $index }})" readonly style="background-color: transparent;">
+                    <label>Quantity</label>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <input type="text" name="arr[{{$index}}][total]" onkeyup="calc(this, {{ $index }})"  class="tot input-calculation input-amt form-control"  id="total{{ $index }}" value="{{$item->total}}" readonly style="background-color: transparent;">
+                    <label>Total</label>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <div class="form-group">
+                   
+                  </div>
+                </div>
+              </div>
+               <div class="row">
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <textarea  class="form-control" rows="2" id="comment" name="arr[{{$index}}][item_description]" readonly style="background-color: transparent;">{{$item->item_description}}</textarea>
+                    <label>Description</label>
+                  </div>
+                </div>
+              </div>
+             @endforeach
+             <hr><br>
+              <div class="row">
+                <div class="col-md-9">
+                  <div class="row">
+                    <div class="col-md-12">
+                     <div class="form-group">
+                          <textarea class="form-control" rows="8" name="terms" readonly style="background-color: transparent;width: 50%;">{{$inv->terms}}</textarea>
+                          <label>Terms</label>
+                     </div>
+                   </div>
+                 </div>
+                </div>
+                <div class="col-md-3">
+                   <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 8px;">Payment Method</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <div style="font-weight: 500;color: #757575;font-size: 10px;">{{$inv->payment_mode}}</div>
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Sub Total</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                       <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->sub_total}}" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Discount <span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="discount" id="discount" onchange="myFunction()"  readonly value="{{$inv->discount}}" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" value="{{$inv->taxInPer}}" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="{{$inv->tax_rate}}" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                    <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 8px;">Deposit Amount</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="text" name="deposit_amount" id="deposit" value="{{$inv->deposit_amount}}" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;padding: 0;width: 75%;"  class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+                 <hr>
+                  <div class="row">
+                   <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Amount Paid</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="number" name="net_amount" id="net_amount" value="{{$inv->net_amount}}"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+                  <div class="row">
+                   <div class="col-md-5">
+                     <div class="form-group amount-details-title" style="margin-bottom: 10px;">
+                      <label style="margin-top: 6px;">Net Amount Due</label>
+                     </div>
+                   </div>
+                    <div class="col-md-7">
+                     <div class="form-group" style="margin-bottom: 10px;">
+                      <input type="number" name="due_amount" id="duePending"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->due_amount}}" onchange="myFunction()" class="input-calculation form-control">
+                     </div>
+                   </div>
+                 </div>
+
+
+
+                </div>
+              </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- <div class="invoice-pay-css">
     <div class="row top-row">
         <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
             <span class="inv-number-show">Invoice({{$inv->invoice_number}})</span>
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
           <div class="invoice-amount-pay-status invoice_payment_status_{{$inv->status}}" style="text-align: left;">
-          @if($inv->status == "PAID-BANKWIRE" || $inv->status == "PAID-OFFLINE")
+          @if($inv->status == "ONLINE")
           HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}. @if($inv->deposit_amount > 0)   DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
           @endif
 
-          @if($inv->status == "PAID-STRIPE" || $inv->is_cancelled ==1)
+          @if($inv->status == "ONLINE" || $inv->is_cancelled ==1)
             HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
           @endif
 
@@ -87,7 +364,7 @@
   </div>
   @endif
 
- <!-- invoice data view -->
+
 <div class="row-class invoice-change-col inv-pay-view-data">
    @if($inv->payment_mode == "STRIPE-PAYMENT")
     <div class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-9 padding-0">
@@ -131,15 +408,11 @@
        
           <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-4 clint-data row-remove-pad">
             <div class="inv-name">{{$inv->client->fname}} {{$inv->client->lname}}</div>
-            <div class="copmany-name">{{$inv->companies->name}}</div>
+            <div class="copmany-name"></div>
             <div class="inv-email">{{$inv->client->email}}</div>
             <div>
               <div class="col-4 col-sm-3 col-md-6 col-lg-5 col-xl-4">
-                @if(!empty($inv->companies->logo))
-                <img src="/company_logo/{{$inv->companies->logo}}" class="img-fluid">
-                @else
                 <div id="clientImage"></div>
-                @endif
               </div>
               <div class="col-8 col-sm-9 col-md-6 col-lg-7 col-xl-8 address-div">
                 <div class="inv-address">{{$inv->client->address}}</div>
@@ -196,10 +469,7 @@
 
           <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-8 inv-heading row-remove-pad" style="padding-left: 35px;">
 
-            <!-- <div>Notes: <br>
-              {!! nl2br($inv->notes) !!}
-            </div>
-            <br> -->
+
             <div>Terms: <br>
               {!! nl2br($inv->terms) !!}
             </div>
@@ -247,13 +517,13 @@
             <div>
               <div class="col-6 col-sm-6 col-md-7 col-lg-6 col-xl-6 inv-heading">Amount Paid</div>
               <div class="col-6 col-sm-6 col-md-5 col-lg-6 col-xl-6 inv-amount">$ {{$inv->net_amount - $inv->due_amount}}</div>
-                            <!-- @if($inv->status =="DEPOSIT_PAID")
+                            @if($inv->status =="DEPOSIT_PAID")
                                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ {{$inv->deposit_amount}}</div>
                             @elseif($inv->status =="PAID-STRIPE")
                                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ {{$inv->net_amount}}</div>
                             @else
                                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 inv-amount">$ 0</div>
-                            @endif -->
+                            @endif
             </div>
 
 
@@ -264,9 +534,9 @@
           </div>
             </div>
     </div>
-  @if($inv->payment_mode == "STRIPE-PAYMENT")
+  @if($inv->payment_mode == "ONLINE")
     <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-      @if($inv->status =="PAID-STRIPE")
+      @if($inv->status =="ONLINE")
       <div class="pay-div">
         <div class="form-top-title">Signup for free 30 days trail</div>
         <div class="form-style shadow-lg">
@@ -297,7 +567,7 @@
                                 </div>
                               </div>
                             </div>
-                           <!-- <input type="checkbox" onclick="myFunction()"> &nbsp; <b>Show Password</b> -->
+                        
                            <br>
                           <button type="submit" class="btn btn-lg btn-block form-btn">
                           Get Started</button>
@@ -329,7 +599,7 @@
         </div>
         <div class="col-7 t-l">
           <div class="amount-show-pay-box">
-          @if($inv->status =="PAID-STRIPE")
+          @if($inv->status =="ONLINE")
             $0
             <input type="hidden" name="amount"  value="0">
           @else
@@ -406,42 +676,13 @@
 
        @endif
     </div>
-  @endif  <!-- payment method -->
+  @endif 
 </div>
 
-<div class="container-fluid footer">
-        
-          <center>
-            <a class="navbar-brand" href="/">
-              <img src="/images/mapleebooks_logo_white.svg" alt="Logo" class="footer-img2" align="center"> 
-            </a>
-          </center>
-          <div class="footer-txt">
-            Invoice clients swiftly, securely and get paid
-          </div>
-          <div class="secure-logo">
-                  <script language="JavaScript" type="text/javascript">
-                TrustLogo("https://mapleebooks.com/images/positivessl_trust_seal_md_167x42.png", "CL1", "none");
-                </script>
-          </div>
+</div> -->
 
 
-              
-            <div class="footer-txt2"> 
-              All Right reserved @ 9711368 canada Inc
-            </div>
-        
-      
-</div>
-</div>
-
-                          <!-- client or user Name to Image -->
-
-              <span id="clientFirstName" style="display: none;">{{$inv->client->fname}}</span>
-              <span id="clientLastName" style="display: none;">{{$inv->client->lname}}</span>
-
-              <span id="userFirstName" style="display: none;">{{$inv->user->fname}}</span>
-              <span id="userLastName" style="display: none;">{{$inv->user->lname}}</span>
+             
 
 
 <button type="button" id="openModel" data-toggle="modal" data-target="#staticModal" style="display: none;">Model open</button> 
@@ -456,7 +697,7 @@
                                 <!-- <img src="/images/success-tick.gif" class="success-tick"> -->
                                <span class="alert-heading-text">Payment successful!</span> <br>
                                <span class="alert-text">On your statement the transaction will show as:</span>
-                               <span class="alert-data-text">{{$inv->user->fname}} {{$inv->user->lname}} ({{$inv->companies->name}}) </span>
+                               <span class="alert-data-text">{{$inv->user->fname}} {{$inv->user->lname}}  </span>
                             </div>
                             <div class="modal-footer" style="display: flex !important;">
                                    <button type="button" id="refresh" class="btn model-alert-btn" data-dismiss="modal">Done</button>
@@ -464,104 +705,14 @@
                         </div>
                     </div>
                 </div>
+
+  <style>
+  .client-data{
+    display: block;
+  }
+</style>
     <script src="{{ asset('js/vendor/jquery-2.1.4.min.js') }}"></script>
-   <script src="{{ asset('js/plugins.js') }}"></script>
    <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-{!! Toastr::message() !!}
-                    <script>
-                      function ccNumber() {
-                      // var account = document.getElementById('cc-number');
-                      // var changed = document.getElementById('cc_changed');
-
-                          // changed.value = new Array(account.value.length-3).join('X') + account.value.substr(account.value.length-4, 4);
-
-                          $('#cc-number').on('keyup', function(e){
-                              var val = $(this).val();
-                              var newval = '';
-                              val = val.replace(/\s/g, '');
-                              for(var i=0; i < val.length; i++) {
-                                  if(i%4 == 0 && i > 0) newval = newval.concat(' ');
-                                  newval = newval.concat(val[i]);
-                              }
-                              $(this).val(newval);
-                          });
-                        }
-                    </script>
-
-                    <script>
-                        $("form#InvoiceData").submit(function(e) {
-                              e.preventDefault();
-                              var formData = new FormData(this);
-
-                              $.ajax({
-                                  url: '/pay-payment',
-                                  type: 'post',
-                                  data: formData,
-                                  processData: false,
-                                  contentType: false,
-                                  dataType: 'json',
-                                  beforeSend: function() {
-                                      $('#payment-button-amount').hide();
-                                      $('#payment-button-sending').show();
-                                      $("#payment-button").attr("disabled", "disabled");
-                                  },
-                                  success: function (data) {
-                                    $('#openModel').click();
-                                      // $('#companies_id')
-                                      //  .append($("<option selected></option>")
-                                      //             .attr("value",data.id)
-                                      //             .text(data.name));
-                                      // $("#companyLogo").attr('src','/company_logo/'+data.logo);
-                                      // $('#addCompanyModal').hide(); /// hide modal
-                                      // $(".modal .close").click(); /// close modals
-                                      // $('#show-logo').show();
-                                  },
-                                  error: function (data) {
-                                    toastr.error(data.responseText);
-                                    $('#payment-button-sending').hide();
-                                    $('#payment-button-amount').show();
-                                    $("#payment-button").removeAttr("disabled");
-                                    //alert(data.responseText);
-
-                                  }
-                              });
-                          });
-
-                          // refesh page
-                          $('#refresh').on("click", function () {
-                            location.reload();
-                          });
-
-                          /// Download invoice pdf file
-                         $(document).ready(function () {
-                                $('.downloadInvoice').on('click', function(e) {
-                                var id = $(this).attr('data-id');
-                                var invToken = $(this).attr('inv-token');
-                                  window.location.href = '/invoice/download/PDF/'+id+'/'+invToken;       
-                              });
-                            });
-                    </script>
-
-                    <script type="text/javascript">
-                    $(document).ready(function(){
-                         var firstName = $('#clientFirstName').text();
-                         var lastName = $('#clientLastName').text();
-                         var dot = '.';
-                         var intials = firstName.charAt(0) + dot + lastName.charAt(0);
-                         var profileImage = $('#clientImage').text(intials);
-                         });
-                    </script>
-                    <script type="text/javascript">
-                    $(document).ready(function(){
-                         var firstName = $('#userFirstName').text();
-                         var lastName = $('#userLastName').text();
-                         var dot = '.';
-                         var intials = firstName.charAt(0) + dot + lastName.charAt(0);
-                         var profileImage = $('#userImage').text(intials);
-                         });
-                    </script>
-
-
-
+{!! Toastr::message() !!}               
     </body>
 </html>

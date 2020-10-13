@@ -74,10 +74,13 @@
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
 		          	<a href="#" class="cancel_invoice btn-warning btn-sm" CancelId="{{$inv->id}}">Cancel</a>
 		          	<a href="#" class="del_invoice btn-danger btn-sm" DeleteId="{{$inv->id}}">Delete</a>
-		            <a href="/invoice/print/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-info btn-sm" data-Id="{{$inv->id}}">Print</a>
+		            <a href="/invoice/print/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" target="_blank" class="btn-info btn-sm" data-Id="{{$inv->id}}">Print</a>
 		            <a href="#" class="btn-dark btn-sm" onclick="goBack()">Back</a>
+                <br><br>
+                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg">Cash Pay Invoice</a>
             	</div>
 		    </div>
+        <br>
           </div>
         </div>
       </div>

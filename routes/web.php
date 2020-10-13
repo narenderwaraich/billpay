@@ -73,12 +73,12 @@ Route::get('/Register','RegistrationsController@create');
 Route::post('user-update/{id}','RegistrationsController@userUpdate');
 Route::get('/profile','RegistrationsController@profileView');
 // // Change Password
-// Route::post('updatepassword/{id}','RegistrationsController@updatePass');
-// Route::get('/updatepassword','RegistrationsController@Pass');
+Route::post('updatepassword/{id}','RegistrationsController@updatePass');
+Route::get('/updatepassword','RegistrationsController@Pass');
 // ///SignUp Account
-// Route::post('SignUp','RegistrationsController@signUpStore');
-// Route::get('/Re-Send-Confirm-link','RegistrationsController@reSendConfirmMail');
-// Route::get('/confirm_login/{token?}','RegistrationsController@showLoginForm');
+Route::post('signup-account','RegistrationsController@signUpStore');
+Route::get('/Re-Send-Confirm-link','RegistrationsController@reSendConfirmMail');
+Route::get('/confirm_login/{token?}','RegistrationsController@showLoginForm');
 
 
 //Client Controller
@@ -98,10 +98,12 @@ Route::post('delete-client','ClientsController@destroy');
 Route::any('/client/search','ClientsController@searchClients');
 
 // /// Client Payment
-// Route::get('/pay-payment/{id}','ClientPaymentController@getPayPage');
-// Route::post('pay-payment','ClientPaymentController@storePayPage');
-// // Route::get('/refund-payment/{id}','ClientPaymentController@refundMoney');
-
+Route::get('/invoice/pay/{id}', 'PaymentController@paytmPay');
+Route::post('/payment/status', 'PaymentController@paytmCallback');
+Route::get('/payment/list', 'PaymentController@showPayment');
+Route::get('/payment/{status}/list', 'PaymentController@showPaymentStatus');
+Route::get('/invoice/cash/pay/{id}','PaymentController@invoiceCashPay');
+Route::get('/invoice/cash/payment/status/{id}','PaymentController@cashPay');
 
 // /// Invoice Controller
 Route::get('/invoice/view','InvoiceController@showInvoiceList');
@@ -113,7 +115,7 @@ Route::any('/invoice/search','InvoiceController@SearchData');
 Route::get('/invoice/edit/{id}','InvoiceController@editInvoices');
 Route::post('invoice/edit/{id}','InvoiceController@updateInvoices');
 // /// send mail
-// Route::post('/invoice/send/{id}','InvoiceController@SendInvoiceMail');
+Route::post('/invoice/send/{id}','InvoiceController@SendInvoiceMail');
 // /// Send reminder
 Route::post('/invoice/reminder/send/{id}','InvoiceController@SendInvoiceReminder');
 // /// delete
@@ -125,7 +127,8 @@ Route::post('/invoice/markSent','InvoiceController@markInvoices');
 // Route::post('/invoice/mark-paid-bankwire','InvoiceController@markBankWirePaid');
 Route::post('/invoice/mark-deposit-invoice','InvoiceController@depositPaid');
 Route::post('/invoice/mark-online-paid','InvoiceController@markOnlinePaid');
-// Route::post('/invoice/mark-overdue','InvoiceController@markOverdue');
+Route::post('/invoice/mark-cash-paid','InvoiceController@markCashPaid');
+
 // /// view invoice ditials
 Route::get('/invoice/view/{id}','InvoiceController@invoiceView');
 // 		///dashbord via
@@ -185,7 +188,17 @@ Route::get('/','RegistrationsController@signUpPage');
 Route::get('/SignUp','RegistrationsController@signUpPage');
 Route::get('/login','SessionController@create')->name('login');
 Route::get('/forget-password','RegistrationsController@forgetPassForm');
-// Route::get('/view-and-pay-invoice/{id}/{invoice_number_token}','InvoiceController@viewAndPay');
+Route::get('/view-and-pay-invoice/{id}/{invoice_number_token}','InvoiceController@viewAndPay');
+
+Route::get('/items','ItemController@index');
+Route::get('/items/add','ItemController@create');
+Route::post('items/add','ItemController@store');
+Route::get('/items/edit/{id}','ItemController@edit');
+Route::post('/items/update/{id}','ItemController@update');
+Route::post('/delete-items','ItemController@destroy');
+Route::get('/items/stock/{id}','ItemController@outInStockItem');
+
+
 
 /// contact-us
 Route::post('contact-us','ContactUsController@contactUs');

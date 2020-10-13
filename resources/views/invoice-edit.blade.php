@@ -86,7 +86,7 @@
               <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
-                    <input type="text" name="arr[{{$index}}][item_name]" value="{{$item->item_name}}" class="form-control" required>
+                    <input type="text" name="arr[{{$index}}][item_name]" value="{{$item->item_name}}" class="automplete form-control" dataId="{{ $index }}" onkeyup="initAutoComplete({{ $index }})" required>
                     <label>Item Name</label>
                   </div>
                 </div>
@@ -346,15 +346,58 @@
     display: block;
   }
 </style>
-
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/js/jquery.auto-complete.js"></script>
 <script>
+
+  let allItems = $(".automplete").siblings("input#Item_name");
+    for(let i = 0; i < allItems.length; i++){
+        if(allItems[i].value == ''){
+            isValid = false;
+        }
+    }
+     // auto complete 
+    
+    $(function() {
+            initAutoComplete(); 
+         });
+
+         function initAutoComplete(i) {
+              $('#rate'+i).val('');
+              $('#qty'+i).val('');
+              $('#total'+i).val('');
+                myFunction();
+              var allItems = <?php echo json_encode($allItem) ?>; 
+                
+                var Items = [];
+                for (Item in allItems){
+                    let subData = {
+                        "label" : allItems[Item]['item_name'], 
+                        "value": allItems[Item]['item_name'],
+                        "rate": allItems[Item]['sale']
+                    };
+                    Items.push(subData);
+                }
+                
+                $( ".automplete" ).autocomplete({
+                    source: Items,
+                    select: function(event, ui){
+                        $(this).siblings('input').val(ui.item.value);
+                        $(this).val(ui.item.label);
+                        var fieldId = $(this).attr('dataId');
+                        $('#rate'+fieldId).val(ui.item.rate);
+                        return false;
+                     }
+            });
+         }
+
               //// add multi items
             $(document).ready(function(){      
               var postURL = "<?php echo url('Invoice'); ?>";
               var i=$("#addForm").data('total-items');  
 
               $('#addForm').click(function(){    
-              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="form-control" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
+              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
                    i++;
               });
 

@@ -30,7 +30,7 @@ button:focus {
 	
 <h2>Hi <span style="text-transform: uppercase;">{{$data['user']['fname']}} {{$data['user']['lname']}}</span></h2>
 <br><br><br>
-<p>Greetings for choosing Mapleebooks. Its Easiest way to invoice your clients and get paid online. 
+<p>Greetings for choosing Bill Pay. Its Easiest way to invoice your clients and get paid online. 
 
 Please click the link below to confirm your email and activate your account.</p>
 <center>
@@ -38,7 +38,7 @@ Please click the link below to confirm your email and activate your account.</p>
 </center>
 <br>
 <h3>Thanks <br>
-Team Mapleebooks</h3>
+Team Bill Pay</h3>
 	
 </body>
 </html>

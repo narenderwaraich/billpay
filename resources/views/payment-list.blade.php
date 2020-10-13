@@ -11,27 +11,30 @@
           <div class="col-md-12">
             <div class="card invoice-show-card">
               <div class="card-header">
-                <h4 class="card-title">Invoices</h4>
+                <h4 class="card-title">Payments 
+                            <div class="btn-group">
+                                <a href="/payment/Success/list">
+                                    <button type="button" class="btn btn-success btn-sm">Success</button>
+                                </a>
+                                <a href="/payment/Fields/list">
+                                    <button type="button" class="btn btn-danger btn-sm">Fields</button>
+                                </a>
+                                <a href="/payment/Pending/list">
+                                    <button type="button" class="btn btn-warning btn-sm">Pending</button>
+                                </a>
+                            </div>
+                </h4>
                   <div class="dropdown">
                     <button type="button" id="action-btn"  class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
                       <i class="now-ui-icons fa fa-gear"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                     <a class="dropdown-item sendInvoice" href="#" data-toggle="modal" data-target="#myModal" id="sendButton" style="display: none;">SEND EMAIL</a>
-                      <a class="dropdown-item sendReminder" href="#" data-toggle="modal" data-target="#sendReminderModel" id="reminderButton" style="display: none;">SEND REMINDER</a>
-                       <a class="dropdown-item" id="markSent" href="#">MARK AS SENT</a>
-                       <a class="dropdown-item" id="depositPaid" href="#">DEPOSIT PAID</a>
-                       <a class="dropdown-item" id="markOnlinePaid" href="#">ONLINE</a>
-                       <a class="dropdown-item" id="markCashPaid" href="#">CASH</a>
-                       <a class="dropdown-item downloadInvoice" href="#" id="downloadButton" style="display: none;">DOWNLOAD INVOICE</a>
-                      <a class="dropdown-item copyInvoice" href="#" id="copyButton" style="display: none;">Copy</a>
-                      <a class="dropdown-item editInvoice" href="#" id="editButton" style="display: none;">Edit</a>
                       <a class="dropdown-item text-danger delete_all" href="#">Remove</a>
                     </div>
                   </div>
               </div>
               <div class="card-body">
-                <form action="/invoice/search" method="POST" id="SearchData" role="search" autocomplete="off">
+                <form action="/payment/search" method="POST" id="SearchData" role="search" autocomplete="off">
                     {{ csrf_field() }}
                 <div class="row">
                   <div class="col-md-2">
@@ -50,7 +53,7 @@
                   </div>
                   <div class="col-md-8">
                       <div class="input-group">
-                        <input type="text" name="q" value="{{request('q')}}" id="search" class="form-control serach-input" placeholder="Search by client name">
+                        <input type="text" name="q" value="{{request('q')}}" id="search" class="form-control serach-input" placeholder="Search by name">
                         <div class="input-group-append">
                           <button class="btn btn-secondary search-btn-css" type="submit">
                             <i class="fa fa-search"></i>
@@ -72,62 +75,69 @@
                      @endif
                   </div>
                 </div>
-
                 <div class="table-responsive">
                   <table class="table">
                     <thead class=" text-primary">
                       <th>
                         <input type="checkbox" id="master">
                         CLIENT<br>
-                         <span style="font-weight: 400;font-size: 12px;">(Invoice Number)</span>
+                         <span style="font-weight: 400;font-size: 12px;">(Order Number)</span>
                       </th>
                       <th>
-                        ISSUE DATE
+                        PAYMENT DATE
                       </th>
                       <th>
-                        DUE DATE
+                        METHOD
+                      </th>
+                      <th>
+                        TRANSACTION ID
+                      </th>
+                      <th>
+                        BANK TRANSACTION ID
+                      </th>
+                      <th>
+                        BANK
+                      </th>
+                      <th>
+                        AMOUNT
                       </th>
                       <th>
                         STATUS
                       </th>
-                      <th class="text-right">
-                        AMOUNT
-                      </th>
                     </thead>
                     <tbody>
-                    @if(isset($invoices))
-                      @foreach ($invoices as $invoice)
-                      <tr id="tr_{{$invoice->id}}" class="clickable-row" data-href='/invoice/view/{{$invoice->id}}' style="cursor: pointer;">
+                    @if(isset($payments))
+                      @foreach ($payments as $payment)
+                      <tr id="tr_{{$payment->id}}" class="clickable-row" data-href='/invoice/view/{{$payment->invoice_id}}' style="cursor: pointer;">
                         <td>
-                          <input type="checkbox" class="sub_chk" data-id="{{$invoice->id}}" token-data="{{$invoice->invoice_number_token}}" email-id="{{ $invoice->client->email }}"> <a href="/invoice/view/{{$invoice->id}}"> {{ $invoice->client->fname }}  {{ $invoice->client->lname }}<br>
-                            <span class="td-inv-no">{{ $invoice->invoice_number}}</span> </a>
+                          <input type="checkbox" class="sub_chk" data-id="{{$payment->id}}"> <a href="/invoice/view/{{$payment->invoice_id}}"> {{ $payment->user }}<br>
+                            <span class="td-inv-no">{{ $payment->order_id}}</span> </a>
                         </td>
                         <td>
-                          {{ date('m/d/Y', strtotime($invoice->issue_date)) }}
+                          {{$payment->transaction_date}}
                         </td>
                         <td>
-                          {{ date('m/d/Y', strtotime($invoice->due_date)) }}
+                          {{$payment->payment_method}}
                         </td>
-                        <td class="status_{{ strtolower($invoice->status)}}">{{ $invoice->status}} <br>
-                              @if($invoice->status == "OVERDUE" && $invoice->net_amount != $invoice->due_amount)
-                              <span class="td-inv-amount-status">DEPOSIT PAID ON {{ date('m/d/Y', strtotime($invoice->payment_date)) }}</span>
-                              @endif
-                              @if($invoice->status == "PAID-STRIPE" || $invoice->status == "PAID-BANKWIRE" || $invoice->status == "PAID-OFFLINE")
-                             <span class="td-inv-amount-status">PAID ON {{ date('m/d/Y', strtotime($invoice->payment_date)) }}</span>
-                             @endif
-
-                             @if($invoice->status == "DEPOSIT_PAID")
-                             <span class="td-inv-amount-status">DEPOSIT PAID ON {{ date('m/d/Y', strtotime($invoice->payment_date)) }}</span>
-                             @endif
+                        <td>
+                          {{$payment->transaction_id}}
+                        </td>
+                        <td>
+                          {{$payment->bank_transaction_id}}
+                        </td>
+                        <td>
+                          {{$payment->bank_name}}
                         </td>
                         <td class="text-right">
-                          <i class="fa fa-inr"></i>{{ $invoice->net_amount}}
+                          <i class="fa fa-inr"></i>{{ $payment->amount}}
+                        </td>
+                        <td class="status_{{ strtolower($payment->transaction_status)}}">{{ $payment->transaction_status}}
                         </td>
                       </tr>
                       @endforeach
                     </tbody>
                   </table>
-                    @if($invoices){!! $invoices->render() !!}@endif
+                    @if($payments){!! $payments->render() !!}@endif
                   @endif
                 </div>
               </div>

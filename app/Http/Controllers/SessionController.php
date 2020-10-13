@@ -23,7 +23,51 @@ class SessionController extends Controller
         if(Auth::check()){
         if(Auth::user()->role == 'user'){
             $id = Auth::id();
-          return view('index');
+            $nowDate = date("Y-m-d", time());
+            $yearData = array(date('Y'));
+            $overdueInvoices = Invoice::where('user_id',$id)->where(function($q){
+                $q->where('status','=','SENT')->orWhere('status','=','DEPOSIT_PAID');
+            })->where('due_date', '<',$nowDate)->update(['status' => 'OVERDUE']);
+            $sentAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','SENT')->where('is_deleted','=',0)->sum('net_amount');
+            $onlyDepositAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','DEPOSIT_PAID')->where('is_deleted','=',0)->sum('deposit_amount');
+            $overdueInDepositAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','OVERDUE')->where('net_amount','!=','due_amount')->where('is_deleted','=',0)->sum('deposit_amount'); 
+            $totalDeposit = $onlyDepositAmount + $overdueInDepositAmount;
+            $cancelInvoice = DB::table("invoices")->where('user_id',$id)->where('status','=','CANCEL')->where('is_deleted','=',0)->sum('net_amount');
+            $piChart = [0,0,0,0,0];
+            $paids =DB::table('invoices')
+                     ->select(DB::raw('sum(net_amount) as amount'),DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as day'))
+                     ->groupBy('day')
+                     ->orderBy('day','asc')
+                     ->whereIn('status',['ONLINE','CASH'])
+                     ->where('is_deleted','=',0)
+                     ->where('user_id', '=', $id)
+                     // ->whereRaw('year(`created_at`) = ?', $yearData)
+                     ->get();
+                   //dd($paids);
+                    foreach($paids as $paidInv){
+                            $piChart[0] += $paidInv->amount;
+                    }
+            $OverDueInvAmount=DB::table('invoices')
+                     ->select(DB::raw('sum(net_amount) as OverDueInvAmount'),DB::raw('DATE_FORMAT(created_at, "%Y-%m-01") as month'))
+                     ->groupBy('month')
+                     ->orderBy('month','asc')
+                     ->where('status', '=', 'OVERDUE')
+                     ->where('is_deleted','=',0)
+                     ->where('user_id', '=', $id)
+                      ->get();
+                      //dd($OverDueInvAmount);
+                      foreach($OverDueInvAmount as $OvInvAmount){
+                        $piChart[2] += $OvInvAmount->OverDueInvAmount;
+                      }
+            $piChart[1] += $totalDeposit;
+            $piChart[3] += $sentAmount;
+            $piChart[4] += $cancelInvoice;
+            $finalPiData = [];
+          foreach($piChart as $key => $PiData){
+              $finalPiData[$key]['type'] = ($key == 0 ? "Paid" : ($key  == 1 ? "Deposit" : ($key  == 2 ? "Overdue" : ($key  == 3 ? "Sent" : "Cancel"))));
+              $finalPiData[$key]['amount'] = $PiData;
+            }
+          return view('index',compact('paids','finalPiData'));
     }else{
         return redirect()->to('/admin');
     }

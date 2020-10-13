@@ -188,6 +188,7 @@ vertical-align: text-top !important;
 padding-top: 10px;
 }
 .item-tr{
+  width: 100% !important;
   border-bottom: 2px solid #000 !important;
   vertical-align: text-top !important;
   padding-bottom: 20px;

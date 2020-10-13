@@ -25,6 +25,7 @@ use Response;
 use App\DeleteInvoice;
 use File;
 use ZipArchive;
+use App\Item;
 
 
 class InvoiceController extends Controller
@@ -38,7 +39,8 @@ class InvoiceController extends Controller
               }else{
                     $id = Auth::id();
                     $client = Clients::find($clientId);
-                    return view('new-invoice',['client' => $client]);
+                    $allItem = Item::where('user_id',$id)->where('in_stock','=',1)->get();
+                    return view('new-invoice',['client' => $client, 'allItem' => $allItem]);
                   }
             }else{
               return redirect()->to('/dashboard');
@@ -122,10 +124,25 @@ class InvoiceController extends Controller
 
                                 
                                   InvoiceItem::insert($details);
+
+                                // $invoiceItm = Item::where('item_name',$itm)->first();
+                                // if($invoiceItm->qty > 1){
+                                //   $qty['qty'] = $invoiceItm->qty - $request->qty;
+                                // }else{
+                                //   $qty['qty'] = 0;
+                                //   $qty['in_stock'] = 0;
+                                // }
+                                // $invoiceItm->update($qty);
+                                
                             }
                                 
                                   Toastr::success('Invoice Add', 'Success', ["positionClass" => "toast-bottom-right"]);
-                                  return redirect()->to('/invoice/view');
+                                  if($request->payment_mode == "Cash"){
+                                    $route = "/invoice/cash/pay/".$invoice_id;
+                                    return redirect()->to($route);
+                                  }else{
+                                    return redirect()->to('/invoice/view');
+                                  }
                                 }
 
 
@@ -435,9 +452,9 @@ class InvoiceController extends Controller
                                     return back();
                                    }
                                    $invItem = $inv->invoiceItems;
-                                   
+                                   $client = Clients::where('id',$inv->client_id)->first(); //dd($client);
                                    if($inv->is_deleted ==0){
-                                    return view('view-and-pay',['invItem' => $invItem, 'inv' => $inv]);
+                                    return view('view-and-pay',['client' => $client, 'invItem' => $invItem, 'inv' => $inv]);
                                   }else{
                                     Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
                                     return redirect()->to('/');
@@ -462,8 +479,9 @@ class InvoiceController extends Controller
                                     $user = Auth::id();
                                     $inv = Invoice::find($id); //dd($inv);
                                     $invItem = InvoiceItem::where('invoice_id',$id)->get();
-                                    $client = Clients::where('id', $inv->client_id)->first(); 
-                                    return view('invoice-edit',compact('invItem','id'),['client'=>$client, 'inv'=>$inv]);
+                                    $client = Clients::where('id', $inv->client_id)->first();
+                                    $allItem = Item::where('in_stock','=',1)->get(); 
+                                    return view('invoice-edit',compact('invItem','id'),['client'=>$client, 'inv'=>$inv, 'allItem' => $allItem]);
                                   }else{
                                   return redirect()->to('/');
                                  }
@@ -540,14 +558,19 @@ class InvoiceController extends Controller
                                           }
                                     
                                       Toastr::success('Invoice Updated', 'Success', ["positionClass" => "toast-bottom-right"]);
-                                      return redirect()->to('/invoice/view');
+                                  if($request->payment_mode == "Cash"){
+                                    $route = "/invoice/cash/pay/".$id;
+                                    return redirect()->to($route);
+                                  }else{
+                                    return redirect()->to('/invoice/view');
+                                  }
 
                             }
 
                           public function cancelInvoice($id){
                               $inv = Invoice::find($id);
                               $status = $inv->status;
-                              if ($status =="PAID-STRIPE") {
+                              if ($status =="ONLINE") {
                                 $data['is_cancelled'] = 1;
                               }
                               if ($status =="OVERDUE" && $inv->net_amount != $inv->due_amount) {
@@ -581,7 +604,7 @@ class InvoiceController extends Controller
                                     $invoiceIds = [];
                                     foreach ($invoices as $invoice) {
                                       $chkStatus = $invoice->status;
-                                      if($chkStatus == "PAID" || $chkStatus == "DEPOSIT_PAID" || ($invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
+                                      if($chkStatus == "ONLINE" || $chkStatus == "DEPOSIT_PAID" || ($invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
                                         array_push($invoiceIds, $invoice->invoice_number);
                                       }else{
                                         DB::table("invoice_items")->where('invoice_id',$invoice->id)->delete();
@@ -605,7 +628,7 @@ class InvoiceController extends Controller
                                     $invoiceIds = [];
                                     foreach ($invoices as $invoice) {
                                       $chkStatus = $invoice->status;
-                                      if($chkStatus == "PAID-STRIPE" || $chkStatus == "DEPOSIT_PAID" || ($chkStatus == "OVERDUE" && $invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
+                                      if($chkStatus == "ONLINE" || $chkStatus == "DEPOSIT_PAID" || ($chkStatus == "OVERDUE" && $invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
                                         array_push($invoiceIds, $invoice->invoice_number);
                                       }else{
                                         DB::table("invoice_items")->where('invoice_id',$invoice->id)->delete();
@@ -649,7 +672,7 @@ class InvoiceController extends Controller
                                     $pay = $chkData->deposit_amount; // pay amount
                                     $totalAmount = $chkData->due_amount; /// total amount 
                                     $pending = $totalAmount - $pay; // total - pay
-                                    if($chkStatus != "PAID-STRIPE"){
+                                    if($chkStatus != "ONLINE"){
                                       $status['status'] = "DEPOSIT_PAID";
                                       $status['deposit_date'] = Carbon::now();
                                       $status['payment_date'] = Carbon::now();
@@ -661,45 +684,7 @@ class InvoiceController extends Controller
                                     }  
                                     
                                 }
-
-                                ///// invoice mark offile paid
-                                public function markOfflinePaid(Request $request){
-                                    $ids = $request->ids;
-                                    $id = explode(",",$ids);
-                                    $chkData =  Invoice::where('id',$id)->first();
-                                    $chkStatus = $chkData->status;
-                                    if($chkStatus != "PAID-STRIPE"){
-                                      $status['status'] = "PAID-OFFLINE";
-                                      $status['payment_date'] = Carbon::now();
-                                      $status['due_amount'] = 0;
-                                      $status['payment_mode'] = "OFFLINE-PAYMENT";
-                                      $chk =  Invoice::whereIn('id',$id)->update($status);
-                                      return response()->json(['success'=>"Mark Offline Paid successfully"]);
-                                    }else{
-                                      return response()->json(['error'=>"Sorry Invoice Mark as not Offline Paid"]);
-                                    }  
-                                    
-                                }
-
-                                ///// invoice mark BankWire paid
-                                public function markBankWirePaid(Request $request){
-                                    $ids = $request->ids;
-                                    $id = explode(",",$ids);
-                                    $chkData =  Invoice::where('id',$id)->first();
-                                    $chkStatus = $chkData->status;
-                                    if($chkStatus != "PAID-STRIPE"){
-                                      $status['status'] = "PAID-BANKWIRE";
-                                      $status['payment_date'] = Carbon::now();
-                                      $status['due_amount'] = 0;
-                                      $status['payment_mode'] = "BANKWIRE-PAYMENT";
-                                      $chk =  Invoice::whereIn('id',$id)->update($status);
-                                      return response()->json(['success'=>"Mark BANKWIRE Paid successfully"]);
-                                    }else{
-                                      return response()->json(['error'=>"Sorry Invoice Mark as not BANKWIRE Paid"]);
-                                    }  
-                                    
-                                }
-
+    
 
                                 ///// invoice mark Stripe Paid
                                 public function markOnlinePaid(Request $request){
@@ -716,34 +701,91 @@ class InvoiceController extends Controller
                                         $status['deposit_date'] = Carbon::now();
                                         $status['payment_date'] = Carbon::now();
                                         $status['due_amount'] = $pending;
-                                        $status['payment_mode'] = "STRIPE-PAYMENT";
+                                        $status['payment_mode'] = "ONLINE";
                                       }else{
-                                        $status['status'] = "PAID-STRIPE";
+                                        $status['status'] = "ONLINE";
                                         $status['payment_date'] = Carbon::now();
                                         $status['due_amount'] = 0;
-                                        $status['payment_mode'] = "STRIPE-PAYMENT";
+                                        $status['payment_mode'] = "ONLINE";
                                       }
                                       $chk =  Invoice::whereIn('id',$id)->update($status);
-                                      return response()->json(['success'=>"Mark Stripe Paid successfully"]);
+                                      return response()->json(['success'=>"Mark Online Paid successfully"]);
                                     }else{
-                                      return response()->json(['error'=>"Sorry Invoice Mark as not Stripe Paid"]);
+                                      return response()->json(['error'=>"Sorry Invoice Mark as not Online Paid"]);
                                     } 
                                     
                                 }
 
-                                public function markOverdue(Request $request){
+
+
+                                ///// invoice mark Cash Paid
+                                public function markCashPaid(Request $request){
+
+                                  $invoice = Invoice::where('id',$id)->first();
+        if($invoice->deposit_amount > 0){
+                    $amount = $invoice->deposit_amount;
+                }else{
+                    $amount = $invoice->net_amount;
+                }
+                
+                /// Update status
+
+
+
+
+
                                     $ids = $request->ids;
                                     $id = explode(",",$ids);
                                     $chkData =  Invoice::where('id',$id)->first();
-                                    $chkStatus = $chkData->status;
-                                    if($chkStatus == "DRAFT"){
-                                      return response()->json(['error'=>"Invoice not Mark OVERDUE"]);
-                                    }else{
-                                      $status['status'] = "OVERDUE";
+                                    if($chkData){
+                                      /// check first any deposit pending
+                                      $depositAmount = $chkData->deposit_amount; // pay amount
+                                      if($depositAmount > 0 && $chkData->net_amount == $chkData->due_amount){
+                                        $totalAmount = $chkData->due_amount; /// total amount 
+                                        $pending = $totalAmount - $depositAmount; // total - pay
+                                        $status['status'] = "DEPOSIT_PAID";
+                                        $status['deposit_date'] = Carbon::now();
+                                        $status['payment_date'] = Carbon::now();
+                                        $status['due_amount'] = $pending;
+                                        $status['payment_mode'] = "CASH";
+
+                                        $order_id = uniqid();
+                                        $order = new UserPayment();
+                                        $order->order_id = $order_id;
+                                        $order->transaction_date = Carbon::now();
+                                        $order->transaction_status = 'Success';
+                                        $order->amount = $depositAmount;
+                                        $order->transaction_id = '';
+                                        $order->invoice_id = $chkData->id;
+                                        $order->user_id = $chkData->user_id;
+                                        $order->created_at =  Carbon::now();
+                                        $order->save();
+                                      }else{
+                                        $status['status'] = "CASH";
+                                        $status['payment_date'] = Carbon::now();
+                                        $status['due_amount'] = 0;
+                                        $status['payment_mode'] = "CASH";
+
+                                        $order_id = uniqid();
+                                        $order = new UserPayment();
+                                        $order->order_id = $order_id;
+                                        $order->transaction_date = Carbon::now();
+                                        $order->transaction_status = 'Success';
+                                        $order->amount = $chkData->net_amount;
+                                        $order->transaction_id = '';
+                                        $order->invoice_id = $chkData->id;
+                                        $order->user_id = $chkData->user_id;
+                                        $order->created_at =  Carbon::now();
+                                        $order->save();
+                                      }
                                       $chk =  Invoice::whereIn('id',$id)->update($status);
-                                      return response()->json(['success'=>"Invoice Mark as OVERDUE"]);
-                                    }
+                                      return response()->json(['success'=>"Mark Cash Paid successfully"]);
+                                    }else{
+                                      return response()->json(['error'=>"Sorry Invoice Mark as not Cash Paid"]);
+                                    } 
+                                    
                                 }
+
                                 
                             
 
