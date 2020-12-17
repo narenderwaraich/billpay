@@ -30,6 +30,15 @@
     }
     .main-panel>.content {
     	padding: 0 20px 30px;
+    }
+    .logo-normal{
+        display: none;
+    }
+    .logo-mini{
+        display: block;
+    }
+    img.template-logo {
+        width: 90px;
     }	
 }
 @media (min-width: 991px){

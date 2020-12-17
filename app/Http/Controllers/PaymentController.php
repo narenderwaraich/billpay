@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use App\UserPayment;
 use App\User;
 use Carbon\Carbon;
@@ -41,18 +42,30 @@ class PaymentController extends Controller
         return view('cash-pay-invoice',compact('invoice'));
     }
 
-    public function cashPay($id){
+    public function cashDepositPay($id){
+       $invoice = Invoice::where('id',$id)->first();
+       $amount = $invoice->deposit_amount;
+       $this->cashPay($id, $amount);
+       Toastr::success('Invoice Cash Deposit Paid', 'Success', ["positionClass" => "toast-top-right"]);
+                return redirect()->to('/dashboard');
+    }
+
+    public function cashFullPay($id){
         $invoice = Invoice::where('id',$id)->first();
-        if($invoice->deposit_amount > 0){
-                    $amount = $invoice->deposit_amount;
-                }else{
-                    $amount = $invoice->net_amount;
-                }
+        $amount = $invoice->net_amount;
+        $this->cashPay($id, $amount);
+        Toastr::success('Invoice Cash Full Paid', 'Success', ["positionClass" => "toast-top-right"]);
+                return redirect()->to('/dashboard');
+    }
+
+    public function cashPay($id, $amount){
+                $invoice = Invoice::where('id',$id)->first();
                 $order_id = uniqid();
                 $order = new UserPayment();
                 $order->order_id = $order_id;
                 $order->transaction_date = Carbon::now();
                 $order->transaction_status = 'Success';
+                $order->payment_method = "Cash";
                 $order->amount = $amount;
                 $order->transaction_id = '';
                 $order->invoice_id = $id;
@@ -62,13 +75,20 @@ class PaymentController extends Controller
                 /// Update status
                 if($amount == $invoice->net_amount){
                     $statusUpdate['status'] = "CASH";
+                    $statusUpdate['due_amount'] = 0;
+                    $statusUpdate['payment_date'] = Carbon::now();
                 }else{
+                    $pay = $invoice->deposit_amount; // pay amount
+                    $totalAmount = $invoice->due_amount; /// total amount 
+                    $pending = $totalAmount - $pay; // total - pay
                     $statusUpdate['status'] = "DEPOSIT_PAID";
+                    $statusUpdate['deposit_date'] = Carbon::now();
+                    $statusUpdate['payment_date'] = Carbon::now();
+                    $statusUpdate['due_amount'] = $pending;
                 }
                 $invoice->update($statusUpdate);
-
-                Toastr::success('Invoice Cash Paid', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect()->to('/');
+                return;
+                
     }
 
     /**
@@ -114,8 +134,18 @@ class PaymentController extends Controller
         $checkSum = "";
         $paramList = array();
 
+        ///if user have own paytem account
+        $userPaytm = User::find(Auth::id());
+        if($userPaytm){
+          $paytmId = Crypt::decryptString($userPaytm->paytm_id);
+          $paytmKey = Crypt::decryptString($userPaytm->paytm_key);
+        }else{
+          $paytmId = env('PAYTM_MERCHANT_ID');
+          $paytmKey = env('PAYTM_MERCHANT_KEY');
+        }
+
         // Create an array having all required parameters for creating checksum.
-        $paramList["MID"] = env('PAYTM_MERCHANT_ID');
+        $paramList["MID"] = $paytmId;
         $paramList["ORDER_ID"] = $order_id;
         $paramList["CUST_ID"] = $order_id;
         $paramList["INDUSTRY_TYPE_ID"] = env('PAYTM_INDUSTRY_TYPE');
@@ -123,7 +153,7 @@ class PaymentController extends Controller
         $paramList["TXN_AMOUNT"] = $amount;
         $paramList["WEBSITE"] = env('PAYTM_MERCHANT_WEBSITE');
         $paramList["CALLBACK_URL"] = url( env('CALL_BACK_URL') );  //env('CALLBACK_URL');
-        $paytm_merchant_key = env('PAYTM_MERCHANT_KEY');
+        $paytm_merchant_key = $paytmKey;
 
         //Here checksum string will return by getChecksumFromArray() function.
         $checkSum = getChecksumFromArray( $paramList, $paytm_merchant_key );
@@ -407,9 +437,17 @@ class PaymentController extends Controller
      * Config Paytm Settings from config_paytm.php file of paytm kit
      */
     function getConfigPaytmSettings() {
+        $userPaytm = User::find(Auth::id());
+        if($userPaytm){
+          $paytmId = Crypt::decryptString($userPaytm->paytm_id);
+          $paytmKey = Crypt::decryptString($userPaytm->paytm_key);
+        }else{
+          $paytmId = env('PAYTM_MERCHANT_ID');
+          $paytmKey = env('PAYTM_MERCHANT_KEY');
+        }
         define('PAYTM_ENVIRONMENT', env('PAYTM_ENVIRONMENT')); // PROD
-        define('PAYTM_MERCHANT_KEY', env('PAYTM_MERCHANT_KEY')); //Change this constant's value with Merchant key downloaded from portal
-        define('PAYTM_MERCHANT_MID', env('PAYTM_MERCHANT_ID')); //Change this constant's value with MID (Merchant ID) received from Paytm
+        define('PAYTM_MERCHANT_KEY', $paytmKey); //Change this constant's value with Merchant key downloaded from portal
+        define('PAYTM_MERCHANT_MID', $paytmId); //Change this constant's value with MID (Merchant ID) received from Paytm
         define('PAYTM_MERCHANT_WEBSITE', env('PAYTM_MERCHANT_WEBSITE')); //Change this constant's value with Website name received from Paytm
 
         $PAYTM_STATUS_QUERY_NEW_URL= env('PAYTM_STATUS_QUERY_URL');

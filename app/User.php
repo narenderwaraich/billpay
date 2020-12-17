@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'fname','lname','email','avatar','password','phone_no','country','city','state','address','zipcode','company_name','status','account_type','is_activated','access_date','gstin_number'];
+        'fname','lname','email','avatar','password','phone_no','country','city','state','address','zipcode','company_name','status','account_type','is_activated','access_date','gstin_number','paytm_id','paytm_key'];
     
     // protected $casts = [
     //     'is_activated' => 'boolean'

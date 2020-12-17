@@ -439,9 +439,20 @@ iframe {
 .navbar .navbar-brand {
     text-transform: uppercase;
     font-size: 0.8571em;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    line-height: 1.625rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: unset;
+}
+img.nav-logo {
+    width: 90px;
+}
+img.template-logo {
+    width: 120px;
+    margin: auto;
+    display: block;
+}
+.logo-mini{
+    display: none;
 }
 .panel-header {
     height: 260px;
@@ -1017,12 +1028,12 @@ font-size: 13px !important;
 color: #E565F3;
 font-size: 13px;
 }
-.status_paid-stripe{
+.status_cash{
 /*color: #04BF37;*/
 color: #138E60;
 font-size: 13px;
 }
-.status_paid-bankwire{
+.status_online{
 color: #718E13;
 font-size: 13px;
 }
@@ -1095,4 +1106,135 @@ font-size: 13px;
     background-color: transparent;
     border: 1px solid #007bff;
     cursor: pointer;
+}
+form.search-nav-form {
+    position: absolute;
+    width: 100%;
+    padding-top: 10px;
+    z-index: 1029;
+    background-color: transparent !important;
+    box-shadow: none;
+    color: #FFFFFF;
+}
+.search-nav-form .input-group{
+    width: 95%;
+    margin: auto;
+}
+.search-nav-form input{
+    border: 1px solid #fff;
+}
+.search-nav-form input::placeholder{
+    color: #fff;
+}
+.search-nav-form input:focus{
+    outline: none !important;
+    color: #e91e63;
+    background-color: transparent !important;
+    border-color: #e91e63 !important;
+    box-shadow: none !important; 
+}
+.search-nav-form .search-nav-btn{
+    background-color: #e91e63;
+    border: 1px solid #fff;
+    padding: 5px 25px;
+    font-size: 30px;
+}
+.search-nav-form .search-nav-btn:hover{
+    background-color: transparent;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+.search-nav-form .search-nav-btn i{
+    color:#fff;
+}
+.select-pay-type {
+    position: relative;
+}
+.select-pay-type label.form-check-label {
+    position: unset;
+    padding-left: 15px;
+    padding-right: 0px;
+    left: 0;
+    top: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #000;
+}
+.select-pay-type .form-check-inline .form-check-input {
+    margin-right: 10px;
+}
+
+
+/*Sign up form css*/
+.form-design{
+    text-align: left;
+}
+.form-design label{
+    color: #8b8b8b;
+    font-weight: 400;
+}
+.form-design .zred{
+    color: #cb202d;
+}
+.form-design .form-group{
+    margin-bottom: 25px;
+}
+.form-design input{
+    color: #e91e63;
+    border: 1px solid #e7e7e7;
+    box-shadow: 0 0 0 0 transparent inset;
+    border-radius: 0;
+    height: 37px;
+}
+.form-design:focus{outline: none;}
+.input-effect-wrapper{
+    width: 100%; 
+    position: relative;
+} 
+.form-design input[type="text"]{
+    font: 15px/24px "Montserrat", Arial, sans-serif;
+    color: #e91e63;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+}
+/*.form-design [type=radio] { 
+position: absolute;
+opacity: 0;
+width: 0;
+height: 0;
+}
+.form-design [type=radio] + img {
+    cursor: pointer;
+}
+.form-design [type=radio]:checked + img {
+    outline: 2px solid #f00;
+}*/
+.input-effect{border: 0 !important;
+    padding: 4px 0;
+    border-bottom: 1px solid #ccc !important;
+    background-color: transparent;
+}
+.input-effect:focus ~ .focus-border,
+.has-content.input-effect ~ .focus-border
+{
+    width: 100%;
+    transition: 0.4s;
+}
+.input-effect ~ label{
+    position: absolute; 
+    left: 0; 
+    width: 100%; 
+    top: 9px; 
+    transition: 0.3s; 
+    z-index: 0; 
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+.input-effect:focus ~ label, 
+.has-content.input-effect ~ label
+{
+    top: -10px; 
+    font-size: 10px; 
+    transition: 0.3s;
 }

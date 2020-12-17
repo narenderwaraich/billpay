@@ -47,20 +47,32 @@
             <div class="card card-user">
               <div class="card-body">
                 <div class="w-100">
+                  <div class="select-pay-type">
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" id="deposit_amt" name="inv_ampunt">Deposit Pay
+                    </label>
+                  </div>
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" id="full_amt" name="inv_ampunt">Full Pay
+                    </label>
+                  </div>
+                </div>
                   <div class="w-55">
                     <div class="cash-show-title">Invoice Amount</div>
                     <div class="cash-show-title">Cash Take</div>
                     <div class="cash-show-title" style="color: #e91e63;">Cash Return</div>
                   </div>
                   <div class="w-45">
-                    <div class="cash-show-title">: <span>{{$invoice->net_amount}}</span></div>
+                    <div class="cash-show-title">: <span id="invoice_amount">0</span></div>
                     <div class="cash-show-title">: <span id="answer_show_value">0</span></div>
                     <div class="cash-show-title" style="color: #e91e63;">: <span id="return_cash">0</span></div>
                   </div>
                 </div>    
               </div>
               <hr>
-                <a href="/invoice/cash/payment/status/{{$invoice->id}}"><button type="button" class="btn btn-success pay-btn" disabled>Pay</button></a>
+                <button type="button" class="btn btn-success pay-btn" disabled>Pay</button>
               <div class="button-container">
 
               </div>
@@ -131,7 +143,7 @@ input[type = text] {
   width: 100%;
   height: auto;
   display: block;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .w-55{
   width: 55%;
@@ -162,27 +174,74 @@ input[type = text] {
 </style>
 <script>
   $(document).ready(function(){
-    $('#result').on('click', function(){
-    var answer = $('#answer').val();
-    var retunCash = 0.00;
-    var invoiceAmount = "<?php echo $invoice->net_amount; ?>";
-    if($('#answer').val()!=""){
-      retunCash = answer - invoiceAmount;
-      $('#return_cash').text(retunCash);
-      $('#answer_show_value').text(answer);
-      if(retunCash >= 0){
-        $('.pay-btn').prop('disabled', false);
-      }else{
-        $('.pay-btn').prop('disabled', true);
-      }
+    var invoiceAmount = 0;
+    var invoiceDepositAmount = "<?php echo $invoice->deposit_amount; ?>";
+    var invoiceNetAmount = "<?php echo $invoice->net_amount; ?>";
+    var invoiceDueAmount = "<?php echo $invoice->due_amount; ?>";
+    if(invoiceDepositAmount > 0 && invoiceNetAmount == invoiceDueAmount){
+      $("#deposit_amt").prop('checked', true);
+      $("#deposit_amt").attr('disabled', false);
+      invoiceAmount = invoiceDepositAmount;
+    }else{
+      $("#deposit_amt").prop('checked', false);
+      $("#deposit_amt").attr('disabled', true);
     }
+
+    if(invoiceNetAmount != invoiceDueAmount){
+      $("#full_amt").prop('checked', true);
+      $("#full_amt").attr('disabled', true);
+      invoiceAmount = invoiceDueAmount;
+    }
+
+    
+    $('#invoice_amount').text(invoiceAmount);
+    $('#deposit_amt').on('click', function(){
+      if($("#deposit_amt").prop('checked')){
+         invoiceAmount = invoiceDepositAmount;
+         $('#invoice_amount').text(invoiceAmount);
+         calculation();
+      }
+    });
+    $('#full_amt').on('click', function(){
+      if($("#full_amt").prop("checked")){
+           invoiceAmount = invoiceNetAmount;
+           $('#invoice_amount').text(invoiceAmount);
+           calculation();
+      }
+    });
+    $('#result').on('click', function(){
+      calculation();
    });
+
+    function calculation(){
+        var answer = $('#answer').val();
+        var retunCash = 0.00;
+        if($('#answer').val()!=""){
+          retunCash = answer - invoiceAmount;
+          $('#return_cash').text(Math.round(retunCash));
+          $('#answer_show_value').text(answer);
+          if(retunCash >= 0){
+            $('.pay-btn').prop('disabled', false);
+          }else{
+            $('.pay-btn').prop('disabled', true);
+          }
+        }
+    }
 
     $('#clear').on('click', function(){
       $('#return_cash').text(0);
       $('#answer_show_value').text(0);
       $('.pay-btn').prop('disabled', true);
    });
+
+    $('.pay-btn').on('click', function(){
+      var Id = "{{$invoice->id}}";
+    if($("#deposit_amt").prop('checked')){
+        window.location.href = '/invoice/cash/deposit/payment/'+Id;
+      }else{
+        window.location.href = '/invoice/cash/full/payment/'+Id;
+      }
+    });
   });
 </script>                            
 @endsection

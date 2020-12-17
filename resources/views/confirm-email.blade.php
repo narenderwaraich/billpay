@@ -1,34 +1,5 @@
-<!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MapleBooks</title>
-    <meta name="description" content="MapleBooks">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
-    <link rel="apple-touch-icon" href="apple-icon.png">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-    <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css"> -->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-   
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!--     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.js"></script> -->
-    
-    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
-    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-</head>
-<body style="background-color: #000;">
+@extends('layouts.homeApp')
+@section('content')
 
           <!-- Error Message  -->
               @if(count($errors)>0)
@@ -71,13 +42,4 @@
   			</center>
 	</div>
 </div>
-
-
-<script src="{{ asset('js/vendor/jquery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('js/plugins.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-<script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-{!! Toastr::message() !!}
-
-    </body>
-</html>  
+@endsection

@@ -8,12 +8,22 @@
   <title>Invoice PDF</title>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
  <style>
+  body{
+    font-size: 11px;
+    font-weight: 400;
+  }
    .container{
     /*background-image: url("{{asset('/images/avatar/'.$inv->user->avatar)}}");*/
     background-position: center;
    }
    hr{
-
+      box-sizing: content-box;
+      height: 0;
+      overflow: visible;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      border: 0;
+      border-top: 1px solid rgba(0,0,0,.1);
    }
    table{
      
@@ -30,9 +40,12 @@
    .t-center{
     text-align: center;
    }
+   .t-left{
+    text-align: left;
+   }
    .invoice-amount-pay-status{
-  color: #e91e63;
-  } 
+    color: #e91e63;
+    } 
   .table-w{
     width: 100%;
     height: auto;
@@ -65,6 +78,11 @@
   .td-3{
     width: 30%;
     height: auto;
+  }
+  .bill-heading-title{
+    color: #e91e63;
+    font-weight: 700;
+    font-size: 12px;
   }
   .item-table-w{
     width: 100%;
@@ -121,22 +139,6 @@
   .t-r{
     text-align: right;
   }
-  .inv-from{
-    float: left;
-    padding-top: 10px;
-    font-weight: 100;
-    font-size: 14px;
-    color: #e91e63;
-    margin-left: 35px;
-  }
-  .inv-to{
-    float: right;
-    padding-top: 10px;
-    font-weight: 100;
-    font-size: 14px;
-    color: #e91e63;
-    margin-right: 180px;
-  }
   .inv-date{
   color: #e91e63;
   font-weight: 400;
@@ -149,39 +151,12 @@
     width: 100px;
     height: auto;
   }
-  .inv-name{
-    text-transform: uppercase;
-    font-size: 18px;
-     padding-left: 10px;
-}
-.copmany-name{
-  color: #e91e63;
-    font-size: 14px;
-    font-weight: 100;
-    padding-left: 10px;
-}
 .inv-email{
   padding-bottom: 3px;
   color: #e91e63;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 12px;
    padding-left: 10px;
-}
-.inv-address{
-  font-weight: 100;
-  padding-left: 10px;
-}
-.inv-state{
-  font-weight: 100;
-  padding-left: 10px;
-}
-.inv-city{
-  font-weight: 100;
-  padding-left: 10px;
-}
-.inv-country{
-  font-weight: 100;
-  padding-left: 10px;
 }
 .tr-border-bottom{
 vertical-align: text-top !important;
@@ -209,14 +184,8 @@ padding-top: 10px;
 }
 .amount-title{
   /*position: relative;*/
-  font-size: 14px;
+  font-size: 11px;
   text-align: left;
-}
-.amount-cl{
-  position: absolute;
-    right: 60px;
-    text-align: left;
-    width: 120px;
 }
 .col-12{
   width: 100%;
@@ -234,51 +203,23 @@ padding-top: 10px;
   float: left;
   margin-left: 150px;
 }
-#clientImage{
-    background: #1e2027;
-    color: #fff;
-    font-size: 32px;
-    padding: 10px;
-    width: 80px;
-    height: 70px;
-    text-align: center;
-    text-transform: uppercase;
-    border: 2px solid #e91e63;
-    display: inline-block;
-}
-#userImage{
-    background: #1e2027;
-    color: #fff;
-    font-size: 32px;
-    padding: 10px;
-    width: 80px;
-    height: 70px;
-    text-align: center;
-    text-transform: uppercase;
-    border: 2px solid #e91e63;
-    display: inline-block;
-}
-.GSTIN-number-div{
-  font-weight: 400;
-    font-size: 14px;
-    color: #000;
-}
 .GSTIN-number{
   font-weight: 400;
-    font-size: 14px;
+    font-size: 12px;
     color: #e91e63;
 }
 .user-company-name{
     text-align: center;
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 14px;
 }
 .company-address{
-  font-weight: 100;
+  font-weight: 400;
   text-align: center;
 }
 .title-txt{
-  font-weight: 100;
+  font-size: 11px;
+  font-weight: 400;
   text-align: center;
 }
 .pad-35{
@@ -289,11 +230,11 @@ padding-top: 10px;
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-12 t-center">
-           Invoice ({{$inv->invoice_number}}) from <!-- {{$inv->user->fname}} {{$inv->user->lname}}  -->{{$inv->user->company_name}}
+        <div class="col-12 t-left">
+           Invoice ({{$inv->invoice_number}})
        </div> 
     </div>
-
+    <br>
     <div class="row">
         <div class="col-12 t-center">
            @if($inv->status == "PAID")
@@ -350,21 +291,21 @@ padding-top: 10px;
     <hr>
     <table class="item-table-w">
       <tr>
-        <th class="td-item-name">
-          <strong>Item Name</strong>
-        </th>
-        <th class="td-item-desc">
-           <strong>Description</strong>
-        </th>
-        <th class="td-item-rate">
-          <strong>Rate</strong>
-        </th>
-        <th class="td-item-qty">
-          <strong>Quantity</strong>
-        </th>
-        <th class="td-item-total">
-          <strong>Line Total</strong>
-        </th>
+        <td class="td-item-name bill-heading-title">
+          Item Name
+        </td>
+        <td class="td-item-desc bill-heading-title">
+           Description
+        </td>
+        <td class="td-item-rate bill-heading-title">
+          Rate
+        </td>
+        <td class="td-item-qty bill-heading-title">
+          Quantity
+        </td>
+        <td class="td-item-total bill-heading-title">
+          Line Total
+        </td>
       </tr>
        @foreach($invItem as $item)
       <tr class="item-tr">
@@ -378,7 +319,7 @@ padding-top: 10px;
           {{$item->rate}}
         </td>
         <td class="td-item-qty">
-          <span style="margin-left: 15px; width: 100%; height: auto; float: left;">{{$item->qty}}</span>
+          <span style="margin-left: 15px; width: 100%; height: auto;">{{$item->qty}}</span>
         </td>
         <td class="td-item-total">
           ${{$item->total}}
@@ -396,6 +337,7 @@ padding-top: 10px;
       <div class="bottom-box-right">
         <div class="col-12">
           <div class="col-6-l">
+            <div class="amount-title">Payment Method</div>
             <div class="amount-title">Subtotal</div>
             <div class="amount-title">Discount</div>
             <div class="amount-title">Tax</div>
@@ -407,6 +349,7 @@ padding-top: 10px;
           </div>
 
           <div class="col-6-r">
+            <div class="amount-title">{{$inv->payment_mode}}</div>
             <div class="amount-title">${{$inv->sub_total}}</div>
             <div class="amount-title">${{$inv->discount}}</div>
             <div class="amount-title">${{$inv->tax_rate}}</div>

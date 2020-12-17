@@ -11,7 +11,7 @@
           <div class="col-lg-8">
             <div class="card">
               <div class="card-header">
-                <h5 class="title">Client</h5>
+                <h5 class="title">Client <span style="float: right;"><a href="{{ URL::previous() }}"><button type="button" class="btn btn-danger btn-sm"><span class="fa fa-chevron-left"></span> Back</button></a></span></h5>
               </div>
               <div class="card-body">
                 <form action="/client/update/{{$client->id}}" method="post" autocomplete="">
@@ -84,7 +84,7 @@
                         <select name="city" id="city" class="form-control">
                           <option value="">Select City</option>
                           @foreach($city_data as $city)
-                            <option value="{{$city->name}}" {{ ($client->city == $city->name ? "selected":"") }}>{{$state->name}}</option>
+                            <option value="{{$city->name}}" {{ ($client->city == $city->name ? "selected":"") }}>{{$city->name}}</option>
                           @endforeach
                         </select>
                         <label>City</label>

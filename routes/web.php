@@ -24,28 +24,74 @@
 //Admin User Route 
 Auth::routes();
 ///Admin
-// Route::get('/user/add','AdminController@AddUser');
-// Route::get('/admin','AdminController@index');
-// Route::get('/user/show','RegistrationsController@showUser');
-// Route::any('/user/search','RegistrationsController@SearchData');
-// Route::get('/suspend-user/{id}','RegistrationsController@enableDisableUser');
-// Route::resource('user','RegistrationsController');
-// Route::post('admin/user/update/{id}','RegistrationsController@update');
-// Route::get('/change-password','AdminController@getChangePass');
-// Route::post('change-password/{id}','RegistrationsController@updatePass');
-// //Delete Account
-// Route::get('/Delete','RegistrationsController@postDestroy');
+Route::get('/admin','AdminController@homePage');
+Route::get('/users','AdminController@index');
+Route::get('/user/suspend-user/{id}','AdminController@enableDisableUser');
+Route::get('/user/verified/{id}','AdminController@verifyUser');
+Route::any('/user/search','AdminController@SearchData');
+Route::get('/all-user-list','AdminController@allUserList');
+Route::get('/user/mail-subscribe/{id}','AdminController@subscribeUnsubscribe');
+Route::post('user-notificaton-mail','AdminController@SendNotificationMail');
+Route::get('/mysql','AdminController@openMySql');
+Route::post('mysql','AdminController@openQueryMySql');
 
-// //// Change Admin Mail
-// Route::get('/admin-mail','AdminController@addMail');
-// Route::post('admin-mail','AdminController@storeMail');
+Route::get('/user', 'AdminController@index');
+Route::get('/user/{status}', 'AdminController@userWithStatus');
+Route::get('/user/{id}/view', 'AdminController@userView');
+Route::get('/user/create', 'AdminController@create');
+Route::post('user/create', 'AdminController@store');
+Route::get('/user/edit/{id}', 'AdminController@edit');
+Route::post('/user/update/{id}', 'AdminController@update');
+Route::get('/user/delete/{id}', 'AdminController@destroy');
+Route::get('/change-password/show', 'AdminController@changePassGet');
+Route::post('change-password', 'AdminController@changePass');
+		// Web Settings
+Route::get('/settings', 'AdminController@settingPage');
+Route::post('settings/update', 'AdminController@settingUpdate');
 
-// /// admin panel action button route
-// Route::post('admin/user/active','AdminController@activeUser');
-// Route::post('admin/user/deactive','AdminController@deactiveUser');
-// Route::post('admin/user/delete','AdminController@userDelete');
+//// Change Admin Mail
+Route::get('/change-env-file-data','AdminController@envData');
+Route::post('change-env-file-data','AdminController@changeEnvData');
+Route::get('/clear-cache','AdminController@clearCache');
+Route::get('/clear-config','AdminController@clearConfig');
 
-// Route::any('/admin/search','AdminController@SearchData');
+///Page Setup
+Route::get('/page-setup/show', 'AdminController@pageIndex');
+Route::get('/page-setup/create', 'AdminController@pageCreate');
+Route::post('page-setup/create', 'AdminController@pageStore');
+Route::get('/page-setup/edit/{id}', 'AdminController@pageEdit');
+Route::post('/page-setup/update/{id}', 'AdminController@pageUpdate');
+Route::get('/page-setup/delete/{id}', 'AdminController@pageDestroy');
+
+Route::get('/user/verified-mail/{id}', 'AdminController@verifyMailReminder');
+
+// user whatsapp
+Route::get('/user/whatsapp/{id}','AdminController@userWhatsapp');
+
+/// Admkin Clients
+Route::get('/admin/clients','AdminController@allClients');
+
+//// admin invoices
+Route::get('/admin/invoices','AdminController@allInvoices');
+
+Route::get('/user/show','RegistrationsController@showUser');
+Route::any('/user/search','RegistrationsController@SearchData');
+Route::get('/suspend-user/{id}','RegistrationsController@enableDisableUser');
+Route::resource('user','RegistrationsController');
+Route::post('change-password/{id}','RegistrationsController@updatePass');
+//Delete Account
+Route::get('/Delete','RegistrationsController@postDestroy');
+
+//// Change Admin Mail
+Route::get('/admin-mail','AdminController@addMail');
+Route::post('admin-mail','AdminController@storeMail');
+
+/// admin panel action button route
+Route::post('admin/user/active','AdminController@activeUser');
+Route::post('admin/user/deactive','AdminController@deactiveUser');
+Route::post('admin/user/delete','AdminController@userDelete');
+
+Route::any('/admin/search','AdminController@SearchData');
 // //login user or addmin
 Route::get('/dashboard','SessionController@HomePage');
 // Route::post('dashboard','SessionController@HomePage');
@@ -71,7 +117,7 @@ Route::post('Register','RegistrationsController@storeUser');
 Route::get('/Register','RegistrationsController@create');
 //Update User
 Route::post('user-update/{id}','RegistrationsController@userUpdate');
-Route::get('/profile','RegistrationsController@profileView');
+Route::get('/profile','RegistrationsController@/client/search');
 // // Change Password
 Route::post('updatepassword/{id}','RegistrationsController@updatePass');
 Route::get('/updatepassword','RegistrationsController@Pass');
@@ -95,7 +141,7 @@ Route::get('/client/search','ClientsController@SearchClientData')->name('client_
 Route::get('/client/update/{id}','ClientsController@editClient');
 Route::post('client/update/{id}','ClientsController@updateClient');
 Route::post('delete-client','ClientsController@destroy');
-Route::any('/client/search','ClientsController@searchClients');
+Route::any('/client/search','ClientsController@SearchData');
 
 // /// Client Payment
 Route::get('/invoice/pay/{id}', 'PaymentController@paytmPay');
@@ -103,7 +149,8 @@ Route::post('/payment/status', 'PaymentController@paytmCallback');
 Route::get('/payment/list', 'PaymentController@showPayment');
 Route::get('/payment/{status}/list', 'PaymentController@showPaymentStatus');
 Route::get('/invoice/cash/pay/{id}','PaymentController@invoiceCashPay');
-Route::get('/invoice/cash/payment/status/{id}','PaymentController@cashPay');
+Route::get('/invoice/cash/deposit/payment/{id}','PaymentController@cashDepositPay');
+Route::get('/invoice/cash/full/payment/{id}','PaymentController@cashFullPay');
 
 // /// Invoice Controller
 Route::get('/invoice/view','InvoiceController@showInvoiceList');
@@ -201,10 +248,18 @@ Route::get('/items/stock/{id}','ItemController@outInStockItem');
 
 
 /// contact-us
+Route::get('/contact-us','ContactUsController@contact');
 Route::post('contact-us','ContactUsController@contactUs');
-Route::get('/Contact-Us', function () {
-    return view('Contact-Us');
-});
+Route::get('/admin/contact-us','ContactUsController@getContact');
+Route::get('/contact/reply/{id}','ContactUsController@contactReplyGet');
+Route::post('contact-reply','ContactUsController@contactReply');
+Route::get('/contact/mark-reply/{id}','ContactUsController@contactMarkReply');
+
+//// send manumal mail
+Route::get('/send-mail','ContactUsController@sendMailView');
+Route::post('send-mail','ContactUsController@sendMail');
+
+Route::post('send-notificaton-mail','ContactUsController@SendNotificationMail');
 Route::get('/about-us', function () {
     return view('about-us');
 });

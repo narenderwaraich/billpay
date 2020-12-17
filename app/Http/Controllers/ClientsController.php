@@ -132,93 +132,90 @@ class ClientsController extends Controller
     
 }
 
-public function searchClients(Request $request){
-      //return $request;
-      $id = Auth::id();
-      $q = Input::get ( 'q' );
-      $CountName = str_word_count($q);
-      if ($q != "") {
-        /// if search any data
-         if ($request->start) {
-          /// if search by date
-            $s = $request->start; //dd($s);
-            $start = Carbon::createFromFormat('m/d/Y', $s)->format('Y-m-d 00:00:00');
-            // check end date
-            if($request->end){
-              $e = $request->end;
-              $end = Carbon::createFromFormat('m/d/Y', $e)->format('Y-m-d 00:00:00');
-            }else{ 
-              $end = Carbon::now();
-            }
+// public function searchClients(Request $request){
+//       //return $request;
+//       $id = Auth::id();
+//       $q = Input::get ( 'q' );
+//       $CountName = str_word_count($q);
+//       if ($q != "") {
+//         /// if search any data
+//          if ($request->start) {
+//           /// if search by date
+//             $s = $request->start; //dd($s);
+//             $start = Carbon::createFromFormat('m/d/Y', $s)->format('Y-m-d 00:00:00');
+//             // check end date
+//             if($request->end){
+//               $e = $request->end;
+//               $end = Carbon::createFromFormat('m/d/Y', $e)->format('Y-m-d 00:00:00');
+//             }else{ 
+//               $end = Carbon::now();
+//             }
 
-            /// Start Clients search by Name or email
-            $clients = Clients::where('fname', 'like', '%'.$q.'%')
-                 ->orWhere('lname', 'like', '%'.$q.'%')
-                 ->orWhere('email', 'like', '%'.$q.'%')
-                 ->orWhere('phone', 'like', '%'.$q.'%')
-                 ->whereBetween('created_at', [$start,$end])
-                 //->where('created_at', '>=', $start)
-                 //->where('created_at', '<=', $end)
-                 ->orderBy('created_at', 'desc')
-                 ->paginate(10)->setPath ( '' );
-                  $pagination = $clients->appends ( array (
-                  'q' => Input::get ( 'q' ), "start" => Input::get('start'), "end" => Input::get('end')
-                  ) );
-                foreach($clients as $index => $client){
-                  $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
-                  $invoiceData = $query->latest()->first();
-                  $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->where('is_deleted','=',0)->sum('net_amount') : '';
-                  $client->totalInvoices = $query->count();
-                }
-                //dd($clients);
-                if (count ($clients) > 0){ //by user name data view
-                      $total_row = $clients->total(); //dd($total_row);
-                    return view ('show-client',compact('total_row','clients'))->withQuery ( $q )->withMessage ($total_row.' '. 'Clients found match your search');
-                 }else{ 
-                    return view ('show-client')->withMessage ( 'Clients not found match Your search !' );
-                 }
+//             /// Start Clients search by Name or email
+//             $clients = Clients::where('user_id',$id)
+//                  ->where('fname', 'like', '%'.$q.'%')
+//                  ->orWhere('lname', 'like', '%'.$q.'%')
+//                  ->orWhere('email', 'like', '%'.$q.'%')
+//                  ->orWhere('phone', 'like', '%'.$q.'%')
+//                  ->whereBetween('created_at', [$start,$end])
+//                  //->where('created_at', '>=', $start)
+//                  //->where('created_at', '<=', $end)
+//                  ->orderBy('created_at', 'desc')
+//                  ->paginate(10)->setPath ( '' );
+//                   $pagination = $clients->appends ( array (
+//                   'q' => Input::get ( 'q' ), "start" => Input::get('start'), "end" => Input::get('end')
+//                   ) );
+//                 foreach($clients as $index => $client){
+//                   $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+//                   $client->totalInvoices = $query->count();
+//                 }
+//                 //dd($clients);
+//                 if (count ($clients) > 0){ //by user name data view
+//                       $total_row = $clients->total(); //dd($total_row);
+//                     return view ('show-client',compact('total_row','clients'))->withQuery ( $q )->withMessage ($total_row.' '. 'Clients found match your search');
+//                  }else{ 
+//                     return view ('show-client')->withMessage ( 'Clients not found match Your search !' );
+//                  }
 
-          /// end if search by date
-         }else{
-          /// else search by date
-              $clients = Clients::where('fname', 'like', '%'.$q.'%')
-               ->orWhere('lname', 'like', '%'.$q.'%')
-               ->orWhere('email', 'like', '%'.$q.'%')
-               ->orWhere('phone', 'like', '%'.$q.'%')
-               ->orderBy('created_at', 'desc')
-               ->paginate(10)->setPath ( '' );
-                $pagination = $clients->appends ( array (
-                'q' => Input::get ( 'q' )
-                ) );
-              foreach($clients as $index => $client){
-                    $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
-                    $invoiceData = $query->latest()->first();
-                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->where('is_deleted','=',0)->sum('net_amount') : '';
-                    $client->totalInvoices = $query->count();
-                  }
-              if (count ($clients) > 0){ //by user name data view
-                    $total_row = $clients->total(); //dd($total_row);
-                  return view ('show-client',compact('total_row','clients'))->withQuery ( $q )->withMessage ($total_row.' '. 'Clients found match your search');
-               }else{ 
-                  return view ('show-client')->withMessage ( 'Clients not found match Your search !' );
-               }
-          /// end else search by date
-         } 
-        /// end if search any data
-       }else{
-        /// else search any data
-            $user = User::find($id);
-            $clients = $user->clients()->latest()->paginate(10); //dd($clients);
-            foreach($clients as $index => $client){
-                    $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
-                    $invoiceData = $query->latest()->first();
-                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->where('is_deleted','=',0)->sum('net_amount') : '';
-                    $client->totalInvoices = $query->count();
-                  }
-              return view ( 'show-client')->withClients($clients);
-        /// end else search any data
-       } 
-}
+//           /// end if search by date
+//          }else{
+//           /// else search by date
+//               $clients = Clients::where('user_id',$id)
+//                ->where('fname', 'like', '%'.$q.'%')
+//                ->orWhere('lname', 'like', '%'.$q.'%')
+//                ->orWhere('email', 'like', '%'.$q.'%')
+//                ->orWhere('phone', 'like', '%'.$q.'%')
+//                ->orderBy('created_at', 'desc')
+//                ->paginate(10)->setPath ( '' );
+//                 $pagination = $clients->appends ( array (
+//                 'q' => Input::get ( 'q' )
+//                 ) );
+//                 dd($clients);
+//               foreach($clients as $index => $client){
+//                   $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+//                   $client->totalInvoices = $query->count();
+//                 }
+//               if (count ($clients) > 0){ //by user name data view
+//                     $total_row = $clients->total(); //dd($total_row);
+//                   return view ('show-client',compact('total_row','clients'))->withQuery ( $q )->withMessage ($total_row.' '. 'Clients found match your search');
+//                }else{ 
+//                   return view ('show-client')->withMessage ( 'Clients not found match Your search !' );
+//                }
+//           /// end else search by date
+//          } 
+//         /// end if search any data
+//        }else{
+//         /// else search any data
+//             $user = User::find($id);
+//             $clients = $user->clients()->latest()->paginate(10); //dd($clients);
+//             foreach($clients as $index => $client){
+//                   $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+//                   $client->totalInvoices = $query->count();
+//                 }
+//               return view ( 'show-client')->withClients($clients);
+//         /// end else search any data
+//        } 
+// }
 
 public function SearchData(Request $request){
       $id = Auth::id();
@@ -235,8 +232,6 @@ public function SearchData(Request $request){
                   }else{ 
                     $end = Carbon::now();
                   } 
-                  $companyFind = UserCompany::where('user_id',$id)->where('name','LIKE','%'.$q.'%')->pluck('id'); // find company Name with Date
-                  if(count($companyFind) <= 0){ // if not match company name if3
                     /// Check search full name with date
                 if($CountName > 1){ // if find full name run this
                    $fname = explode(' ', $q)[0];
@@ -258,66 +253,19 @@ public function SearchData(Request $request){
                         }
                 } 
 
-                          //// Collect Clients Information 
-                            $recentClients = [];
-                            foreach($clients as $index => $client){
-                                    $query = Invoice::where('client_id', $client->id);
-                                    $invoiceData = $query->latest()->first();
-                                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount') : '';
-                                    
-                                    $client->totalInvoices = $query->count();
-                                    if($index < 3){
-                                      $recentClients[$index]['invPaid'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','PAID-STRIPE')->sum('net_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','DEPOSIT_PAID')->sum('deposit_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','OVERDUE')->where('net_amount','!=', 'due_amount')->sum('deposit_amount');
-                                      
-                                      $recentClients[$index]['invAmt'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount');
-                                      
-                                    }
- 
-                                  }
-                              // end info
+                      foreach($clients as $index => $client){
+                        $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+                        $client->totalInvoices = $query->count();
+                      }
                                   
                               if (count ( $clients ) > 0){ 
                                 $total_row = $clients->count();
-                                return view ('show-client',compact('total_row','recentClients'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
+                                return view ('show-client',compact('total_row'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
                               }else{ 
                                 return view ('show-client')->withMessage ( 'Client not found match Your search !' );
                               }
-                     }else{ //if3 ///  client find by company with date
-                          $clients =  Clients::where('user_id',$id)->whereIn('companies_id',$companyFind)->where('created_at', '>=', $start)->where('created_at', '<=', $end)->latest()->paginate(10)->setPath ( '' );
-                          $pagination = $clients->appends ( array (
-                                'q' => Input::get ( 'q' ), "fromDate" => Input::get('start') 
-                            ) );
 
-                          //// Collect Clients Information 
-                            $recentClients = [];
-                            foreach($clients as $index => $client){
-                                    $query = Invoice::where('client_id', $client->id);
-                                    $invoiceData = $query->latest()->first();
-                                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount') : '';
-                                    
-                                    $client->totalInvoices = $query->count();
-                                    if($index < 3){
-                                      $recentClients[$index]['invPaid'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','PAID-STRIPE')->sum('net_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','DEPOSIT_PAID')->sum('deposit_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','OVERDUE')->where('net_amount','!=', 'due_amount')->sum('deposit_amount');
-                                      
-                                      $recentClients[$index]['invAmt'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount');
-                                    }
- 
-                                  }
-
-                                // end info
-
-                              if (count ( $clients ) > 0){
-                                $total_row = $clients->count();
-                                return view ('show-client',compact('total_row','recentClients'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
-                              }else{
-                                return view ('show-client')->withMessage ( 'Client not found match Your search !' );
-                              }
-
-                     }   /// end search by date
-
-          }else{ ///find client name search if2 seach by company name 
-              $companyFind = UserCompany::where('user_id',$id)->where('name','LIKE','%'.$q.'%')->pluck('id');
-              if(count($companyFind) <= 0){ //Search by client name (error this query)
+          }else{
                  /// Check search full name
                 if($CountName > 1){ // if find full name run this
                    $fname = explode(' ', $q)[0];
@@ -348,61 +296,40 @@ public function SearchData(Request $request){
                         }
                 } 
                 
-                          //// Collect Clients Information 
-                            $recentClients = [];
-                            foreach($clients as $index => $client){
-                                    $query = Invoice::where('client_id', $client->id);
-                                    $invoiceData = $query->latest()->first();
-                                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount') : '';
-                                    
-                                    $client->totalInvoices = $query->count();
-                                    if($index < 3){
-                                      $recentClients[$index]['invPaid'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','PAID-STRIPE')->sum('net_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','DEPOSIT_PAID')->sum('deposit_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','OVERDUE')->where('net_amount','!=', 'due_amount')->sum('deposit_amount');
-                                      
-                                      $recentClients[$index]['invAmt'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount');
-                                    }
- 
-                                  }
-
-                                  // end info
+                foreach($clients as $index => $client){
+                  $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+                  $client->totalInvoices = $query->count();
+                }
 
                               if (count ( $clients ) > 0){
                                 $total_row = $clients->count();
-                                return view ('show-client',compact('total_row','recentClients'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
+                                return view ('show-client',compact('total_row'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
                               }else{
-                                return view ('show-client')->withMessage ( 'Client not found match Your search !' );
-                              }
-                        }else{ /// find Search by company name
-                             $clients =  Clients::where('user_id',$id)->whereIn('companies_id',$companyFind)->paginate(10)->setPath ( '' );
-                          $pagination = $clients->appends ( array (
-                                'q' => Input::get ( 'q' ) 
-                            ) );
-                            $recentClients = [];
-                            foreach($clients as $index => $client){
-                                    $query = Invoice::where('client_id', $client->id);
-                                    $invoiceData = $query->latest()->first();
-                                    $client->invoiceAmount = $invoiceData ? DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount') : '';
-                                    
-                                    $client->totalInvoices = $query->count();
-                                    if($index < 3){
-                                      $recentClients[$index]['invPaid'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','PAID-STRIPE')->sum('net_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','DEPOSIT_PAID')->sum('deposit_amount') + DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','=','OVERDUE')->where('net_amount','!=', 'due_amount')->sum('deposit_amount');
-                                      
-                                      $recentClients[$index]['invAmt'] = DB::table("invoices")->where('user_id',$id)->where('client_id','=',$client->id)->where('status','!=','DRAFT')->sum('net_amount');
-                                    }
- 
-                                  }
+                                if(is_numeric($q)){
+                                    $clients =  Clients::where('user_id',$id)
+                                                         ->where('phone', 'like', '%'.$q.'%')
+                                                         ->paginate(10)->setPath ( '' );
+                                                        $pagination = $clients->appends ( array (
+                                                              'q' => Input::get ( 'q' ) 
+                                                          ) );
+                                      foreach($clients as $index => $client){
+                                        $query = Invoice::where('client_id', $client->id)->where('is_deleted','=',0);
+                                        $client->totalInvoices = $query->count();
+                                      }
 
-                                          // end info
-
-                              if (count ( $clients ) > 0){
+                                      if (count ( $clients ) > 0){
                                 $total_row = $clients->count();
-                                return view ('show-client',compact('total_row','recentClients'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
-                              }else{
-                                return view ('show-client')->withMessage ( 'Client not found match Your search !' );
+                                return view ('show-client',compact('total_row'),['id' => $id])->withClients ( $clients )->withQuery ( $q )->withMessage ($total_row.' '. 'Client found match your search');
                               }
-                        }         
+
+                                }else{
+                                  return view ('show-client')->withMessage ( 'Client not found match Your search !' );
+                                }
+                                
+                              }        
   
             }
+
 
         // }
  }                          

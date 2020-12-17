@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Crypt;
 use App\User;
 use App\GeneralSetting;
 use Auth;
@@ -94,7 +95,7 @@ class RegistrationsController extends Controller
                return redirect()->to('/'); //redirect them anywhere you want if the token does not exist.
              }else{
                   $id = $tokenData->id;
-                  $data["is_activated"] = 1;
+                  $data["verified"] = 1;
                   $data["token"] = "";
                   $user=User::where('id',$id)->update($data);
                   auth()->logout();
@@ -129,7 +130,7 @@ class RegistrationsController extends Controller
               if($request->avatar){
                 $imageName = time().'.'.request()->avatar->getClientOriginalExtension();
 
-                request()->avatar->move(public_path('images/avatar'), $imageName);
+                request()->avatar->move(public_path('images/companies-logo'), $imageName);
                 $user->avatar=$imageName;
               }
               $token = $this->sendWelcomeEmail($user);
@@ -203,8 +204,8 @@ class RegistrationsController extends Controller
 
             /// Show User Data
               public function profileView(){
-                  if(\Auth::check()){
-                    if(!Auth::user()->is_activated == 'true'){
+                  if(Auth::check()){
+                    if(!Auth::user()->verified == 'true'){
                         Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
                           return back();
                       }else{
@@ -239,8 +240,15 @@ class RegistrationsController extends Controller
                         if($request->avatar){
                       $imageName = time().'.'.request()->avatar->getClientOriginalExtension();
 
-                      request()->avatar->move(public_path('images/avatar'), $imageName);
+                      request()->avatar->move(public_path('images/companies-logo'), $imageName);
                       $data["avatar"] = $imageName;
+                      }
+
+                      if($request->paytm_id){
+                        $data["paytm_id"] = Crypt::encryptString($request->paytm_id);
+                      }
+                      if($request->paytm_key){
+                        $data["paytm_key"] = Crypt::encryptString($request->paytm_key );
                       }
                         
                   //update user to database

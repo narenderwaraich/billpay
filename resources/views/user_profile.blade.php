@@ -20,7 +20,7 @@
                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <input type="text" value="{{auth()->user()->company_name}}" name="company_name" id="gstin_number" class="form-control">
+                        <input type="text" value="{{auth()->user()->company_name}}" name="company_name" id="firm_name" class="form-control" required>
                         <label>Company Name</label>
                       </div>
                     </div>
@@ -28,13 +28,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input type="text" value="{{auth()->user()->fname}}" name="fname" id="fname" class="form-control">
+                        <input type="text" value="{{auth()->user()->fname}}" name="fname" id="fname" class="form-control" required>
                         <label>First Name</label>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input type="text" name="lname" value="{{auth()->user()->lname}}" id="lname" class="form-control">
+                        <input type="text" name="lname" value="{{auth()->user()->lname}}" id="lname" class="form-control" required>
                         <label>Last Name</label>
                       </div>
                     </div>
@@ -42,13 +42,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input name="phone_no" type="text" id="phone" value="{{ auth()->user()->phone_no }}" class="form-control">
+                        <input name="phone_no" type="text" id="phone" value="{{ auth()->user()->phone_no }}" class="form-control" required>
                         <label>Mobile</label>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
-                        <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="email" value="{{auth()->user()->email}}">
+                        <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="email" value="{{auth()->user()->email}}" required>
                         <label>Email</label>
                         @if ($errors->has('email'))
                           <span class="invalid-feedback" role="alert">
@@ -61,7 +61,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <select  name="country" id="country" class="form-control">
+                        <select  name="country" id="country" class="form-control" required>
                           <option value="">Select Country</option>
                          @foreach($country_data as $country)
                           <option value="{{ $country->name }}" {{ (auth()->user()->country == $country->name ? "selected":"") }}>{{$country->name}}</option>
@@ -74,7 +74,7 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <select name="state" id="state" class="form-control">
+                        <select name="state" id="state" class="form-control" required>
                           <option value="">Select State</option>
                           @foreach($state_data as $state)
                             <option value="{{$state->name}}" {{ (auth()->user()->state == $state->name ? "selected":"") }}>{{$state->name}}</option>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <select name="city" id="city" class="form-control">
+                        <select name="city" id="city" class="form-control" required>
                           <option value="">Select City</option>
                           @foreach($city_data as $city)
                             <option value="{{$city->name}}" {{ (auth()->user()->city == $city->name ? "selected":"") }}>{{$state->name}}</option>
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <input type="number" name="zipcode" id="zip" value="{{auth()->user()->zipcode}}" class="form-control">
+                        <input type="number" name="zipcode" id="zip" value="{{auth()->user()->zipcode}}" class="form-control" required>
                         <label>Postal Code</label>
                       </div>
                     </div>
@@ -109,10 +109,26 @@
                       </div>
                     </div>
                   </div>
+<!--                   <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <input name="paytm_id" type="password" id="paytm-id" value="{{ auth()->user()->paytm_id }}" class="form-control">
+                        <label>Paytm Id</label>
+                        <span toggle="#paytm-id" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <input type="password" class="form-control" name="paytm_key" id="paytm-key" value="{{auth()->user()->paytm_key}}">
+                        <label>Paytm Key</label>
+                        <span toggle="#paytm-key" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+                      </div>
+                    </div>
+                  </div> -->
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <textarea name="address" id="address" rows="4" cols="80" class="form-control" placeholder="Address">{{ auth()->user()->address }}</textarea>
+                        <textarea name="address" id="address" rows="4" cols="80" class="form-control" placeholder="Address" required>{{ auth()->user()->address }}</textarea>
                         <label>Address</label>
                       </div>
                     </div>
@@ -135,11 +151,11 @@
               <div class="card-body">
                 <div class="author">
                   @if(!empty(Auth::user()->avatar))
-                   <img src="/public/images/avatar/{{Auth::user()->avatar}}" id="" class="avatar border-gray show-user-logo profile-img-tag">
+                   <img src="/public/images/companies-logo/{{Auth::user()->avatar}}" id="" class="avatar border-gray show-user-logo profile-img-tag">
                   @else
                   <div class="avatar border-gray user-profile-logo" id="userImage">
                   </div>
-                  <img src="/public/images/avatar/{{Auth::user()->avatar}}" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
+                  <img src="/public/images/companies-logo/{{Auth::user()->avatar}}" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
                     <script type="text/javascript">
                         $(document).ready(function(){
                         var dot = '.';
@@ -149,8 +165,9 @@
                     </script>
                   @endif
                   <i class="fa fa-camera img-change-btn-icon" id="selectImage"></i>
-                    <h5 class="title"><span id="first_name"></span> <span id="last_name"></span></h5>
+                    <h5 class="title"><span id="companies_name"></span></h5>
                   <hr>
+                  <div class="client-data" id="client_name">Name :<span id="first_name"></span> <span id="last_name"></span></div>
                   <div class="client-data" id="client_email">Email : <span id="client_email_data"></span></div>
                   <div class="client-data" id="client_phone">Phone : <span id="client_phone_data"></span></div>
                   <div class="client-data" id="client_country">Country : <span id="client_country_data"></span></div>
@@ -256,12 +273,21 @@
 ////// Client Data Show
 $(document).ready(function(){
     clientDataShow();
+   $('#firm_name').on('keyup', function(){
+    var compnyName = $(this).val();
+    if($('#firm_name').val()!=""){
+      $('#companies_name').text(compnyName);
+    }else{
+      $('#companies_name').text('');
+    }
+   });
+
    $('#fname').on('keyup', function(){
     var fname = $(this).val();
     if($('#fname').val()!=""){
       $('#first_name').text(fname);
     }else{
-      $('#fname').hide();
+      $('#fname').text('');
     }
    });
 
@@ -270,7 +296,7 @@ $(document).ready(function(){
       if($('#lname').val()!=""){
         $('#last_name').text(lname);
       }else{
-        $('#lname').hide();
+        $('#lname').text('');
       }
     });
 
@@ -280,7 +306,7 @@ $(document).ready(function(){
       $('#client_email').show();
       $('#client_email_data').text(email);
     }else{
-      $('#client_email').hide();
+      $('#client_email').text('');
     }
    });
 
@@ -290,7 +316,7 @@ $(document).ready(function(){
       $('#client_phone').show();
       $('#client_phone_data').text(phone);
     }else{
-      $('#client_phone').hide();
+      $('#client_phone').text('');
     }
    });
 
@@ -300,7 +326,7 @@ $(document).ready(function(){
       $('#client_country').show();
       $('#client_country_data').text(country);
     }else{
-      $('#client_country').hide();
+      $('#client_country').text('');
     }
    });
 
@@ -310,7 +336,7 @@ $(document).ready(function(){
         $('#client_state').show();
         $('#client_state_data').text(state);
       }else{
-        $('#client_state').hide();
+        $('#client_state').text('');
       }
     });
 
@@ -320,7 +346,7 @@ $(document).ready(function(){
       $('#client_city').show();
       $('#client_city_data').text(city);
     }else{
-      $('#client_city').hide();
+      $('#client_city').text('');
     }
    });
 
@@ -330,7 +356,7 @@ $(document).ready(function(){
         $('#client_zip').show();
         $('#client_zip_data').text(zip);
       }else{
-        $('#client_zip').hide();
+        $('#client_zip').text('');
       }
     });
 
@@ -340,13 +366,14 @@ $(document).ready(function(){
         $('#client_address').show();
         $('#client_address_data').text(address);
       }else{
-        $('#client_address').hide();
+        $('#client_address').text('');
       }
     });
 
 });
 
    function clientDataShow(){
+      var companiesName = $('#firm_name').val(); 
       var fname = $('#fname').val();
       var lname = $('#lname').val();
       var email = $('#email').val();
@@ -357,6 +384,7 @@ $(document).ready(function(){
       var zip = $('#zip').val();
       var address = $('#address').val();
 
+      $('#companies_name').text(companiesName);
       $('#first_name').text(fname);
       $('#last_name').text(lname);
       $('#client_email_data').text(email);
@@ -367,5 +395,15 @@ $(document).ready(function(){
       $('#client_zip_data').text(zip);
       $('#client_address_data').text(address);
     }
+
+$(".toggle-password").click(function() {
+$(this).toggleClass("fa-eye-slash fa-eye");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+input.attr("type", "text");
+} else {
+input.attr("type", "password");
+}
+});
 </script>                
 @endsection

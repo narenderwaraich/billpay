@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>{{ config('backpack.base.project_name') }} Error 500</title>
+    <title>{{ config('backpack.base.project_name') }} Error 404</title>
 
     <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
 
@@ -39,19 +39,19 @@
         font-size: 24px;
       }
       .form-btn{
-        background-color: #E565F3;
+        background-color: #e91e63;
         color: #FFFFFF;
         text-transform: uppercase;
-        border-radius: 30px;
-        border: 2px solid #E565F3;
-        height: 45px;
-        width: 190px;
+        border: 2px solid #e91e63;
+        height: auto;
+        width: auto;
+        padding: 7px 20px;
         font-size: 22px;
       }
       .form-btn:hover{
         background-color: transparent;
-        color: #E565F3;
-        border:2px solid #E565F3;
+        color: #e91e63;
+        border:2px solid #e91e63;
         cursor: pointer;
       }
     </style>
@@ -65,10 +65,10 @@
           <br>
           <small>
             <center>
-              <a href="/dashboard"><img src="/images/mapleebooks_logo.svg" alt="Logo"></a>
+              <a href="/dashboard"><img src="/images/logo.png" alt="Logo"></a>
             </center>
             <br>
-           <a href="/"><button type="button" class="btn form-btn">Go to Home</button></a>
+           <a href="/dashboard"><button type="button" class="btn form-btn">Go to Home</button></a>
          </small>
        </div>
       </div>

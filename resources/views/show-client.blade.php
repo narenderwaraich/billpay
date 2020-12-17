@@ -11,7 +11,7 @@
           <div class="col-md-12">
             <div class="card client-show-card">
               <div class="card-header">
-                <h4 class="card-title">Invoices</h4>
+                <h4 class="card-title">Clients</h4>
                   <div class="dropdown">
                     <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
                       <i class="now-ui-icons fa fa-gear"></i>
@@ -73,13 +73,22 @@
                          <span style="font-weight: 400;font-size: 12px;">(Name / email)</span>
                       </th>
                       <th>
-                        CREATED DATE
+                        MOBILE
                       </th>
                       <th>
-                        INVOICES RAISED
+                        ADDRESS
+                      </th>
+                      <th>
+                        STATE
+                      </th>
+                      <th>
+                        CITY
+                      </th>
+                      <th>
+                        CREATE DATE
                       </th>
                       <th class="text-right">
-                        INVOICED AMOUNT
+                        INVOICES
                       </th>
                     </thead>
                     <tbody>
@@ -90,13 +99,22 @@
                          <span class="td-inv-no">{{ $client->email}}</span>
                         </td>
                         <td>
-                          {{ $client->created_at->format('m/d/Y') }}
+                          {{ $client->phone }}
                         </td>
                         <td>
-                          {{ $client->totalInvoices }}
+                          {{ $client->address }}
+                        </td>
+                        <td>
+                          {{ $client->state }}
+                        </td>
+                        <td>
+                          {{ $client->city }}
+                        </td>
+                        <td>
+                          {{ $client->created_at->format('d/m/Y') }}
                         </td>
                         <td class="text-right">
-                          @if(empty($client->invoiceAmount)) $0 @else ${{ $client->invoiceAmount }} @endif
+                          {{ $client->totalInvoices }}
                         </td>
                       </tr>
                       @endforeach

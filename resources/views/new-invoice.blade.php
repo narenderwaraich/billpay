@@ -97,7 +97,7 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <input min="0" id="qty0" name="qty[]" type="text" class="form-control input-amt" onkeyup="calc(this, 0)" required>
-                    <label>Quantity</label>
+                    <label>Quantity <span class="badge badge-success" id="avalible-qty0" style="display: none;"></span></label>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -383,6 +383,7 @@
               $('#rate'+i).val('');
               $('#qty'+i).val('');
               $('#total'+i).val('');
+              $('#avalible-qty'+i).hide();
                 myFunction();
               var allItems = <?php echo json_encode($allItem) ?>; 
                 
@@ -404,6 +405,8 @@
                         $(this).val(ui.item.label);
                         var fieldId = $(this).attr('dataId');
                         $('#rate'+fieldId).val(ui.item.rate);
+                        $('#avalible-qty'+fieldId).show();
+                        $('#avalible-qty'+fieldId).text(ui.item.qty);
                         $('#stockQTY'+fieldId).val(ui.item.qty);
                         return false;
                      }

@@ -1,11 +1,11 @@
 <!-- sidebar with menu -->
 <div class="sidebar">
   <div class="logo">
-    <a href="#" class="simple-text logo-mini">
-      Mob
+    <a href="#" class="logo-mini">
+      <img src="/public/images/icon/template-mini-logo.svg" alt="Web Logo" class="template-logo">
     </a>
-    <a href="/dashboard" class="simple-text logo-normal">
-      Dashboard
+    <a href="/dashboard" class="logo-normal">
+      <img src="/public/images/icon/template-logo.svg" alt="Web Logo" class="template-logo">
     </a>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
@@ -124,3 +124,15 @@
               </div>
             </nav> -->
             <!-- End Navbar -->
+
+<form action="/find-client" method="post" class="search-nav-form">
+  {{ csrf_field() }}
+  <div class="input-group">
+    <input type="text" name="phone" value="" class="form-control" placeholder="Enter Client Mobile Number" required>
+    <div class="input-group-append">
+      <button type="submit" class="input-group-text search-nav-btn">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+</form>
