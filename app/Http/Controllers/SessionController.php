@@ -24,7 +24,41 @@ class SessionController extends Controller
         if(Auth::user()->role == 'user'){
             $id = Auth::id();
             $nowDate = date("Y-m-d", time());
-            $yearData = array(date('Y'));
+            $lastMonth = array(date('m')-1);
+            $cruentYear = array(date('Y'));
+            $lastYear = array(date('Y')-1);
+
+            $todayDepositInvoiceAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','DEPOSIT_PAID')->where('is_deleted','=',0)->whereRaw('date(`created_at`) = ?', $nowDate)->sum('deposit_amount'); //dd($todayDepositInvoiceAmount);
+            $todayPaidInvoiceAmount = DB::table("invoices")->where('user_id',$id)->whereIn('status',['ONLINE','CASH'])->where('is_deleted','=',0)->whereRaw('date(`created_at`) = ?', $nowDate)->sum('net_amount'); //dd($todayPaidInvoiceAmount);
+
+            $lastMonthDepositInvoiceAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','DEPOSIT_PAID')->where('is_deleted','=',0)->whereRaw('month(`created_at`) = ?', $lastMonth)->sum('deposit_amount'); //dd($lastMonthDepositInvoiceAmount);
+            $lastMonthPaidInvoiceAmount = DB::table("invoices")->where('user_id',$id)->whereIn('status',['ONLINE','CASH'])->where('is_deleted','=',0)->whereRaw('month(`created_at`) = ?', $lastMonth)->sum('net_amount'); //dd($lastMonthPaidInvoiceAmount);
+
+            $lastYearDepositInvoiceAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','DEPOSIT_PAID')->where('is_deleted','=',0)->whereRaw('year(`created_at`) = ?', $lastYear)->sum('deposit_amount'); //dd($lastYearDepositInvoiceAmount);
+            $lastYearPaidInvoiceAmount = DB::table("invoices")->where('user_id',$id)->whereIn('status',['ONLINE','CASH'])->where('is_deleted','=',0)->whereRaw('year(`created_at`) = ?', $lastYear)->sum('net_amount'); //dd($lastMonthPaidInvoiceAmount);
+
+            $totalDepositInvoiceAmount = DB::table("invoices")->where('user_id',$id)->where('status','=','DEPOSIT_PAID')->where('is_deleted','=',0)->sum('deposit_amount'); //dd($totalDepositInvoiceAmount);
+            $totalPaidInvoiceAmount = DB::table("invoices")->where('user_id',$id)->whereIn('status',['ONLINE','CASH'])->where('is_deleted','=',0)->sum('net_amount'); //dd($totalPaidInvoiceAmount);
+
+            ///sale
+            $todaySale = $todayDepositInvoiceAmount + $todayPaidInvoiceAmount;
+            $lastMonthSale = $lastMonthDepositInvoiceAmount + $lastMonthPaidInvoiceAmount;
+            $lastYearSale = $lastYearDepositInvoiceAmount + $lastYearPaidInvoiceAmount;
+            $totalSale = $totalDepositInvoiceAmount + $totalPaidInvoiceAmount;
+
+            /// clients
+            $todayClient = DB::table("clients")->where('user_id',$id)->whereRaw('date(`created_at`) = ?', $nowDate)->count(); //dd($todayClient);
+            $lastMonthClient = DB::table("clients")->where('user_id',$id)->whereRaw('month(`created_at`) = ?', $lastMonth)->count(); //dd($lastMonthClient);
+            $lastYearClient = DB::table("clients")->where('user_id',$id)->whereRaw('year(`created_at`) = ?', $lastYear)->count(); //dd($lastYearClient);
+            $totalClient = DB::table("clients")->where('user_id',$id)->count(); //dd($totalClient);
+
+            ///invoices
+            $todayInvoice = DB::table("invoices")->where('user_id',$id)->where('is_deleted','=',0)->whereRaw('date(`created_at`) = ?', $nowDate)->count(); //dd($todayInvoice);
+            $lastMonthInvoice = DB::table("invoices")->where('user_id',$id)->where('is_deleted','=',0)->whereRaw('month(`created_at`) = ?', $lastMonth)->count(); //dd($lastMonthInvoice);
+            $lastYearInvoice = DB::table("invoices")->where('user_id',$id)->where('is_deleted','=',0)->whereRaw('year(`created_at`) = ?', $lastYear)->count(); //dd($lastYearInvoice);
+            $totalInvoice = DB::table("invoices")->where('user_id',$id)->where('is_deleted','=',0)->count(); //dd($totalInvoice);
+
+
             $overdueInvoices = Invoice::where('user_id',$id)->where(function($q){
                 $q->where('status','=','SENT')->orWhere('status','=','DEPOSIT_PAID');
             })->where('due_date', '<',$nowDate)->update(['status' => 'OVERDUE']);
@@ -34,14 +68,14 @@ class SessionController extends Controller
             $totalDeposit = $onlyDepositAmount + $overdueInDepositAmount;
             $cancelInvoice = DB::table("invoices")->where('user_id',$id)->where('status','=','CANCEL')->where('is_deleted','=',0)->sum('net_amount');
             $piChart = [0,0,0,0,0];
-            $paids =DB::table('invoices')
+            $paids = DB::table('invoices')
                      ->select(DB::raw('sum(net_amount) as amount'),DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as day'))
                      ->groupBy('day')
                      ->orderBy('day','asc')
                      ->whereIn('status',['ONLINE','CASH'])
                      ->where('is_deleted','=',0)
                      ->where('user_id', '=', $id)
-                     // ->whereRaw('year(`created_at`) = ?', $yearData)
+                     // ->whereRaw('year(`created_at`) = ?', $cruentYear)
                      ->get();
                    //dd($paids);
                     foreach($paids as $paidInv){
@@ -67,7 +101,7 @@ class SessionController extends Controller
               $finalPiData[$key]['type'] = ($key == 0 ? "Paid" : ($key  == 1 ? "Deposit" : ($key  == 2 ? "Overdue" : ($key  == 3 ? "Sent" : "Cancel"))));
               $finalPiData[$key]['amount'] = $PiData;
             }
-          return view('index',compact('paids','finalPiData'));
+          return view('index',compact('paids','finalPiData','todaySale','lastMonthSale','lastYearSale','totalSale','todayClient','lastMonthClient','lastYearClient','totalClient','todayInvoice','lastMonthInvoice','lastYearInvoice','totalInvoice'));
     }else{
         return redirect()->to('/admin');
     }

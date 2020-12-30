@@ -2,7 +2,15 @@
 @section('content')
 <!-- top header -->
 <div class="panel-header panel-header-sm">
-              
+    <div class="invoice-status-title">
+      @if($inv->status == "CASH" || $inv->status == "ONLINE")
+      HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}} @if($inv->deposit_amount > 0)<br> DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
+      @endif
+
+      @if($inv->status == "DEPOSIT_PAID" || ($inv->status == "OVERDUE" && $inv->net_amount != $inv->due_amount) || $inv->is_cancelled ==2)
+      DEPOSIT {{$inv->deposit_amount}} INR PAID ON {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
+      @endif
+    </div>          
 </div>
 <!-- end header    -->
 <!-- content section -->
@@ -57,14 +65,14 @@
       <div class="col-lg-4">
         <div class="card">
           <div class="card-header">
-            <h5 class="title">Action</h5>
+            <h5 class="title" style="color: #e91e63;">INVOICE {{$inv->invoice_number}}</h5>
             <hr>
           </div>
           <div class="card-body">
           	<div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
 		          	<a href="#" data-toggle="modal" class="btn-success btn-sm" data-target="#myModal">Send</a>
-		          	<a href="/invoice/edit/{{$inv->id}}" class="btn-primary btn-sm">Edit</a>
+		          	<a href="/invoice/edit/{{$inv->id}}" class="btn-primary btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif">Edit</a>
 		          	<a href="/invoice/download/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-dark btn-sm">Download</a>
 		          	<a href="/invoice/copy/{{$inv->id}}" class="btn-secondary btn-sm">Copy</a>
 		        </div>
@@ -72,12 +80,12 @@
 		    <br>
 		    <div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
-		          	<a href="#" class="cancel_invoice btn-warning btn-sm" CancelId="{{$inv->id}}">Cancel</a>
-		          	<a href="#" class="del_invoice btn-danger btn-sm" DeleteId="{{$inv->id}}">Delete</a>
+		          	<a href="#" class="cancel_invoice btn-warning btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" CancelId="{{$inv->id}}">Cancel</a>
+		          	<a href="#" class="del_invoice btn-danger btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" DeleteId="{{$inv->id}}">Delete</a>
 		            <a href="/invoice/print/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" target="_blank" class="btn-info btn-sm" data-Id="{{$inv->id}}">Print</a>
 		            <a href="#" class="btn-dark btn-sm" onclick="goBack()">Back</a>
                 <br><br>
-                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg">Cash Pay Invoice</a>
+                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif">Cash Pay Invoice</a>
             	</div>
 		    </div>
         <br>
@@ -301,9 +309,22 @@
 
 
 <style>
-  .client-data{
+.panel-header-sm {
+    height: 165px;
+}
+.client-data{
     display: block;
-  }
+}
+.invoice-status-title {
+    color: #fff;
+    padding: 0 30px;
+    font-size: 18px;
+    margin-top: -12px;
+    font-weight: 400;
+}
+.disabled-link {
+    pointer-events: none;
+}
 </style>
 
 

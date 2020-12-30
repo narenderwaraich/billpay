@@ -87,6 +87,7 @@
                     <input type="text" name="item_name[]" class="automplete form-control" dataId="0" onkeyup="initAutoComplete(0)" required>
                     <label>Item Name</label>
                   </div>
+                  <input type="hidden" name="item_id[]" id="itmId0">
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
@@ -97,7 +98,7 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <input min="0" id="qty0" name="qty[]" type="text" class="form-control input-amt" onkeyup="calc(this, 0)" required>
-                    <label>Quantity <span class="badge badge-success" id="avalible-qty0" style="display: none;"></span></label>
+                    <label>Quantity <span class="badge badge-success" id="avalible-qty0" style="display: none;" title="avalible-qty"></span></label>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -115,7 +116,7 @@
                <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
-                    <textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea>
+                    <textarea  class="form-control" rows="2" id="desc0" name="item_description[]"></textarea>
                     <label>Description</label>
                   </div>
                 </div>
@@ -159,7 +160,7 @@
                      <div class="form-group" style="margin-bottom: 10px;">
                       <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;height: unset;width: 75%;" required>
                         <option value="Cash" selected>Cash</option>
-                        <option value="Online">Online</option>
+                        <option value="Online" disabled>Online</option>
                       </select>
                      </div>
                    </div>
@@ -382,7 +383,9 @@
          function initAutoComplete(i) {
               $('#rate'+i).val('');
               $('#qty'+i).val('');
+              $('#desc0'+i).html('');
               $('#total'+i).val('');
+              $('#itmId'+i).val('');
               $('#avalible-qty'+i).hide();
                 myFunction();
               var allItems = <?php echo json_encode($allItem) ?>; 
@@ -392,8 +395,10 @@
                     let subData = {
                         "label" : allItems[Item]['item_name'], 
                         "value": allItems[Item]['item_name'],
+                        "item_id": allItems[Item]['id'],
                         "rate": allItems[Item]['sale'],
-                        "qty": allItems[Item]['qty']
+                        "qty": allItems[Item]['qty'],
+                        "desc": allItems[Item]['item_description']
                     };
                     Items.push(subData);
                 }
@@ -404,7 +409,9 @@
                         $(this).siblings('input').val(ui.item.value);
                         $(this).val(ui.item.label);
                         var fieldId = $(this).attr('dataId');
+                        $('#itmId'+fieldId).val(ui.item.item_id);
                         $('#rate'+fieldId).val(ui.item.rate);
+                        $('#desc'+fieldId).html(ui.item.desc);
                         $('#avalible-qty'+fieldId).show();
                         $('#avalible-qty'+fieldId).text(ui.item.qty);
                         $('#stockQTY'+fieldId).val(ui.item.qty);
@@ -419,7 +426,7 @@
                           var i=1;  
 
                           $('#addForm').click(function(){    
-                          $('#dynamic_field').append('<div class="row" id="frm'+i+'"><div class="col-md-5"><div class="form-group"><input type="text" name="item_name[]" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div>');
+                          $('#dynamic_field').append('<div class="row" id="frm'+i+'"><div class="col-md-5"><div class="form-group"><input type="text" name="item_name[]" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div>');
                                i++;
                           });  
 

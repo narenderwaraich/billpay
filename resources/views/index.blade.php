@@ -15,7 +15,7 @@
           <h5 class="card-category">Global Sales</h5>
           <h4 class="card-title">Shipped Products</h4>
           <div class="dropdown">
-            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
               <i class="now-ui-icons fa fa-gear"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -42,10 +42,10 @@
     <div class="col-lg-6">
       <div class="card card-chart">
         <div class="card-header">
-          <h5 class="card-category">Global Sales</h5>
-          <h4 class="card-title">Shipped Products</h4>
+          <h5 class="card-category">Invoice</h5>
+          <h4 class="card-title">Invoice Status</h4>
           <div class="dropdown">
-            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
               <i class="now-ui-icons fa fa-gear"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -76,45 +76,10 @@
     <div class="col-lg-4">
       <div class="card card-chart">
         <div class="card-header">
-          <h5 class="card-category">Genrate Bill</h5>
-          <h4 class="card-title">Invoice</h4>
-        </div>
-        <div class="card-body">
-          <div class="chart-area">
-            <br><br>
-              <form action="/find-client" method="post" style="width: 70%;margin: auto;">
-                  {{ csrf_field() }}
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <input type="text" name="phone" class="form-control">
-                        <label>Mobile</label>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <button type="submit" class="btn btn-info" style="margin-left: 15px;width: 100px;">Enter</button>
-                      </div>
-                    </div>
-                  </div>
-              </form>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div class="stats">
-            <i class="now-ui-icons arrows-1_refresh-69"></i> Today Genrate Bill
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- end col -->
-    <div class="col-lg-4">
-      <div class="card card-chart">
-        <div class="card-header">
-          <h5 class="card-category">Global Sales</h5>
-          <h4 class="card-title">Shipped Products</h4>
+          <h5 class="card-category">Sale</h5>
+          <h4 class="card-title">Today Sale</h4>
           <div class="dropdown">
-            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
               <i class="now-ui-icons fa fa-gear"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -126,13 +91,16 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="chart-area">
-            
+          <div class="chart-area sale-area">
+            <div><span class="toady-sale-txt-title">Today</span> <span class="toady-sale-txt-title-amount"><i class="fa fa-inr"></i> @if(isset($todaySale)) {{$todaySale}} @else 0 @endif</span></div>
+            <div><span class="last-month-sale-txt-title">Last Month</span> <span class="last-month-sale-txt-title-amount"><i class="fa fa-inr"></i> @if(isset($lastMonthSale)) {{$lastMonthSale}} @else 0 @endif </span></div>
+            <div><span class="last-year-sale-txt-title">Last Year</span> <span class="last-year-sale-txt-title-amount"><i class="fa fa-inr"></i>  @if(isset($lastYearSale)) {{$lastYearSale}} @else 0 @endif </span></div>
+            <div><span class="total-sale-txt-title">Total</span> <span class="total-sale-txt-title-amount"><i class="fa fa-inr"></i>  @if(isset($totalSale)) {{$totalSale}} @else 0 @endif </span></div>
           </div>
         </div>
         <div class="card-footer">
           <div class="stats">
-            <i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+            <i class="fa fa-clock-o"></i> {{ date('d-m-Y H:i:s') }}
           </div>
         </div>
       </div>
@@ -141,10 +109,10 @@
     <div class="col-lg-4">
       <div class="card card-chart">
         <div class="card-header">
-          <h5 class="card-category">Global Sales</h5>
-          <h4 class="card-title">Shipped Products</h4>
+          <h5 class="card-category">Client</h5>
+          <h4 class="card-title">Today Client</h4>
           <div class="dropdown">
-            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
               <i class="now-ui-icons fa fa-gear"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -156,13 +124,49 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="chart-area">
-            
+          <div class="chart-area sale-area">
+            <div><span class="toady-sale-txt-title">Today</span> <span class="toady-sale-txt-title-amount"><i class="fa fa-user"></i> @if(isset($todayClient)) {{$todayClient}} @else 0 @endif</span></div>
+            <div><span class="last-month-sale-txt-title">Last Month</span> <span class="last-month-sale-txt-title-amount"><i class="fa fa-user"></i> @if(isset($lastMonthClient)) {{$lastMonthClient}} @else 0 @endif </span></div>
+            <div><span class="last-year-sale-txt-title">Last Year</span> <span class="last-year-sale-txt-title-amount"><i class="fa fa-user"></i>  @if(isset($lastYearClient)) {{$lastYearClient}} @else 0 @endif </span></div>
+            <div><span class="total-sale-txt-title">Total</span> <span class="total-sale-txt-title-amount"><i class="fa fa-user"></i>  @if(isset($totalClient)) {{$totalClient}} @else 0 @endif </span></div>
           </div>
         </div>
         <div class="card-footer">
           <div class="stats">
-            <i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+            <i class="fa fa-clock-o"></i> {{ date('d-m-Y H:i:s') }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end col -->
+    <div class="col-lg-4">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Invoice</h5>
+          <h4 class="card-title">Today Invoice</h4>
+          <div class="dropdown">
+            <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown" disabled="">
+              <i class="now-ui-icons fa fa-gear"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item text-danger" href="#">Remove Data</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-area sale-area">
+            <div><span class="toady-sale-txt-title">Today</span> <span class="toady-sale-txt-title-amount"><i class="fa fa-file"></i> @if(isset($todayInvoice)) {{$todayInvoice}} @else 0 @endif</span></div>
+            <div><span class="last-month-sale-txt-title">Last Month</span> <span class="last-month-sale-txt-title-amount"><i class="fa fa-file"></i> @if(isset($lastMonthInvoice)) {{$lastMonthInvoice}} @else 0 @endif </span></div>
+            <div><span class="last-year-sale-txt-title">Last Year</span> <span class="last-year-sale-txt-title-amount"><i class="fa fa-file"></i>  @if(isset($lastYearInvoice)) {{$lastYearInvoice}} @else 0 @endif </span></div>
+            <div><span class="total-sale-txt-title">Total</span> <span class="total-sale-txt-title-amount"><i class="fa fa-file"></i>  @if(isset($totalInvoice)) {{$totalInvoice}} @else 0 @endif </span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="stats">
+            <i class="fa fa-clock-o"></i> {{ date('d-m-Y H:i:s') }}
           </div>
         </div>
       </div>
@@ -355,40 +359,10 @@ var lineChart = am4core.create("lineChart", am4charts.XYChart);
 
 // Add data
 lineChart.data = [{
-  "date": new Date(2018, 0, 1),
+  "date": "2018/01/01",
   "value": 450,
   "value2": 362,
   "value3": 699
-}, {
-  "date": new Date(2018, 0, 2),
-  "value": 269,
-  "value2": 450,
-  "value3": 841
-}, {
-  "date": new Date(2018, 0, 3),
-  "value": 700,
-  "value2": 358,
-  "value3": 699
-}, {
-  "date": new Date(2018, 0, 4),
-  "value": 490,
-  "value2": 367,
-  "value3": 500
-}, {
-  "date": new Date(2018, 0, 5),
-  "value": 500,
-  "value2": 485,
-  "value3": 369
-}, {
-  "date": new Date(2018, 0, 6),
-  "value": 550,
-  "value2": 354,
-  "value3": 250
-}, {
-  "date": new Date(2018, 0, 7),
-  "value": 420,
-  "value2": 350,
-  "value3": 600
 }];
 
 // Create axes
@@ -415,9 +389,9 @@ function createSeries(field, name) {
   return series;
 }
 
-createSeries("value", "Series #1");
-createSeries("value2", "Series #2");
-createSeries("value3", "Series #3");
+createSeries("value", "Clients");
+createSeries("value2", "Invoices");
+createSeries("value3", "Sale");
 
 lineChart.legend = new am4charts.Legend();
 lineChart.cursor = new am4charts.XYCursor();

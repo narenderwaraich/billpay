@@ -20,6 +20,9 @@ use App\Mail\UserNotify;
 use Carbon\Carbon;
 use Toastr;
 use App\UserPayment;
+use App\UserPlan;
+use App\InvoicePlan;
+use App\Invoice;
 
 class RegistrationsController extends Controller
       {   
@@ -209,10 +212,15 @@ class RegistrationsController extends Controller
                         Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
                           return back();
                       }else{
+                            $userId = Auth::id();
                             $country_data =DB::table('countries')->select('id','name')->get();
                             $state_data = DB::table("states")->select('id','name')->get();
                             $city_data = DB::table("cities")->select('id','name')->get();
-                            return view('user_profile',compact('country_data','state_data','city_data'));
+                            $userPlan = UserPlan::where('user_id', $userId)->first();
+                            $plan = InvoicePlan::where('id', $userPlan->plan_id)->first();
+                            $invoice = Invoice::where('user_id', $userId)->get(); //dd($invoice);
+                            $totalInvoice = $invoice ? $invoice->count() : 0; //dd($totalInvoice);
+                            return view('user_profile',compact('country_data','state_data','city_data','userPlan','plan','totalInvoice'));
                           }
               }
                else{

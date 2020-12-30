@@ -26,34 +26,89 @@ use App\DeleteInvoice;
 use File;
 use ZipArchive;
 use App\Item;
-
+use App\UserPlan;
+use App\InvoicePlan;
 
 class InvoiceController extends Controller
 {
       public function addInvoice($clientId){
-        if(Auth::check()){
-          if(Auth::user()->role == 'user'){
-            if(!Auth::user()->verified == 'true'){
-              Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
-              return back();
-            }else{
+          if(Auth::check()){ //// check user login or not
+            if(Auth::user()->role == 'user'){ //// check user admin or user
+              if(!Auth::user()->verified == 'true'){ //// check user verified or not
+                Toastr::error('Please first confirm your email to start using your Account!', 'Error', ["positionClass" => "toast-top-right"]);
+                return back();
+              }else{ //// end check user verified or not
 
-              if(Auth::user()->company_name == ''){
-              Toastr::error('Please first update your company details!', 'Error', ["positionClass" => "toast-top-right"]);
-              return redirect()->to('/profile');
-              }else{
-                  $id = Auth::id();
-                  $client = Clients::find($clientId);
-                  $allItem = Item::where('user_id',$id)->where('in_stock','=',1)->get();
-                  return view('new-invoice',['client' => $client, 'allItem' => $allItem]);
+                $userId = Auth::id();
+                $client = Clients::find($clientId);
+                $allItem = Item::where('user_id',$userId)->where('in_stock','=',1)->get();
+                // if($userId === 1 || $userId === 2){ // special check for our user to skip payment
+                //     return view('new-invoice',['client' => $client, 'allItem' => $allItem]);
+                //   }
+                $userPlan = UserPlan::where('user_id', $userId)->first();
+                if($userPlan){
+                  if(Auth::user()->company_name == ''){
+                    Toastr::error('Please first update your company details!', 'Error', ["positionClass" => "toast-top-right"]);
+                    return redirect()->to('/profile');
+                  }
+
+                  // get the current time
+                $current = Carbon::now(); /// Now Date
+                $nowDate = $current->toDateTimeString(); // change now date to string value
+                $nowD = strtotime(str_replace('/', '-', $nowDate)); 
+                
+                $trialDate = $userPlan->expire_date;  // create time add trail 30 days date       
+                //$trial = $trialDate->toDateTimeString();
+                $trialD = strtotime(str_replace('/', '-', $trialDate));
+                $packExpires = $trialD - $nowD; /// show total seconds 
+                //dd($packExpires);
+
+                $invoices = Invoice::where('user_id', $userId)->get();
+                $invoicesCount = $invoices->count();
+
+                $getInvoice = $userPlan->get_invoice;
+
+                $bool = true;
+                $message = "";
+
+                    if($userPlan->is_activated){ /// Check User plan active or not Status 
+                            if($packExpires <= 0){// if pack not ended ///1if
+                                $message = 'Sorry your Package Date Expires';
+                                $bool = false;                  
+                            }else{
+                                if($invoicesCount == $getInvoice){
+                                    $bool = false;
+                                    $message = 'Sorry first Activate Other Package in this pack add only '.$getInvoice.' invoices';
+                                }else{ ///3f
+                                    $bool = true; /// 3f  
+                                }
+                            } 
+                      }else{
+                          $bool = false;
+                          $message = 'Sorry you have not any Invoice Plan';
+                      }
+     
+                if($bool){
+                      return view('new-invoice',['client' => $client, 'allItem' => $allItem]);
+                }else{
+                      Toastr::error($message, 'Error', ["positionClass" => "toast-top-right"]);
+                      return redirect()->to('/dashboard');
                 }
-            }
-          }else{
-            return redirect()->to('/dashboard');
+
+                // end check
+              
+                }else{
+                  Toastr::error('Please first choose any invoice plan!', 'Error', ["positionClass" => "toast-top-right"]);
+                      return redirect()->to('/invoice/plans');
+                }
+                 
+              }
+            }else{ //// end check user admin or user
+                return redirect()->to('/dashboard');
+              } 
+          }else{ //// end check user login or not
+            return redirect()->to('/login');
           }
-        }else{
-          return redirect()->to('/login');
-        }
       }
 
 
@@ -80,14 +135,6 @@ class InvoiceController extends Controller
           $newInvoiceID = "INV00001";
           $newInvNumber = "";
         } 
-
-        $checkDeleteInvoice = DeleteInvoice::where('user_id', $userId)->orderBy('id', 'DESC')->pluck('invoice_number')->first();
-        if($checkDeleteInvoice){
-          $deleteInvNumber = explode('INV', $checkDeleteInvoice)[1];
-          if($newInvNumber == $deleteInvNumber){
-            $newInvoiceID = 'INV'.str_pad($deleteInvNumber + 1, 5, "0", STR_PAD_LEFT);
-          }   
-        }
 
 
         $data = request(['tax_rate','notes','terms','net_amount','client_id','discount','due_amount','sub_total','taxInFlat','disInFlat','disInPer','taxInPer','payment_mode']);
@@ -124,22 +171,13 @@ class InvoiceController extends Controller
             'qty'=>$request->qty [$key],
             'total'=>$request->total [$key],
             'item_description'=>addslashes($request->item_description [$key]),
+            'item_id'=>$request->item_id [$key],
             'created_at'=>$time,
             'updated_at'=>$time
           );
 
 
       InvoiceItem::insert($details);
-
-        $invoiceItm = Item::where('item_name',$itm)->first();
-        if($invoiceItm->qty > $request->qty [$key]){
-          $qty['qty'] = $invoiceItm->qty - $request->qty [$key];
-        }
-        if($invoiceItm->qty == $request->qty [$key]){
-          $qty['qty'] = 0;
-          $qty['in_stock'] = 0;
-        }
-        $invoiceItm->update($qty);
 
     }
 
@@ -213,6 +251,7 @@ class InvoiceController extends Controller
             'qty'=>$request->qty [$key],
             'total'=>$request->total [$key],
             'item_description'=>addslashes($request->item_description [$key]),
+            'item_id'=>$request->item_id [$key],
             'created_at'=>$time,
             'updated_at'=>$time
           );
@@ -346,63 +385,110 @@ class InvoiceController extends Controller
     public function copyData($id){
     //dd($id);
       if(Auth::check()){
-        $inv = Invoice::find($id); 
-        $userId = $inv->user_id;
-        $invItem = $inv->invoiceItems;
-        $invo = new Invoice();
+          $userId = Auth::id();
+          $userPlan = UserPlan::where('user_id', $userId)->first();
+             // get the current time
+                $current = Carbon::now(); /// Now Date
+                $nowDate = $current->toDateTimeString(); // change now date to string value
+                $nowD = strtotime(str_replace('/', '-', $nowDate)); 
+                
+                $trialDate = $userPlan->expire_date;  // create time add trail 30 days date       
+                //$trial = $trialDate->toDateTimeString();
+                $trialD = strtotime(str_replace('/', '-', $trialDate));
+                $packExpires = $trialD - $nowD; /// show total seconds 
+                //dd($packExpires);
 
-        $lastInvoiceID = Invoice::where('user_id', $userId)->orderBy('id', 'DESC')->pluck('invoice_number')->first(); 
-        $getNumber = explode('INV', $lastInvoiceID)[1];  
-        $newInvoiceID = 'INV'.str_pad($getNumber + 1, 5, "0", STR_PAD_LEFT);         
-        $data['tax_rate'] = $inv->tax_rate;
-        $data['notes'] = $inv->notes;
-        $data['terms'] = $inv->terms;
-        $data['net_amount'] = $inv->net_amount;
-        $data['client_id'] = $inv->client_id;
-        $data['discount'] = $inv->discount;
-        $data['due_amount'] = $inv->net_amount;
-        $data['sub_total'] = $inv->sub_total;
-        $data['payment_mode'] = $inv->payment_mode;
-        $str = $newInvoiceID;
-        $invoiceToken = md5($str);
-        $data['invoice_number_token']= $invoiceToken;
-        $data['invoice_number']= $newInvoiceID; 
-        $data['user_id'] = $inv->user_id;
-        $dueDate = now()->addDays(7);
-        $data['due_date'] = $dueDate->format('Y-m-d');
-        $data['issue_date'] = now()->format('Y-m-d'); 
-    // $data['status'] = $inv->status;
-        $data['payment_date'] = $inv->payment_date;
-        $data['created_at']= now();
-        $data['updated_at']= now();
-        $data['deposit_amount'] = $inv->deposit_amount;
-        $data['disInPer']= $inv->disInPer; 
-        $data['taxInPer']= $inv->taxInPer;
-        $data['disInFlat']= $inv->disInFlat;
-        $data['taxInFlat']= $inv->taxInFlat;
+                $invoices = Invoice::where('user_id', $userId)->get();
+                $invoicesCount = $invoices->count();
 
-    //dd($data);
-        $time = now(); 
-        $invoice_id = DB::table('invoices')->insertGetId($data);
+                $getInvoice = $userPlan->get_invoice;
+
+                $bool = true;
+                $message = "";
+
+                    if($userPlan->is_activated){ /// Check User plan active or not Status 
+                            if($packExpires <= 0){// if pack not ended ///1if
+                                $message = 'Sorry your Package Date Expires';
+                                $bool = false;                  
+                            }else{
+                                if($invoicesCount == $getInvoice){
+                                    $bool = false;
+                                    $message = 'Sorry first Activate Other Package in this pack add only '.$getInvoice.' invoices';
+                                }else{ ///3f
+                                    $bool = true; /// 3f  
+                                }
+                            } 
+                      }else{
+                          $bool = false;
+                          $message = 'Sorry you have not any Invoice Plan';
+                      }
+                
+          if($bool){
+                $inv = Invoice::find($id); 
+              $userId = $inv->user_id;
+              $invItem = $inv->invoiceItems;
+              $invo = new Invoice();
+
+              $lastInvoiceID = Invoice::where('user_id', $userId)->orderBy('id', 'DESC')->pluck('invoice_number')->first(); 
+              $getNumber = explode('INV', $lastInvoiceID)[1];  
+              $newInvoiceID = 'INV'.str_pad($getNumber + 1, 5, "0", STR_PAD_LEFT);
+
+              $data['tax_rate'] = $inv->tax_rate;
+              $data['notes'] = $inv->notes;
+              $data['terms'] = $inv->terms;
+              $data['net_amount'] = $inv->net_amount;
+              $data['client_id'] = $inv->client_id;
+              $data['discount'] = $inv->discount;
+              $data['due_amount'] = $inv->net_amount;
+              $data['sub_total'] = $inv->sub_total;
+              $data['payment_mode'] = $inv->payment_mode;
+              $str = $newInvoiceID;
+              $invoiceToken = md5($str);
+              $data['invoice_number_token']= $invoiceToken;
+              $data['invoice_number']= $newInvoiceID; 
+              $data['user_id'] = $inv->user_id;
+              $dueDate = now()->addDays(7);
+              $data['due_date'] = $dueDate->format('Y-m-d');
+              $data['issue_date'] = now()->format('Y-m-d'); 
+          // $data['status'] = $inv->status;
+              $data['payment_date'] = $inv->payment_date;
+              $data['created_at']= now();
+              $data['updated_at']= now();
+              $data['deposit_amount'] = $inv->deposit_amount;
+              $data['disInPer']= $inv->disInPer; 
+              $data['taxInPer']= $inv->taxInPer;
+              $data['disInFlat']= $inv->disInFlat;
+              $data['taxInFlat']= $inv->taxInFlat;
+
+          //dd($data);
+              $time = now(); 
+              $invoice_id = DB::table('invoices')->insertGetId($data);
 
 
-        foreach ($invItem as  $itm){
+              foreach ($invItem as  $itm){
 
-          $details = array('invoice_id'=>$invoice_id,
-            'item_name'=>$itm->item_name,
-            'rate'=>$itm->rate,
-            'qty'=>$itm->qty,
-            'total'=>$itm->total,
-            'item_description'=>addslashes($itm->item_description),
-            'created_at'=>$time,
-            'updated_at'=>$time
-          );
+                $details = array('invoice_id'=>$invoice_id,
+                  'item_name'=>$itm->item_name,
+                  'rate'=>$itm->rate,
+                  'qty'=>$itm->qty,
+                  'total'=>$itm->total,
+                  'item_description'=>addslashes($itm->item_description),
+                  'item_id'=>$itm->item_id,
+                  'created_at'=>$time,
+                  'updated_at'=>$time
+                );
 
 
-          InvoiceItem::insert($details);
-        }
-        Toastr::success('Invoice Copy', 'Success', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->to('/invoice/view');
+                InvoiceItem::insert($details);
+              }
+              Toastr::success('Invoice Copy', 'Success', ["positionClass" => "toast-bottom-right"]);
+              return redirect()->to('/invoice/view');
+          }else{
+                Toastr::error($message, 'Error', ["positionClass" => "toast-top-right"]);
+                return redirect()->to('/dashboard');
+          }
+
+          // end check
       }else{
         return redirect()->to('/');
       }

@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\UserPlan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use App\UserPayment;
-use App\User;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Validator;
 use Redirect;
 use Toastr;
-use App\Clients;
-use Validator;
-use App\Invoice;
+use Carbon\Carbon;
+use Auth;
+use Mail;
+use App\Mail\PaymentNotification;
+use App\User;
+use App\Setting;
 use App\InvoicePlan;
-use App\Item;
+use App\UserPlanPayment;
 
-class PaymentController extends Controller
+class UserPlanController extends Controller
 {
-
-	/**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -35,118 +35,37 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    { 
-        $plans = InvoicePlan::all();
-        return view('plans',compact('plans'));
-    }
-
-    public function invoiceCashPay($id){
-        $invoice = Invoice::find($id);
-        return view('cash-pay-invoice',compact('invoice'));
-    }
-
-    public function cashDepositPay($id){
-       $invoice = Invoice::where('id',$id)->first();
-       $amount = $invoice->deposit_amount;
-       $this->cashPay($id, $amount);
-       Toastr::success('Invoice Cash Deposit Paid', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect()->to('/dashboard');
-    }
-
-    public function cashFullPay($id){
-        $invoice = Invoice::where('id',$id)->first();
-        $amount = $invoice->net_amount;
-        $this->cashPay($id, $amount);
-        Toastr::success('Invoice Cash Full Paid', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect()->to('/dashboard');
-    }
-
-    public function cashPay($id, $amount){
-                $invoice = Invoice::where('id',$id)->first();
-                $order_id = uniqid();
-                $order = new UserPayment();
-                $order->order_id = $order_id;
-                $order->transaction_date = Carbon::now();
-                $order->transaction_status = 'Success';
-                $order->payment_method = "Cash";
-                $order->amount = $amount;
-                $order->transaction_id = '';
-                $order->invoice_id = $id;
-                $order->user_id = $invoice->user_id;
-                $order->created_at =  Carbon::now();
-                $order->save();
-                /// Update status
-                if($amount == $invoice->net_amount){
-                    $statusUpdate['status'] = "CASH";
-                    $statusUpdate['due_amount'] = 0;
-                    $statusUpdate['payment_date'] = Carbon::now();
-                }else{
-                    $pay = $invoice->deposit_amount; // pay amount
-                    $totalAmount = $invoice->due_amount; /// total amount 
-                    $pending = $totalAmount - $pay; // total - pay
-                    $statusUpdate['status'] = "DEPOSIT_PAID";
-                    $statusUpdate['deposit_date'] = Carbon::now();
-                    $statusUpdate['payment_date'] = Carbon::now();
-                    $statusUpdate['due_amount'] = $pending;
-                }
-                $statusUpdate['inventory'] = 0;
-                
-                //// item inventory
-                if($invoice->inventory){
-                    $invItem = $invoice->invoiceItems; 
-                    foreach ($invItem as $key => $item) {
-                          $invoiceItmSale = Item::where('id',$item->item_id)->first();
-                          if($invoiceItmSale){
-                            if($invoiceItmSale->qty > $item->qty){
-                                $qty['qty'] = $invoiceItmSale->qty - $item->qty;
-                              }
-                              if($invoiceItmSale->qty == $item->qty){
-                                $qty['qty'] = 0;
-                                $qty['in_stock'] = 0;
-                              }
-                              $invoiceItmSale->update($qty);
-                          }  
-                    }
-                }
-                $invoice->update($statusUpdate);
-                return;
-                
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    // Paytem Via Payments Recived all function
-
-    public function paytmPay($id)
     {
-                $invoice = Invoice::find($id); //dd($invoice);
-                if($invoice->deposit_amount > 0){
-                	$amount = $invoice->deposit_amount;
-                }else{
-                	$amount = $invoice->net_amount;
-                }
-                $order_id = uniqid();
-                $order = new UserPayment();
-                $order->order_id = $order_id;
-                $order->transaction_date = Carbon::now();
-                $order->transaction_status = 'Pending';
-                $order->amount = $amount;
-                $order->transaction_id = '';
-                $order->invoice_id = $id;
-                $order->user_id = $invoice->user_id;
-                $order->save();
-                $data_for_request = $this->handlePaytmRequest($order_id, $amount);
-                $paytm_txn_url = env('PAYTM_TXN_URL');
-                $paramList = $data_for_request['paramList'];
-                $checkSum = $data_for_request['checkSum'];
-
-                return view('paytm-merchant-form',compact( 'paytm_txn_url', 'paramList', 'checkSum' ));
+        
     }
 
+    public function buyPlan($id){
+        if (Auth::check()) {
+            $invoicePlan = InvoicePlan::find($id);
+            $amount = $invoicePlan->amount;
+            $order_id = uniqid();
+            $userPlanPayment = new UserPlanPayment();
+            $userPlanPayment->order_id = $order_id;
+            $userPlanPayment->transaction_status = 'Pending';
+            $userPlanPayment->amount = $amount;
+            $userPlanPayment->plan_id = $id;
+            $userPlanPayment->user_id = Auth::id();
+            $userPlanPayment->transaction_id = '';
+            $userPlanPayment->payment_method = "Paytm";
+            $userPlanPayment->transaction_date = Carbon::now();
+            $userPlanPayment->save();
+            $data_for_request = $this->handlePaytmRequest($order_id, $amount);
+            $paytm_txn_url = env('PAYTM_TXN_URL');
+            $paramList = $data_for_request['paramList'];
+            $checkSum = $data_for_request['checkSum'];
+
+            return view('paytm-merchant-form',compact( 'paytm_txn_url', 'paramList', 'checkSum' ));
+        }else{
+            Toastr::error('Please login first', 'Error', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->to('/login');
+        }
+            
+    }
 
     public function handlePaytmRequest( $order_id, $amount ) {
         // Load all functions of encdec_paytm.php and config-paytm.php
@@ -156,26 +75,19 @@ class PaymentController extends Controller
         $checkSum = "";
         $paramList = array();
 
-        ///if user have own paytem account
-        $userPaytm = User::find(Auth::id());
-        if($userPaytm){
-          $paytmId = Crypt::decryptString($userPaytm->paytm_id);
-          $paytmKey = Crypt::decryptString($userPaytm->paytm_key);
-        }else{
-          $paytmId = env('PAYTM_MERCHANT_ID');
-          $paytmKey = env('PAYTM_MERCHANT_KEY');
-        }
+
+       
 
         // Create an array having all required parameters for creating checksum.
-        $paramList["MID"] = $paytmId;
+        $paramList["MID"] = env('PAYTM_MERCHANT_ID');
         $paramList["ORDER_ID"] = $order_id;
         $paramList["CUST_ID"] = $order_id;
         $paramList["INDUSTRY_TYPE_ID"] = env('PAYTM_INDUSTRY_TYPE');
         $paramList["CHANNEL_ID"] = env('PAYTM_CHANNEL');
         $paramList["TXN_AMOUNT"] = $amount;
         $paramList["WEBSITE"] = env('PAYTM_MERCHANT_WEBSITE');
-        $paramList["CALLBACK_URL"] = url( env('CALL_BACK_URL') );  //env('CALLBACK_URL');
-        $paytm_merchant_key = $paytmKey;
+        $paramList["CALLBACK_URL"] = url( env('PAYMENT_CALL_BACK_URL') );  //env('PAYMENT_CALL_BACK_URL');
+        $paytm_merchant_key = env('PAYTM_MERCHANT_KEY');
 
         //Here checksum string will return by getChecksumFromArray() function.
         $checkSum = getChecksumFromArray( $paramList, $paytm_merchant_key );
@@ -459,17 +371,9 @@ class PaymentController extends Controller
      * Config Paytm Settings from config_paytm.php file of paytm kit
      */
     function getConfigPaytmSettings() {
-        $userPaytm = User::find(Auth::id());
-        if($userPaytm){
-          $paytmId = Crypt::decryptString($userPaytm->paytm_id);
-          $paytmKey = Crypt::decryptString($userPaytm->paytm_key);
-        }else{
-          $paytmId = env('PAYTM_MERCHANT_ID');
-          $paytmKey = env('PAYTM_MERCHANT_KEY');
-        }
         define('PAYTM_ENVIRONMENT', env('PAYTM_ENVIRONMENT')); // PROD
-        define('PAYTM_MERCHANT_KEY', $paytmKey); //Change this constant's value with Merchant key downloaded from portal
-        define('PAYTM_MERCHANT_MID', $paytmId); //Change this constant's value with MID (Merchant ID) received from Paytm
+        define('PAYTM_MERCHANT_KEY', env('PAYTM_MERCHANT_KEY')); //Change this constant's value with Merchant key downloaded from portal
+        define('PAYTM_MERCHANT_MID', env('PAYTM_MERCHANT_ID')); //Change this constant's value with MID (Merchant ID) received from Paytm
         define('PAYTM_MERCHANT_WEBSITE', env('PAYTM_MERCHANT_WEBSITE')); //Change this constant's value with Website name received from Paytm
 
         $PAYTM_STATUS_QUERY_NEW_URL= env('PAYTM_STATUS_QUERY_URL');
@@ -494,78 +398,63 @@ class PaymentController extends Controller
                 $transaction_status = $request['STATUS'];
                 $bank_transaction_id = $request['BANKTXNID'];
                 $bank_name = $request['BANKNAME'];
+                $userId = Auth::id();
 
         if ( 'TXN_SUCCESS' === $request['STATUS'] ) {
-                    $order = UserPayment::where( 'order_id', $order_id )->first();
-                    $order->transaction_status = 'Success';
-                    $order->transaction_id = $transaction_id;
-                    $order->payment_method = $payment_method;
-                    $order->bank_transaction_id = $bank_transaction_id;
-                    $order->bank_name = $bank_name;
-                    $order->transaction_date =  Carbon::now();
-                    $order->created_at =  Carbon::now();
-                    $order->save();
+                    // get the current time
+                    $current = Carbon::now();
+                    $nowDate = $current->toDateTimeString();
 
-                    $invoice = Invoice::where('id',$order->invoice_id)->first();
-                    if($amount == $invoice->net_amount){
-                    	$statusUpdate['status'] = "ONLINE";
+                    $userPlanPayment = UserPlanPayment::where( 'order_id', $order_id )->first();
+                    $userPlanPayment->transaction_status = 'Success';
+                    $userPlanPayment->transaction_id = $transaction_id;
+                    $userPlanPayment->payment_method = $payment_method;
+                    $userPlanPayment->bank_transaction_id = $bank_transaction_id;
+                    $userPlanPayment->transaction_date = $transaction_date;
+                    $userPlanPayment->bank_name = $bank_name;
+                    $userPlanPayment->transaction_date =  $current;
+                    $userPlanPayment->created_at =  $current;
+                    $userPlanPayment->save();
+
+                    $userPlan = UserPlan::where('user_id', $userId)->first();
+
+                    $plan = InvoicePlan::where('id',$userPlanPayment->plan_id)->first();
+                    $expireDate = $current->addDays($plan->access_day);
+
+                    $userPlanData['amount'] = $amount;
+                    $userPlanData['user_id'] = $userId;
+                    $userPlanData['plan_id'] = $plan->id;
+                    $userPlanData['access_date'] = $current;
+                    $userPlanData['is_activated'] = 1;
+                    $userPlanData['expire_date'] = $expireDate;
+                    $userPlanData['get_invoice'] = $plan->invoices;
+
+                    if($userPlan){
+                        $userPlan->update($userPlanData);
                     }else{
-                    	$statusUpdate['status'] = "DEPOSIT_PAID";
+                        UserPlan::create($userPlanData);
                     }
-                    $invoice->update($statusUpdate);
 
-                    Toastr::success('Payment Success', 'Success', ["positionClass" => "toast-top-right"]);
-                    return redirect()->to('/');
+                    $order = $userPlanPayment;
+                    $user = User::where('id',$userId)->first();
+                    $setting = Setting::find(1);
+                    $adminMail = $setting->admin_mail;
+                    Mail::to($adminMail)->send(new PaymentNotification($user,$order));
+                Toastr::success('Your Plan Activated', 'Success', ["positionClass" => "toast-bottom-right"]);
+                return redirect()->to('/dashboard');
         } else if( 'TXN_FAILURE' === $request['STATUS'] ){
-                $order = UserPayment::where( 'order_id', $order_id )->first();
-                $order->transaction_status = 'Fields';
-                $order->transaction_id = $transaction_id;
-                $order->payment_method = $payment_method;
-                $order->bank_transaction_id = $bank_transaction_id;
-                $order->bank_name = $bank_name;
-                $order->created_at =  Carbon::now();
-                $order->save();
-                return view('payment-failed');
+            //return $request;
+                    $userPlanPayment = UserPlanPayment::where( 'order_id', $order_id )->first();
+                    $userPlanPayment->transaction_status = 'Failed';
+                    $userPlanPayment->transaction_id = $transaction_id;
+                    $userPlanPayment->payment_method = $payment_method;
+                    $userPlanPayment->bank_transaction_id = $bank_transaction_id;
+                    $userPlanPayment->transaction_date = $transaction_date;
+                    $userPlanPayment->bank_name = $bank_name;
+                    $userPlanPayment->transaction_date =  Carbon::now();
+                    $userPlanPayment->created_at =  Carbon::now();
+                    $userPlanPayment->save();
+            return view( 'payment-failed' );
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\UserPayment  $UserPayment
-     * @return \Illuminate\Http\Response
-     */
-    public function showPayment()
-    {
-    	$id = Auth::id();
-        $payments = UserPayment::where('user_id',$id)->where('transaction_status','=','Success')->orderBy('created_at','desc')->paginate(10); //dd($payments);
-        foreach ($payments as $payment) {
-        	$invoice = Invoice::find($payment->invoice_id);
-            if($invoice){
-                $client = Clients::where('id',$invoice->client_id)->first();
-                $client_first_name = $client ? $client->fname : '';
-                $client_last_name = $client ? $client->lname : '';
-                $payment->user = $client_first_name.' '.$client_last_name;
-            }
-        }
-        return view('payment-list',['payments' =>$payments]);
-    }
-
-    public function showPaymentStatus($status)
-    {
-    	$id = Auth::id();
-        $payments = UserPayment::where('user_id',$id)->where('transaction_status',$status)->orderBy('created_at','desc')->paginate(10); //dd($payments);
-        foreach ($payments as $payment) {
-        	$invoice = Invoice::find($payment->invoice_id);
-            if($invoice){
-                $client = Clients::where('id',$invoice->client_id)->first();
-                $client_first_name = $client ? $client->fname : '';
-                $client_last_name = $client ? $client->lname : '';
-                $payment->user = $client_first_name.' '.$client_last_name;
-            }
-        }
-        return view('payment-list',['payments' =>$payments]);
-    }
-
-        
 }

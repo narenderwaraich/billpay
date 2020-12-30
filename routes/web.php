@@ -117,7 +117,7 @@ Route::post('Register','RegistrationsController@storeUser');
 Route::get('/Register','RegistrationsController@create');
 //Update User
 Route::post('user-update/{id}','RegistrationsController@userUpdate');
-Route::get('/profile','RegistrationsController@/client/search');
+Route::get('/profile','RegistrationsController@profileView');
 // // Change Password
 Route::post('updatepassword/{id}','RegistrationsController@updatePass');
 Route::get('/updatepassword','RegistrationsController@Pass');
@@ -151,6 +151,9 @@ Route::get('/payment/{status}/list', 'PaymentController@showPaymentStatus');
 Route::get('/invoice/cash/pay/{id}','PaymentController@invoiceCashPay');
 Route::get('/invoice/cash/deposit/payment/{id}','PaymentController@cashDepositPay');
 Route::get('/invoice/cash/full/payment/{id}','PaymentController@cashFullPay');
+
+/// invoice plans
+Route::get('/invoice/plans','PaymentController@create');
 
 // /// Invoice Controller
 Route::get('/invoice/view','InvoiceController@showInvoiceList');
@@ -195,7 +198,7 @@ Route::get('/invoice/copy/{id}','InvoiceController@copyData');
 
 // /// Delete Invoice Controller 
 Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
-// Route::get('/invoice/delete/{id}','DeleteInvoiceController@deleteInvoicesData');
+Route::get('/invoice/delete/{id}','DeleteInvoiceController@deleteInvoicesData');
 // Route::get('/delete/invoice/view','DeleteInvoiceController@showDeleteInvoice');
 // // Route::get('/delete/invoice/view/{id}','DeleteInvoiceController@invoiceView');
 // Route::any('/delete/invoice/search','DeleteInvoiceController@searchInvData');
@@ -279,3 +282,13 @@ Route::get('/privacy-policy', function () {
 //Route::get('/test','PaymentController@testMethod');
 
 Route::get('/home','SessionController@Home');
+
+Route::get('/plan/create', 'InvoicePlanController@create');
+Route::post('/plan/create', 'InvoicePlanController@store');
+Route::get('/plan/edit/{id}', 'InvoicePlanController@edit');
+Route::post('/plan/update/{id}', 'InvoicePlanController@update');
+Route::get('/plans', 'InvoicePlanController@index');
+Route::get('/plan/delete/{id}', 'InvoicePlanController@destroy');
+
+Route::get('/buy-plan/{id}','UserPlanController@buyPlan');
+Route::post('/payment-call-back', 'UserPlanController@paytmCallback');

@@ -175,9 +175,16 @@
                   <div class="client-data" id="client_city">City : <span id="client_city_data"></span></div>
                   <div class="client-data" id="client_zip">ZipCode : <span id="client_zip_data"></span></div>
                   <div class="client-data" id="client_address">Address : <span id="client_address_data"></span></div>
-                  <!-- <p class="description">
-                    michael24
-                  </p> -->
+                  <br>
+                  <h6 class="title" style="color: #e91e63;text-transform: uppercase;">Invoice Plan</h6>
+                  <hr>
+                  <div class="client-data">Name : <span>{{$plan->name}}</span></div>
+                  <div class="client-data">Status : @if($userPlan->is_activated)<span style="color: #28a745;font-weight: 800;">Active</span> @else <span style="color: #e91e63;font-weight: 800;">Inactive</span> @endif</div>
+                  <div class="client-data">Total Invoices : <span>{{$userPlan->get_invoice}}</span></div>
+                  <div class="client-data">Left Invoices : <span>{{$userPlan->get_invoice - $totalInvoice}}</span></div>
+                  <div class="client-data">Plan Exp : <span>{{ date('m/d/Y', strtotime($userPlan->expire_date)) }}</span></div>
+                  <br>
+                  <a href="/invoice/plans"><button type="button" class="btn btn-info btn-sm">Change Plan</button></a>
                 </div>
               </div>
               

@@ -52,13 +52,13 @@ class ItemController extends Controller
             if(!$validate){
               Redirect::back()->withInput();
             }
+            $userId = Auth::id();
             $itemName = $request->item_name;
                 /// Check item_name record in database already exists or not
-                if(sizeof(Item::where('item_name','=',$itemName)->get()) > 0){
-                  Toastr::error('Sorry Item item name exists!', 'Error', ["positionClass" => "toast-top-right"]);
+                if(sizeof(Item::where('user_id',$userId)->where('item_name','=',$itemName)->get()) > 0){
+                  Toastr::error('Sorry Item already exists!', 'Error', ["positionClass" => "toast-top-right"]);
                     return back();
                 }
-            $userId = Auth::id();
             $item = request(['item_name','item_description','price','sale','qty']);
             $item['user_id'] = $userId;
             Item::create($item);

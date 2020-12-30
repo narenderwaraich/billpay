@@ -89,6 +89,7 @@
                     <input type="text" name="arr[{{$index}}][item_name]" value="{{$item->item_name}}" class="automplete form-control" dataId="{{ $index }}" onkeyup="initAutoComplete({{ $index }})" required>
                     <label>Item Name</label>
                   </div>
+                  <input type="hidden" name="item_id[]" id="itmId{{ $index }}">
                 </div>
                 <div class="col-md-2">
                   <div class="form-group">
@@ -99,7 +100,7 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <input min="0" id="qty{{ $index }}" name="arr[{{$index}}][qty]" type="text" value="{{$item->qty}}" class="form-control input-amt" onkeyup="calc(this, {{ $index }})" required>
-                    <label>Quantity</label>
+                    <label>Quantity <span class="badge badge-success" id="avalible-qty{{ $index }}" style="display: none;" title="avalible-qty"></span></label>
                   </div>
                 </div>
                 <div class="col-md-2">
@@ -117,7 +118,7 @@
                <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
-                    <textarea  class="form-control" rows="2" id="comment" name="arr[{{$index}}][item_description]">{{$item->item_description}}</textarea>
+                    <textarea  class="form-control" rows="2" id="desc{{ $index }}" name="arr[{{$index}}][item_description]">{{$item->item_description}}</textarea>
                     <label>Description</label>
                   </div>
                 </div>
@@ -166,7 +167,7 @@
                      <div class="form-group" style="margin-bottom: 10px;">
                       <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;height: unset;width: 75%;" required>
                         <option value="Cash" {{ $inv->payment_mode == 'Cash' ? 'selected' : ''}}>Cash</option>
-                        <option value="Online" {{ $inv->payment_mode == 'Online' ? 'selected' : ''}}>Online</option>
+                        <option value="Online" disabled {{ $inv->payment_mode == 'Online' ? 'selected' : ''}}>Online</option>
                       </select>
                      </div>
                    </div>
@@ -365,7 +366,10 @@
          function initAutoComplete(i) {
               $('#rate'+i).val('');
               $('#qty'+i).val('');
+              $('#desc0'+i).html('');
               $('#total'+i).val('');
+              $('#itmId'+i).val('');
+              $('#avalible-qty'+i).hide();
                 myFunction();
               var allItems = <?php echo json_encode($allItem) ?>; 
                 
@@ -374,7 +378,10 @@
                     let subData = {
                         "label" : allItems[Item]['item_name'], 
                         "value": allItems[Item]['item_name'],
-                        "rate": allItems[Item]['sale']
+                        "item_id": allItems[Item]['id'],
+                        "rate": allItems[Item]['sale'],
+                        "qty": allItems[Item]['qty'],
+                        "desc": allItems[Item]['item_description']
                     };
                     Items.push(subData);
                 }
@@ -385,7 +392,12 @@
                         $(this).siblings('input').val(ui.item.value);
                         $(this).val(ui.item.label);
                         var fieldId = $(this).attr('dataId');
+                        $('#itmId'+fieldId).val(ui.item.item_id);
                         $('#rate'+fieldId).val(ui.item.rate);
+                        $('#desc'+fieldId).html(ui.item.desc);
+                        $('#avalible-qty'+fieldId).show();
+                        $('#avalible-qty'+fieldId).text(ui.item.qty);
+                        $('#stockQTY'+fieldId).val(ui.item.qty);
                         return false;
                      }
             });
@@ -397,7 +409,7 @@
               var i=$("#addForm").data('total-items');  
 
               $('#addForm').click(function(){    
-              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity</label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="comment" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
+              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
                    i++;
               });
 
