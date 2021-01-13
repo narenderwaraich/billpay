@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['text','slug'];
+    protected $fillable = ['title','description','image','heading','sub_heading','button_text','button_link','page_name'];
 }

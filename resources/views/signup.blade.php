@@ -6,7 +6,7 @@
   <section style="width: 100%;height: auto;max-width: 650px;min-width: 290px;text-align: center;margin: auto;margin-bottom: 50px;">
   <center><img src="/public/images/icon/logo.svg" alt="Logo" class="home-logo" style="width: 300px;"></center>
   <hr>
-  <div class="form-top-title">Signup Account</div>
+  <div class="form-top-title">Register Account</div>
   <div class="form-style shadow-lg">
     <form action="/signup-account" method="post" class="form-design" id="Signup-Form">
       {{ csrf_field() }}

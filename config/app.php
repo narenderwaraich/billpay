@@ -211,4 +211,11 @@ return [
 
     ],
 
+
+    'copy_tag' => env('COPY_TAG', ''),
+    'admin_email' => env('ADMIN_MAIL', ''),
+    'facebook' => env('FB_URL', '#'),
+    'instagram' => env('INSTAGRAM_URL', '#'),
+    'phone' => env('PHONE_NUMBER', ''),
+
 ];

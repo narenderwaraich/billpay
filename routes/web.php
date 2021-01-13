@@ -54,14 +54,15 @@ Route::get('/change-env-file-data','AdminController@envData');
 Route::post('change-env-file-data','AdminController@changeEnvData');
 Route::get('/clear-cache','AdminController@clearCache');
 Route::get('/clear-config','AdminController@clearConfig');
+//Page Add
 
-///Page Setup
-Route::get('/page-setup/show', 'AdminController@pageIndex');
-Route::get('/page-setup/create', 'AdminController@pageCreate');
-Route::post('page-setup/create', 'AdminController@pageStore');
-Route::get('/page-setup/edit/{id}', 'AdminController@pageEdit');
-Route::post('/page-setup/update/{id}', 'AdminController@pageUpdate');
-Route::get('/page-setup/delete/{id}', 'AdminController@pageDestroy');
+Route::get('/page/create', 'PageController@create');
+Route::post('/page/create', 'PageController@store');
+Route::get('/page/edit/{id}', 'PageController@edit');
+Route::post('/page/update/{id}', 'PageController@update');
+Route::get('/page/show', 'PageController@index');
+Route::get('/page/delete/{id}', 'PageController@destroy');
+
 
 Route::get('/user/verified-mail/{id}', 'AdminController@verifyMailReminder');
 
@@ -234,8 +235,8 @@ Route::get('get-city-list','APIController@getCityList');
 
 
 ///// All Public URL
-Route::get('/','RegistrationsController@signUpPage');
-Route::get('/SignUp','RegistrationsController@signUpPage');
+Route::get('/','HomeController@index');
+Route::get('/register','RegistrationsController@signUpPage');
 Route::get('/login','SessionController@create')->name('login');
 Route::get('/forget-password','RegistrationsController@forgetPassForm');
 Route::get('/view-and-pay-invoice/{id}/{invoice_number_token}','InvoiceController@viewAndPay');
@@ -263,15 +264,11 @@ Route::get('/send-mail','ContactUsController@sendMailView');
 Route::post('send-mail','ContactUsController@sendMail');
 
 Route::post('send-notificaton-mail','ContactUsController@SendNotificationMail');
-Route::get('/about-us', function () {
-    return view('about-us');
-});
-Route::get('/term-of-services', function () {
-    return view('term-of-services');
-});
-Route::get('/privacy-policy', function () {
-    return view('privacy-policy');
-});
+Route::get('/about-us','ContactUsController@aboutUs');
+Route::get('/term-of-services','ContactUsController@termOfServices');
+Route::get('/privacy-policy','ContactUsController@privacyPolicy');
+
+Route::get('/whatsapp','ContactUsController@whatsapp');
 
 // Route::get('/test', function () {
 //     return view('test');

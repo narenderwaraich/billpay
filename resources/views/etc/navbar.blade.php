@@ -60,7 +60,72 @@
 </div>
 <!-- end sidebar -->
 
-<!-- Navbar -->
+<!-- Mobile Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-dark static-top nav-bottom-border fix-navbar bg-red-color mobile-navbar">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="/public/images/icon/template-logo.svg" alt="Logo" class="nav-logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars menu-open-btn" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <hr class="menu-devider">
+      <ul class="navbar-nav ml-auto nav-m-r">
+        <li class="nav-item nav-text mobile-nav-link {{ (request()->is('dashboard')) ? 'active' : '' }} {{ (request()->is('dashboard/*')) ? 'active' : '' }}">
+        <a href="/dashboard" class="nav-link white-txt">
+          <i class="menu-icon fa fa-dashboard"></i>
+          Dashboard
+        </a>
+      </li>
+
+      <li class="nav-item nav-text mobile-nav-link {{ (request()->is('client')) ? 'active' : '' }} {{ (request()->is('client/*')) ? 'active' : '' }}">
+        <a href="/client/view" class="nav-link white-txt">
+          <i class="menu-icon fa fa-users"></i>
+          Client
+        </a>
+      </li>
+
+      <li class="nav-item nav-text mobile-nav-link {{ (request()->is('invoice')) ? 'active' : '' }}{{ (request()->is('invoice/*')) ? 'active' : '' }}">
+        <a href="/invoice/view" class="nav-link white-txt">
+          <i class="menu-icon fa fa-files-o"></i>
+          Invoice
+        </a>
+      </li>
+      <li class="nav-item nav-text mobile-nav-link {{ (request()->is('payment/list')) ? 'active' : '' }}">
+        <a href="/payment/list" class="nav-link white-txt">
+          <i class="menu-icon fa fa-inr"></i>
+          Payment
+        </a>
+      </li>
+      <li class="nav-item nav-text mobile-nav-link {{ (request()->is('items')) ? 'active' : '' }}">
+        <a href="/items" class="nav-link white-txt">
+          <i class="menu-icon fa fa-book"></i>
+          Item
+        </a>
+      </li>   
+      <li class="nav-item nav-text mobile-nav-link {{ (request()->is('profile')) ? 'active' : '' }}{{ (request()->is('profile/*')) ? 'active' : '' }}">
+        <a href="/profile" class="nav-link white-txt">
+          <i class="menu-icon fa fa-user"></i>
+          User
+        </a>
+      </li>   
+      <li class="nav-item nav-text mobile-nav-link ">
+        <a href="/logout" class="nav-link white-txt">
+          <i class="menu-icon fa fa-power-off"></i>
+          LogOut
+        </a>
+      </li>                   
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
+
             <!-- <nav class="navbar navbar-expand-lg navbar-transparent  bg-primary  navbar-absolute">
               <div class="container-fluid">
                 <div class="navbar-wrapper">

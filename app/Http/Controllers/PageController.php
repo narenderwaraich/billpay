@@ -40,15 +40,31 @@ class PageController extends Controller
     public function store(Request $request)
     {
         $validate = $this->validate($request, [
-            'text' => 'required',
-            'slug' => 'required',
+            'page_name' => 'required',
         ]);
         if(!$validate){
-                        Redirect::back()->withInput();
-                          }
-        $page = Page::create($request->all());
-        Toastr::success('Page Add', 'Success', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->to('/page/show');
+            Redirect::back()->withInput();
+        }
+        $data = request(['title','description','heading','sub_heading','button_text','button_link','page_name']);
+        if($request->file('uploadFile')){
+            foreach ($request->file('uploadFile') as $key => $value) {
+
+                $imageName = time(). $key . '.' . $value->getClientOriginalExtension();
+                $value->move(public_path('images/banner'), $imageName);
+                $data['image'] =$imageName;
+            }
+        }
+
+          $pageNameCheck = Page::where('page_name', '=', $request->page_name)->first();
+          if($pageNameCheck){
+            Toastr::error('Page Already Make', 'Sorry', ["positionClass" => "toast-bottom-right"]);
+           return redirect()->back(); 
+         }else{
+           $pageSetup = Page::create($data);
+            Toastr::success('Page Add', 'Success', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->to('/page/show'); 
+         }   
+
     }
 
     public function edit($id)
@@ -65,12 +81,31 @@ class PageController extends Controller
 
     public function update(Request $request, $id)
     {
-        $page = Page::find($id);
+        $validate = $this->validate($request, [
+            'page_name' => 'required',
 
-        $page->update($request->all());
-        Toastr::success('Page updated', 'Success', ["positionClass" => "toast-bottom-right"]);
+        ]);
+        if(!$validate){
+            Redirect::back()->withInput();
+        }
+        $pageSetup = Page::find($id);
+        $data = request(['title','description','heading','sub_heading','button_text','button_link','page_name']);
+        if($request->file('uploadFile')){
+            foreach ($request->file('uploadFile') as $key => $value) {
 
-      return redirect()->to('/page/show');
+                $imageName = time(). $key . '.' . $value->getClientOriginalExtension();
+                $value->move(public_path('images/banner'), $imageName);
+                $data['image'] = $imageName;
+            }
+            $pageSetup->update($data);
+            Toastr::success('Page updated', 'Success', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->to('/page/show');
+        }else{
+            $pageSetup->update($request->all());
+            Toastr::success('Page updated', 'Success', ["positionClass" => "toast-bottom-right"]);
+            return redirect()->to('/page/show');
+        }
+
     }
 
     public function destroy($id)

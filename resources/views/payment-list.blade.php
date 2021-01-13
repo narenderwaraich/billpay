@@ -14,13 +14,13 @@
                 <h4 class="card-title">Payments 
                             <div class="btn-group">
                                 <a href="/payment/Success/list">
-                                    <button type="button" class="btn btn-success btn-sm">Success</button>
+                                    <button type="button" class="btn btn-success btn-sm boder-radius-unset">Success</button>
                                 </a>
                                 <a href="/payment/Fields/list">
-                                    <button type="button" class="btn btn-danger btn-sm">Fields</button>
+                                    <button type="button" class="btn btn-danger btn-sm boder-radius-unset">Fields</button>
                                 </a>
                                 <a href="/payment/Pending/list">
-                                    <button type="button" class="btn btn-warning btn-sm">Pending</button>
+                                    <button type="button" class="btn btn-warning btn-sm boder-radius-unset">Pending</button>
                                 </a>
                             </div>
                 </h4>

@@ -4001,7 +4001,9 @@ EFFECT
 	color: #333333;
 }
 
-
+.boder-radius-unset{
+	border-radius: unset;
+}
 
 /*[ Parallax ]
 /////////////////////////////////////
@@ -4017,7 +4019,9 @@ EFFECT
     background-color: rgba(0,0,0,0.2);
 }
 
-
+.text-strong {
+    font-weight: 700;
+}
 
 
 

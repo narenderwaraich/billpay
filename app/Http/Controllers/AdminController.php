@@ -339,121 +339,6 @@ class AdminController extends Controller
         return back();
     }
 
-
-    //// Page Setup All function
-
-    public function pageIndex()
-    {
-      if(Auth::check()){
-    if(Auth::user()->role == "admin"){
-        $pageSetup = BanerSlide::orderBy('created_at','desc')->paginate(8);
-        return view('Admin.PageSetup.Show',['pageSetup' =>$pageSetup]);
-      }
-    }else{
-        return redirect()->to('/login');
-    }
-    }
-    
-    public function pageCreate()
-    {
-      if(Auth::check()){
-    if(Auth::user()->role == "admin"){
-        $pages = Page::All();
-        return view('Admin.PageSetup.Add',['pages' => $pages]);
-      }
-    }else{
-        return redirect()->to('/login');
-    }
-    }
-
-    public function pageStore(Request $request)
-    {
-        $validate = $this->validate($request, [
-            'page_name' => 'required',
-        ]);
-        if(!$validate){
-            Redirect::back()->withInput();
-        }
-        $data = request(['title','description','heading','sub_heading','button_text','button_link','page_name']);
-        if($request->file('uploadFile')){
-            foreach ($request->file('uploadFile') as $key => $value) {
-
-                $imageName = time(). $key . '.' . $value->getClientOriginalExtension();
-                $value->move(public_path('images/banner'), $imageName);
-                $data['image'] =$imageName;
-            }
-        }
-        if($request->page_name == "home"){
-            $pageSetup = BanerSlide::create($data);
-        Toastr::success('Banner Add', 'Success', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->to('/page-setup/show');
-        }else{
-          $pageNameCheck = BanerSlide::where('page_name', '=', $request->page_name)->first();
-          if($pageNameCheck){
-            Toastr::error('Page Banner Already Make', 'Sorry', ["positionClass" => "toast-bottom-right"]);
-           return redirect()->back(); 
-         }else{
-           $pageSetup = BanerSlide::create($data);
-            Toastr::success('Banner Add', 'Success', ["positionClass" => "toast-bottom-right"]);
-            return redirect()->to('/page-setup/show'); 
-         }   
-        }
-        
-    }
-    public function pageEdit($id)
-    {
-      if(Auth::check()){
-    if(Auth::user()->role == "admin"){
-        $pageSetup = BanerSlide::find($id);
-        $pages = Page::All();
-        return view('Admin.PageSetup.Edit',['pageSetup' =>$pageSetup, 'pages' => $pages]);
-      }
-}else{
-    return redirect()->to('/login');
-}
-    }
-    public function pageUpdate(Request $request, $id)
-    {
-        $validate = $this->validate($request, [
-            'page_name' => 'required',
-
-        ]);
-        if(!$validate){
-            Redirect::back()->withInput();
-        }
-        $pageSetup = BanerSlide::find($id);
-        $data = request(['title','description','heading','sub_heading','button_text','button_link','page_name']);
-        if($request->file('uploadFile')){
-            foreach ($request->file('uploadFile') as $key => $value) {
-
-                $imageName = time(). $key . '.' . $value->getClientOriginalExtension();
-                $value->move(public_path('images/banner'), $imageName);
-                $data['image'] = $imageName;
-            }
-            $pageSetup->update($data);
-            Toastr::success('Banner updated', 'Success', ["positionClass" => "toast-bottom-right"]);
-            return redirect()->to('/page-setup/show');
-        }else{
-            $pageSetup->update($request->all());
-            Toastr::success('Banner updated', 'Success', ["positionClass" => "toast-bottom-right"]);
-            return redirect()->to('/page-setup/show');
-        }
- 
-    }
-    public function pageDestroy($id)
-    {
-      if(Auth::check()){
-    if(Auth::user()->role == "admin"){
-        $pageSetup = BanerSlide::find($id);
-        $pageSetup->delete();
-        Toastr::success('Banner Deleted', 'Success', ["positionClass" => "toast-bottom-right"]);
-        return redirect()->to('/page-setup/show');
-        }
-}else{
-    return redirect()->to('/login');
-}
-    }
-
     public function openMySql(){
       if(Auth::check()){
     if(Auth::user()->role == "admin"){
@@ -525,7 +410,7 @@ class AdminController extends Controller
             return redirect()->to('/change-env-file-data');
         }
 
-        public function make($number, $message='', $options = array())
+    public function make($number, $message='', $options = array())
     {
         $options = array_replace($this->options,$options);
         $link = $this->link($number, $message);

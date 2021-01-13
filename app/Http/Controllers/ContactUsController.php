@@ -8,11 +8,16 @@ use Illuminate\Http\Response;
 use Redirect;
 use Toastr;
 use App\Contact;
+use App\Page;
 
 class ContactUsController extends Controller
 {
   public function contact(){
-    return view('Contact-Us');
+        $pageName = "contact_us";
+        $page = Page::where('page_name',$pageName)->first(); //dd($page);
+        $title = $page ? $page->title : '' ;
+        $description = $page ? $page->description : '';
+      return view('Contact-Us',compact('title','description'));
   }
    public function contactUs(Request $request){
    	$validate = $this->validate(request(),[
@@ -142,5 +147,37 @@ class ContactUsController extends Controller
           return redirect()->to('/user');
       
    }
+
+   public function aboutUs(){
+        $pageName = "about_us";
+        $page = Page::where('page_name',$pageName)->first(); //dd($page);
+        $title = $page ? $page->title : '' ;
+        $description = $page ? $page->description : '';
+      return view('about-us',compact('title','description'));
+  }
+
+  public function termOfServices(){
+        $pageName = "term_of_services";
+        $page = Page::where('page_name',$pageName)->first(); //dd($page);
+        $title = $page ? $page->title : '' ;
+        $description = $page ? $page->description : '';
+      return view('term-of-services',compact('title','description'));
+  }
+
+  public function privacyPolicy(){
+        $pageName = "privacy_policy";
+        $page = Page::where('page_name',$pageName)->first(); //dd($page);
+        $title = $page ? $page->title : '' ;
+        $description = $page ? $page->description : '';
+      return view('privacy-policy',compact('title','description'));
+  }
+
+  public function whatsapp(){
+       $message = "Hey!";
+       $num = env('WHATAPPS_NUMBER');
+       $whatsappLink = "https://wa.me/".env('WHATAPPS_NUMBER')."/?text=".$message;
+
+        return redirect($whatsappLink);
+    }
 
 }

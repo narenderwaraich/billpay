@@ -23,12 +23,17 @@ use App\UserPayment;
 use App\UserPlan;
 use App\InvoicePlan;
 use App\Invoice;
+use App\Page;
 
 class RegistrationsController extends Controller
       {   
 
             public function signUpPage(){
-                return view('signup');
+                  $pageName = "register";
+                  $page = Page::where('page_name',$pageName)->first(); //dd($page);
+                  $title = $page ? $page->title : '' ;
+                  $description = $page ? $page->description : '';
+                return view('signup',compact('title','description'));
             }
 
             public function signUpStore(Request $request){

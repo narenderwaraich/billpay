@@ -16,6 +16,7 @@ use App\Clients;
 use Carbon\Carbon;
 use Toastr;
 use App\UserCompany;
+use App\Page;
 
 class SessionController extends Controller
 {
@@ -112,12 +113,16 @@ class SessionController extends Controller
     }
 }
 
-      public function Home(){
-        return view('index');
-      }
+      // public function Home(){
+      //   return view('index');
+      // }
 
     public function create(){
-        return view('login');
+        $pageName = "login";
+        $page = Page::where('page_name',$pageName)->first(); //dd($page);
+        $title = $page ? $page->title : '' ;
+        $description = $page ? $page->description : '';
+        return view('login',compact('title','description'));
     }
     public function store(Request $request)
     {

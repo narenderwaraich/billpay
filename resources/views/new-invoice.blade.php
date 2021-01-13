@@ -135,7 +135,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                          <textarea class="form-control" rows="8" name="notes" style="width: 50%;"></textarea>
+                          <textarea class="form-control w-100" rows="8" name="notes" style="width: 50%;"></textarea>
                           <label>Notes (optional)</label>
                       </div>
                     </div>
@@ -143,7 +143,7 @@
                   <div class="row">
                     <div class="col-md-12">
                      <div class="form-group">
-                          <textarea class="form-control" rows="8" name="terms" style="width: 50%;"></textarea>
+                          <textarea class="form-control w-100" rows="8" name="terms" style="width: 50%;"></textarea>
                           <label>Terms</label>
                      </div>
                    </div>
@@ -151,12 +151,12 @@
                 </div>
                 <div class="col-md-3">
                    <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Payment Method</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;height: unset;width: 75%;" required>
                         <option value="Cash" selected>Cash</option>
@@ -167,12 +167,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Sub Total</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                        <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" class="input-calculation form-control">
                      </div>
@@ -180,12 +180,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Discount<span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="discount" id="discount" onchange="myFunction()"  readonly value="0" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
@@ -193,12 +193,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                        <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="0" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
@@ -206,12 +206,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Deposit Amount</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="deposit_amount" id="deposit" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;width: 75%;"  class="input-calculation form-control">
                      </div>
@@ -219,12 +219,12 @@
                  </div>
                  <hr>
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Amount Paid</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="net_amount" id="net_amount"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
                      </div>
@@ -232,12 +232,12 @@
                  </div>
 
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Net Amount Due</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="due_amount" id="duePending"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
                      </div>

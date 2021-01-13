@@ -1,35 +1,68 @@
 @media (max-width: 767px){
+    .mobile-column-reverse {
+        -ms-flex-direction: column-reverse!important;
+        flex-direction: column-reverse!important;
+    }
+    .mobile-navbar{
+        display: block !important;
+    }
     .sidebar {
-    	width: 135px;
-	}
-	.sidebar .logo {
-    	padding: 2px 5px;
-	}
-	.sidebar .sidebar-wrapper {
-    	width: 135px;
-	}
-	.sidebar .nav {
-    	margin-top: 15px;
-	}
-/*	.sidebar .nav li:first-child>a {
-	    margin: 0 5px;
-	}*/
-	.sidebar .nav li>a{
-		font-size: 16px;
-    	padding: 7px 3px;
-	}
-	.sidebar .nav p {
-	    line-height: 15px;
-	    font-size: 11px;
+        /*width: 135px;*/
+        display: none;
+    }
+    /*.sidebar .logo {
+        padding: 2px 5px;
+    }
+    .sidebar .sidebar-wrapper {
+        width: 135px;
+    }
+    .sidebar .nav {
+        margin-top: 15px;
+    }*/
+/*  .sidebar .nav li:first-child>a {
+        margin: 0 5px;
+    }*/
+    /*.sidebar .nav li>a{
+        font-size: 16px;
+        padding: 7px 3px;
+    }
+    .sidebar .nav p {
+        line-height: 15px;
+        font-size: 11px;
+    }*/
+    hr.menu-devider {
+        border-top: 2px solid #fff;
+        margin: 1rem -1rem;
+    }
+    li.mobile-nav-link > a{
+        margin: 0px 15px;
+        text-transform: uppercase;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    li.mobile-nav-link.active {
+        background-color: #FFFFFF;
+         border-radius: 30px;
+        box-shadow: 0 1px 15px 1px rgba(39, 39, 39, 0.1);
+    }
+    li.mobile-nav-link.active > a{
+        color: #e91e63 !important;
+        display: block;
+        text-decoration: none;
+        position: relative;
+        margin: 0;
+        padding: 10px 15px;
+        line-height: 1.625rem;
     }
     .main-panel {
-    	width: calc(100% - 135px);
+        /*width: calc(100% - 135px);*/
+        width: 100%;
     }
     .menu-icon {
-    	margin: 0 1px;
+        margin: 0 1px;
     }
     .main-panel>.content {
-    	padding: 0 20px 30px;
+        padding: 0 20px 30px;
     }
     .logo-normal{
         display: none;
@@ -39,11 +72,27 @@
     }
     img.template-logo {
         width: 90px;
-    }	
+    }
+    form.search-nav-form {
+        padding-top: 30px;
+    }
+    .gj-datepicker.gj-datepicker-bootstrap.gj-unselectable.input-group {
+        width: 100% !important;
+    }
+    .search-btn-css,
+    .clear-btn-css {
+        width: 50px;
+    }
+    .w-50{
+        width: 50%;
+    }   
+    .w-100{
+        width: 100%;
+    }   
 }
 @media (min-width: 991px){
-	.sidebar {
-    	display: block;
-    	box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35);
-	}	
+    .sidebar {
+        display: block;
+        box-shadow: 0px 2px 22px 0 rgba(0, 0, 0, 0.2), 0px 2px 30px 0 rgba(0, 0, 0, 0.35);
+    }   
 }

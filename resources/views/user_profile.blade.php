@@ -7,7 +7,7 @@
 <!-- end header    -->
 <!-- content section -->
   <div class="content">
-        <div class="row">
+        <div class="row mobile-column-reverse">
           <div class="col-lg-8">
             <div class="card">
               <div class="card-header">

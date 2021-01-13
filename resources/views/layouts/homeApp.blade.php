@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Online Bill Pay</title>
-    <meta name="description" content="Online Bill Pay">
+    <title>{{config('app.name')}} @if(isset($title)){{$title}}@endif</title>
+    <meta name="description" content="@if(isset($description)){{$description}}@endif">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" type="text/css" href="/public/css/app.css">

@@ -183,6 +183,9 @@ iframe {
 .bg-black-color{
     background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
 }
+.bg-red-color{
+    background: #e91e63;
+}
 .white-txt{
     color: #FFFFFF !important;
 }
@@ -191,6 +194,9 @@ iframe {
 }
 /*end here*/
 /*navbar and sidebar*/
+.mobile-navbar{
+    display: none !important;
+}
 .wrapper {
     position: relative;
     top: 0;
@@ -383,6 +389,13 @@ iframe {
     -ms-transition: all 300ms ease 0s;
     transition: all 300ms ease 0s;
 }
+.navbar-dark .navbar-nav .nav-link{
+    color: #FFFFFF;
+    font-weight: 600;
+}
+.navbar-dark .navbar-nav .active>.nav-link{
+    color: #e91e63;
+}
 .bg-primary {
     background-color: #007bff!important;
 }
@@ -427,11 +440,16 @@ iframe {
     border-radius: .25rem;
 }
 .navbar .navbar-toggler {
-    width: 37px;
-    height: 27px;
+    width: 50px;
+    height: 50px;
     vertical-align: middle;
     outline: 0;
     cursor: pointer;
+    border: none;
+}
+i.fa.fa-bars.menu-open-btn {
+    color: #fff;
+    font-size: 35px;
 }
 .navbar .navbar-wrapper .navbar-toggle .navbar-toggler {
     padding-left: 0;
@@ -1334,3 +1352,164 @@ section.chat-plan-section {
     background-color: transparent;
     border: 2px solid #e91e63;
 }
+
+/*footer css*/
+.footer-content {
+    padding: 60px 40px;
+}
+.footer-content h4{
+    color: #FFFFFF;
+    line-height: 2;
+}
+.footer-content i{
+    color: #fff;
+    width: 25px;
+}
+.footer-content a{
+    color: #fff;
+}
+.footer-content a:hover,
+.footer-content i:hover{
+    color: #e91e63;
+    cursor: pointer;
+}
+.footer-content p{
+    color: #fff;
+    font-size: 14px;
+}
+.footer-form-section{
+    padding: 60px 0px;
+}
+form.footer-form input, form.footer-form textarea{
+    background: rgba(0, 0, 0, 0.03) none repeat scroll 0 0;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    font-size: 12px;
+    padding: 0.625rem;
+    width: 100%;
+}
+form.footer-form input{
+    height: 2.7rem;
+    margin-bottom: 1.25rem;
+}
+form.footer-form textarea{
+    margin-bottom: 1.25rem;
+}
+form.footer-form input:focus::-webkit-input-placeholder { color: #fff; }
+form.footer-form textarea:focus::-webkit-input-placeholder { color: #fff; }
+.required {
+    border-left: 1px solid #e91e63 !important;
+}
+form.footer-form input::placeholder,
+form.footer-form textarea::placeholder{ color: #fff; }
+.footer-form .border-radius {
+    border-radius: 3px;
+}
+form.footer-form input:hover, form.footer-form textarea:hover, form.footer-form input:focus, form.customform textarea:focus{
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+form.footer-form button {
+    background-color: #e91e63;
+    color: #FFFFFF;
+    border: 1px solid #e91e63;
+    padding: 8px 0px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.20s linear 0s;
+    -o-transition: background 0.20s linear 0s;
+    -ms-transition: background 0.20s linear 0s;
+    -moz-transition: background 0.20s linear 0s;
+    -webkit-transition: background 0.20s linear 0s;
+}
+form.footer-form button:hover {
+    background-color: transparent;
+    border: 1px solid #FFFFFF;
+    cursor: pointer;
+}
+.bottom-footer {
+    padding: 15px;
+    color: #fff;
+}
+ul.bottom-footer-menu {
+    display: flex;
+}
+li.bottom-footer-menu-item {
+
+}
+a.bottom-footer-menu-item-link{
+    color: #FFFFFF;
+    display: block;
+    padding: 0 8px;
+    font-size: 80%;
+    font-weight: 400;
+}
+a.bottom-footer-menu-item-link:hover{
+    color: #0c2646;
+}
+li.bottom-footer-menu-item.active a{
+    color: #0c2646;
+    font-weight: 800;   
+}
+/*end*/
+
+/*home slider*/
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    width: 35px;
+    height: 35px;
+}
+.carousel .carousel-item img {
+    width: 100%;
+}
+.carousel-indicators li{
+    bottom: 20px;
+    background-color: #0c2646;
+}
+.carousel-indicators .active{
+    background-color: #e91e63;
+}
+.slider-control-prev-icon,
+.slider-control-next-icon{
+    color: #0c2646;
+    font-size: 35px;
+}
+.text-home {
+    text-transform: uppercase;
+    text-align: center;
+    color: #e91e63;
+    margin-top: 50px;
+    font-size: 30px;
+    font-weight: 700;
+}
+.invoice-feature-section {
+    background-color: #0c2646;
+    margin-top: 40px;
+    padding-top: 1px;
+    padding-bottom: 20px;
+}
+.iphone {
+    padding: 73px 27px 85px 20px;
+    background: url(/public/images/icon/iphone.png) no-repeat scroll top center;
+    background-size: 100%;
+    max-width: 292px;
+    margin: 0 auto;
+    margin-top: 0;
+}
+.ipn-img {
+    height: 434px;
+    width: 100%;
+    background-color: #fff;
+}
+.feature-text {
+    color: #FFFFFF;
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 2;
+    padding-left: 20px;
+}
+.feature-tik-icon{
+    color: #FFFFFF;
+    font-size: 30px;
+}
+/*end*/
