@@ -58,15 +58,33 @@
         </div>
       </div>
       <div class="col-lg-4">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="title">Action</h5>
-            <hr>
-          </div>
+        <div class="card card-user">
+            <div class="image">
+                <img src="/public/images/bg.jpg" alt="">
+            </div>
           <div class="card-body">
-            <button type="submit" class="btn btn-success btn-lg">Save</button>
-            <button type="button" class="btn btn-info btn-lg">Print</button>
-            <a href="/dashboard"><button type="button" class="btn btn-danger btn-lg">Cancel</button></a>
+              <div class="author">
+                <a href="#">
+                  @if($user->avatar)
+                  <img class="avatar border-gray" src="/public/images/companies-logo/{{$user->avatar}}" alt="{{$user->company_name}}">
+                  @else
+                  <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="{{$user->company_name}}">
+                  @endif
+                  <h5 class="title"><span>{{$user->company_name}}</span></h5>
+                </a>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="client-data" id="client_email">Email : <span>{{$user->email}}</span></div>
+                    <div class="client-data" id="client_phone">Phone : <span>{{$user->phone}}</span></div>
+                    <div class="client-data" id="client_country">Country : <span>{{$user->country}}</span></div>
+                    <div class="client-data" id="client_state">State : <span>{{$user->state}}</span></div>
+                    <div class="client-data" id="client_city">City : <span>{{$user->city}}</span></div>
+                    <div class="client-data" id="client_zip">ZipCode : <span>{{$user->zipcode}}</span></div>
+                    <div class="client-data" id="client_address">Address : <span>{{$user->address}}</span></div>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -250,7 +268,11 @@
               </div>
 
 
+          </div> <!-- card body end -->
+          <div class="card-footer">
+              <button type="submit" class="btn btn-success text-up btn-block">Save</button> 
           </div>
+
         </div>
       </div>
     </div>

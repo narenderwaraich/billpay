@@ -1140,6 +1140,7 @@ form.search-nav-form {
 }
 .search-nav-form input{
     border: 1px solid #fff;
+    color: #fff;
 }
 .search-nav-form input::placeholder{
     color: #fff;

@@ -2,7 +2,7 @@
 @section('content')  
 <!-- top header -->
 <div class="panel-header panel-header-lg">
-   <div id="chartdiv"></div>           
+   <div id="topChart"></div>           
 </div>
 <!-- end header    -->
 
@@ -181,7 +181,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-#chartdiv {
+#topChart {
   width: 100%;
   height: 340px;
 }
@@ -280,7 +280,7 @@ function isLastPage() {
 am4core.useTheme(am4themes_animated);
 
 // Create chart instance
-var chart = am4core.create("chartdiv", am4charts.XYChart);
+var chart = am4core.create("topChart", am4charts.XYChart);
 
 // Set input format for the dates
 chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";

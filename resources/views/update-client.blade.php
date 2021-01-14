@@ -108,7 +108,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <button type="submit" class="btn btn-success">Update</button>
-                      <a href="/invoice/{{$client->id}}"><button type="button" class="btn btn-danger">Add Invoice</button></a>
+                      <a href="/invoice/{{$client->id}}"><button type="button" class="btn btn-danger">New Invoice</button></a>
                     </div>
                   </div>
                 </form>

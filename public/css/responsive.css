@@ -88,6 +88,23 @@
     }   
     .w-100{
         width: 100%;
+    }
+    .w-10{
+        width: 10%;
+    }
+    .w-90{
+        width: 90%;
+    }
+    .footer-content {
+        padding: 40px 0px 0px 0px;
+    }
+    .feature-text {
+        margin-top: 30px;
+        font-size: 15px;
+        padding: 0;
+    }
+    .feature-tik-icon {
+        font-size: 15px;
     }   
 }
 @media (min-width: 991px){

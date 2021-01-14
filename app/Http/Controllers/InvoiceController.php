@@ -40,6 +40,7 @@ class InvoiceController extends Controller
               }else{ //// end check user verified or not
 
                 $userId = Auth::id();
+                $user = User::find($userId);
                 $client = Clients::find($clientId);
                 $allItem = Item::where('user_id',$userId)->where('in_stock','=',1)->get();
                 // if($userId === 1 || $userId === 2){ // special check for our user to skip payment
@@ -89,7 +90,7 @@ class InvoiceController extends Controller
                       }
      
                 if($bool){
-                      return view('new-invoice',['client' => $client, 'allItem' => $allItem]);
+                      return view('new-invoice',['user' => $user,'client' => $client, 'allItem' => $allItem]);
                 }else{
                       Toastr::error($message, 'Error', ["positionClass" => "toast-top-right"]);
                       return redirect()->to('/dashboard');
@@ -193,12 +194,13 @@ class InvoiceController extends Controller
 
     public function editInvoices($id){
       if(Auth::check()){
-        $user = Auth::id();
+        $userId = Auth::id();
+        $user = User::find($userId);
         $inv = Invoice::find($id); //dd($inv);
         $invItem = InvoiceItem::where('invoice_id',$id)->get();
         $client = Clients::where('id', $inv->client_id)->first();
         $allItem = Item::where('in_stock','=',1)->get(); 
-        return view('invoice-edit',compact('invItem','id'),['client'=>$client, 'inv'=>$inv, 'allItem' => $allItem]);
+        return view('invoice-edit',compact('invItem','id'),['user' => $user,'client'=>$client, 'inv'=>$inv, 'allItem' => $allItem]);
       }else{
         return redirect()->to('/');
       }

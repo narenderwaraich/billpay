@@ -80,20 +80,20 @@
 
             <div class="col-md-8">
               <div class="row feature-text">
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">ONLINE INVOICE SYSTEM</div>
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">EASY REGISTER ACCOUNT</div>
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">CREATE INVOICE & SEND BY EMAIL</div>
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">DOWNLOAD YOUR INVOICES PDF</div>
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">MULTI DOWNLOAD YOUR INVOICES WITH ZIP</div> 
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">Add Your All Product Items</div>
-                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
-                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11">Product Items Inventory</div>           
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">ONLINE INVOICE SYSTEM</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">EASY REGISTER ACCOUNT</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">CREATE INVOICE & SEND BY EMAIL</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">DOWNLOAD YOUR INVOICES PDF</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">MULTI DOWNLOAD YOUR INVOICES WITH ZIP</div> 
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">Add Your All Product Items</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">Product Items Inventory</div>           
               </div>
             </div>
           </div> 

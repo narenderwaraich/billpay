@@ -20,7 +20,7 @@ use App\Page;
 
 class SessionController extends Controller
 {
-    public function HomePage(Request $request){
+    public function HomePage(){
         if(Auth::check()){
         if(Auth::user()->role == 'user'){
             $id = Auth::id();

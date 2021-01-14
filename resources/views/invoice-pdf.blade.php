@@ -12,6 +12,21 @@
     font-size: 11px;
     font-weight: 400;
   }
+  .fs-1{
+    font-size: 11px;
+  }
+  .fs-2{
+    font-size: 12px;
+  }
+  .fs-3{
+    font-size: 14px;
+  }
+  .f-w-1{
+    font-weight: 400;
+  }
+  .f-w-2{
+    font-weight: 700;
+  }
    .container{
     /*background-image: url("{{asset('/images/avatar/'.$inv->user->avatar)}}");*/
     background-position: center;
@@ -81,8 +96,6 @@
   }
   .bill-heading-title{
     color: #e91e63;
-    font-weight: 700;
-    font-size: 12px;
   }
   .item-table-w{
     width: 100%;
@@ -141,7 +154,6 @@
   }
   .inv-date{
   color: #e91e63;
-  font-weight: 400;
   }
 /*  .inv-logo{
       width: 90px;
@@ -154,8 +166,6 @@
 .inv-email{
   padding-bottom: 3px;
   color: #e91e63;
-  font-weight: 400;
-  font-size: 12px;
    padding-left: 10px;
 }
 .tr-border-bottom{
@@ -184,7 +194,6 @@ padding-top: 10px;
 }
 .amount-title{
   /*position: relative;*/
-  font-size: 11px;
   text-align: left;
 }
 .col-12{
@@ -204,22 +213,16 @@ padding-top: 10px;
   margin-left: 150px;
 }
 .GSTIN-number{
-  font-weight: 400;
-    font-size: 12px;
     color: #e91e63;
 }
 .user-company-name{
     text-align: center;
     text-transform: uppercase;
-    font-size: 14px;
 }
 .company-address{
-  font-weight: 400;
   text-align: center;
 }
 .title-txt{
-  font-size: 11px;
-  font-weight: 400;
   text-align: center;
 }
 .pad-35{
@@ -247,16 +250,16 @@ padding-top: 10px;
        </div> 
     </div>
     <div class="row">
-      <div class="col-12 user-company-name">{{$inv->user->company_name}}</div>
+      <div class="col-12 user-company-name fs-3">{{$inv->user->company_name}}</div>
     </div>
     <div class="row">
-      <div class="col-12 company-address">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
+      <div class="col-12 company-address f-w-1">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
     </div>
     <div class="row">
-      <div class="col-12 title-txt">E-Mail :<span class="inv-email">{{$inv->user->email}}</span></div>
+      <div class="col-12 title-txt fs-1 f-w-1">E-Mail :<span class="inv-email fs-2 f-w-1">{{$inv->user->email}}</span></div>
     </div>
     <div class="row">
-      <div class="col-12 title-txt">GST/TIN No. <span class="GSTIN-number">{{$inv->user->gstin_number}}</span></div>
+      <div class="col-12 title-txt fs-1 f-w-1">GST/TIN No. <span class="GSTIN-number fs-2 f-w-1">{{$inv->user->gstin_number}}</span></div>
     </div>
 
     <hr>
@@ -281,8 +284,8 @@ padding-top: 10px;
           <div class="pad-35">Status #</div>
         </td>
         <td class="td-25">
-          <div class="inv-date">{{ date('m/d/Y', strtotime($inv->issue_date)) }}</div>
-          <div class="inv-date">{{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
+          <div class="inv-date f-w-1">{{ date('m/d/Y', strtotime($inv->issue_date)) }}</div>
+          <div class="inv-date f-w-1">{{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
           <div class="">{{$inv->client->phone}}</div>
           <div class="">{{$inv->status}}</div>
         </td>
@@ -291,19 +294,19 @@ padding-top: 10px;
     <hr>
     <table class="item-table-w">
       <tr>
-        <td class="td-item-name bill-heading-title">
+        <td class="td-item-name bill-heading-title fs-2 f-w-2">
           Item Name
         </td>
-        <td class="td-item-desc bill-heading-title">
+        <td class="td-item-desc bill-heading-title fs-2">
            Description
         </td>
-        <td class="td-item-rate bill-heading-title">
+        <td class="td-item-rate bill-heading-title fs-2">
           Rate
         </td>
-        <td class="td-item-qty bill-heading-title">
+        <td class="td-item-qty bill-heading-title fs-2">
           Quantity
         </td>
-        <td class="td-item-total bill-heading-title">
+        <td class="td-item-total bill-heading-title fs-2">
           Line Total
         </td>
       </tr>
@@ -337,27 +340,27 @@ padding-top: 10px;
       <div class="bottom-box-right">
         <div class="col-12">
           <div class="col-6-l">
-            <div class="amount-title">Payment Method</div>
-            <div class="amount-title">Subtotal</div>
-            <div class="amount-title">Discount</div>
-            <div class="amount-title">Tax</div>
-            <div class="amount-title"> Deposit Amount</div>
+            <div class="amount-title fs-1">Payment Method</div>
+            <div class="amount-title fs-1">Subtotal</div>
+            <div class="amount-title fs-1">Discount</div>
+            <div class="amount-title fs-1">Tax</div>
+            <div class="amount-title fs-1"> Deposit Amount</div>
             <hr>
-            <div class="amount-title">Total Amount</div>
-            <div class="amount-title">Amount Paid</div>
-            <div class="amount-title">Amount Due</div>
+            <div class="amount-title fs-1">Total Amount</div>
+            <div class="amount-title fs-1">Amount Paid</div>
+            <div class="amount-title fs-1">Amount Due</div>
           </div>
 
           <div class="col-6-r">
-            <div class="amount-title">{{$inv->payment_mode}}</div>
-            <div class="amount-title">${{$inv->sub_total}}</div>
-            <div class="amount-title">${{$inv->discount}}</div>
-            <div class="amount-title">${{$inv->tax_rate}}</div>
-            <div class="amount-title">${{$inv->deposit_amount}}</div>
+            <div class="amount-title fs-1">{{$inv->payment_mode}}</div>
+            <div class="amount-title fs-1">${{$inv->sub_total}}</div>
+            <div class="amount-title fs-1">${{$inv->discount}}</div>
+            <div class="amount-title fs-1">${{$inv->tax_rate}}</div>
+            <div class="amount-title fs-1">${{$inv->deposit_amount}}</div>
             <hr>
-            <div class="amount-title">${{$inv->net_amount}}</div>
-            <div class="amount-title">${{$inv->net_amount - $inv->due_amount}}</div>
-            <div class="amount-title">${{$inv->due_amount}}</div>
+            <div class="amount-title fs-1">${{$inv->net_amount}}</div>
+            <div class="amount-title fs-1">${{$inv->net_amount - $inv->due_amount}}</div>
+            <div class="amount-title fs-1">${{$inv->due_amount}}</div>
           </div>
         </div>
             
