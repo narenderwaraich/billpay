@@ -127,7 +127,7 @@
                     <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
                     <h5 class="title"><span id="first_name"></span> <span id="last_name"></span></h5>
                   </a>
-                  <hr>
+                  <hr class="hr-color">
                   <div class="client-data" id="client_email">Email : <span id="client_email_data"></span></div>
                   <div class="client-data" id="client_phone">Phone : <span id="client_phone_data"></span></div>
                   <div class="client-data" id="client_country">Country : <span id="client_country_data"></span></div>

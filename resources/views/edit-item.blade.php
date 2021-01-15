@@ -79,7 +79,7 @@
                     <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
                     <h5 class="title"><span id="first_name"></span></h5>
                   </a>
-                  <hr>
+                  <hr class="hr-color">
                   <div class="client-data" id="client_qty">Quantity : <span id="client_qty_data"></span></div>
                   <div class="client-data" id="client_price">Price : <span id="client_price_data"></span></div>
                   <div class="client-data" id="client_sale">Sale : <span id="client_sale_data"></span></div>

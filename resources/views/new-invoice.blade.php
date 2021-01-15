@@ -22,7 +22,7 @@
                   <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
                   <h5 class="title"><span id="first_name">{{$client->fname}}</span> <span id="last_name">{{$client->lname}}</span></h5>
                 </a>
-                <hr>
+                <hr class="hr-color">
                 <div class="row">
                   <div class="col-lg-9">
                     <div class="client-data" id="client_email">Email : <span id="client_email_data">{{$client->email}}</span></div>
@@ -72,7 +72,7 @@
                   @endif
                   <h5 class="title"><span>{{$user->company_name}}</span></h5>
                 </a>
-                <hr>
+                <hr class="hr-color">
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="client-data" id="client_email">Email : <span>{{$user->email}}</span></div>
@@ -96,7 +96,7 @@
         <div class="card">
           <div class="card-header">
             <h5 class="title">Invoice Items</h5>
-            <hr>
+            <hr class="hr-color">
           </div>
           <div class="card-body">
               <div class="row">
@@ -161,7 +161,7 @@
                   <div class="row">
                     <div class="col-md-12">
                      <div class="form-group">
-                          <textarea class="form-control w-100" rows="8" name="terms" style="width: 50%;"></textarea>
+                          <textarea class="form-control w-100" rows="8" name="terms" title="Terms and conditions - late fees, payment methods, delivery schedule" style="width: 50%;"></textarea>
                           <label>Terms</label>
                      </div>
                    </div>
@@ -176,7 +176,7 @@
                    </div>
                     <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
-                      <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;height: unset;width: 75%;" required>
+                      <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #0c2646;padding: 0;height: unset;width: 75%;" required>
                         <option value="Cash" selected>Cash</option>
                         <option value="Online" disabled>Online</option>
                       </select>
@@ -231,11 +231,11 @@
                    </div>
                     <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
-                      <input type="text" name="deposit_amount" id="deposit" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #dadce0;padding: 0;width: 75%;"  class="input-calculation form-control">
+                      <input type="text" name="deposit_amount" id="deposit" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #0c2646;padding: 0;width: 75%;"  class="input-calculation form-control">
                      </div>
                    </div>
                  </div>
-                 <hr>
+                 <hr class="hr-color">
                   <div class="row">
                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">

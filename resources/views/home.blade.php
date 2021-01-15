@@ -81,6 +81,8 @@
             <div class="col-md-8">
               <div class="row feature-text">
                 <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
+                <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">All invoices in one place</div>
+                <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
                 <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">ONLINE INVOICE SYSTEM</div>
                 <div class="col-md-1 col-xs-4 col-sm-2 col-lg-1 w-10"><i class="fa fa-check feature-tik-icon" aria-hidden="true"></i></div>
                 <div class="col-xs-8 col-sm-10 col-lg-11 col-md-11 w-90">EASY REGISTER ACCOUNT</div>

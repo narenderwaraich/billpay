@@ -724,7 +724,7 @@ img.template-logo {
 }*/
 .form-control {
     background-color: transparent;
-    border: 1px solid #dadce0;
+    border: 1px solid #0c2646;
     border-radius: 4px;
     outline: 0;
     -webkit-box-shadow: none;
@@ -755,12 +755,18 @@ textarea.form-control {
     max-height: 80px;
     padding: 10px 10px 0 0;
     resize: none;
-    border: 1px solid #E3E3E3;
+    border: 1px solid #0c2646;
     border-radius: 0;
     line-height: 2;
 }
 textarea.form-control {
     height: auto;
+}
+.hr-color{
+    border-top: 1px solid #0c2646;
+}
+.gj-datepicker button {
+    border: 1px solid #0c2646 !important;
 }
 .card .image {
     overflow: hidden;
@@ -901,7 +907,7 @@ p.description {
 .add-btn{
     width: 80%;
     background-color: white;
-    color: grey; 
+    color: #0c2646; 
     border: 1px dashed;
     margin: 20px auto 35px;
     display: block;

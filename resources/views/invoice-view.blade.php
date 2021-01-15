@@ -27,7 +27,7 @@
                   <img class="avatar border-gray" src="/public/images/icon/user.jpg" alt="Client">
                   <h5 class="title"><span id="first_name">{{$client->fname}}</span> <span id="last_name">{{$client->lname}}</span></h5>
                 </a>
-                <hr>
+                <hr class="hr-color">
                 <div class="row">
                   <div class="col-lg-9">
                     <div class="client-data" id="client_email">Email : <span id="client_email_data">{{$client->email}}</span></div>
@@ -66,7 +66,7 @@
         <div class="card">
           <div class="card-header">
             <h5 class="title" style="color: #e91e63;">INVOICE {{$inv->invoice_number}}</h5>
-            <hr>
+            <hr class="hr-color">
           </div>
           <div class="card-body">
           	<div class="row">
@@ -102,7 +102,7 @@
         <div class="card">
           <div class="card-header">
             <h5 class="title">Invoice Items</h5>
-            <hr>
+            <hr class="hr-color">
           </div>
           <div class="card-body">
             @foreach($invItem as $index => $item)
@@ -148,7 +148,7 @@
               </div>
               @endif
              @endforeach
-             <hr><br>
+             <hr class="hr-color"><br>
               <div class="row">
                 <div class="col-md-9">
                   <div class="row">
@@ -233,7 +233,7 @@
                      </div>
                    </div>
                  </div>
-                 <hr>
+                 <hr class="hr-color">
                   <div class="row">
                    <div class="col-md-5">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">

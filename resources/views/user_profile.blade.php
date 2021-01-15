@@ -166,7 +166,7 @@
                   @endif
                   <i class="fa fa-camera img-change-btn-icon" id="selectImage"></i>
                     <h5 class="title"><span id="companies_name"></span></h5>
-                  <hr>
+                  <hr class="hr-color">
                   <div class="client-data" id="client_name">Name :<span id="first_name"></span> <span id="last_name"></span></div>
                   <div class="client-data" id="client_email">Email : <span id="client_email_data"></span></div>
                   <div class="client-data" id="client_phone">Phone : <span id="client_phone_data"></span></div>
@@ -177,7 +177,7 @@
                   <div class="client-data" id="client_address">Address : <span id="client_address_data"></span></div>
                   <br>
                   <h6 class="title" style="color: #e91e63;text-transform: uppercase;">Invoice Plan</h6>
-                  <hr>
+                  <hr class="hr-color">
                   <div class="client-data">Name : <span>{{$plan->name}}</span></div>
                   <div class="client-data">Status : @if($userPlan->is_activated)<span style="color: #28a745;font-weight: 800;">Active</span> @else <span style="color: #e91e63;font-weight: 800;">Inactive</span> @endif</div>
                   <div class="client-data">Total Invoices : <span>{{$userPlan->get_invoice}}</span></div>

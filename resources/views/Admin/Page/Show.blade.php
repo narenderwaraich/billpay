@@ -42,8 +42,8 @@
                                         <td>{{ $pageData->page_name }}</td>
                                         <td>{{ $pageData->heading }}</td>
                                         <td><img src="/public/images/banner/{{ $pageData->image }}" class="bannerShowImg"></td>
-                                       <td><a href="/page-setup/edit/{{ $pageData->id }}" class="btn btn-secondary">Edit</a>
-                                        <a onclick="return removeAlert();" href="/page-setup/delete/{{ $pageData->id }}" class="btn btn-danger on-mob-table-btn">Delete</a>
+                                       <td><a href="/page/edit/{{ $pageData->id }}" class="btn btn-secondary">Edit</a>
+                                        <a onclick="return removeAlert();" href="/page/delete/{{ $pageData->id }}" class="btn btn-danger on-mob-table-btn">Delete</a>
                                     </tr>
                                     @endforeach
                                 </tbody>
