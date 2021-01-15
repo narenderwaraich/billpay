@@ -231,6 +231,7 @@ padding-top: 10px;
 </style>
 </head>
 <body>
+  <!-- &#8377; icon &#8360; rs -->
 <div class="container">
     <div class="row">
         <div class="col-12 t-left">
@@ -245,7 +246,7 @@ padding-top: 10px;
             @endif
 
             @if($inv->status == "DEPOSIT_PAID")
-            <div class="invoice-amount-pay-status">DEPOSIT $ {{$inv->deposit_amount}} USD PAID ON {{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
+            <div class="invoice-amount-pay-status">DEPOSIT &#x20b9; {{$inv->deposit_amount}} USD PAID ON {{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
             @endif
        </div> 
     </div>
@@ -325,7 +326,7 @@ padding-top: 10px;
           <span style="margin-left: 15px; width: 100%; height: auto;">{{$item->qty}}</span>
         </td>
         <td class="td-item-total">
-          ${{$item->total}}
+          &#8377;{{$item->total}}
         </td>
       </tr>
       @endforeach
@@ -353,14 +354,14 @@ padding-top: 10px;
 
           <div class="col-6-r">
             <div class="amount-title fs-1">{{$inv->payment_mode}}</div>
-            <div class="amount-title fs-1">${{$inv->sub_total}}</div>
-            <div class="amount-title fs-1">${{$inv->discount}}</div>
-            <div class="amount-title fs-1">${{$inv->tax_rate}}</div>
-            <div class="amount-title fs-1">${{$inv->deposit_amount}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->sub_total}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->discount}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->tax_rate}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->deposit_amount}}</div>
             <hr>
-            <div class="amount-title fs-1">${{$inv->net_amount}}</div>
-            <div class="amount-title fs-1">${{$inv->net_amount - $inv->due_amount}}</div>
-            <div class="amount-title fs-1">${{$inv->due_amount}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->net_amount}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->net_amount - $inv->due_amount}}</div>
+            <div class="amount-title fs-1">&#8377;{{$inv->due_amount}}</div>
           </div>
         </div>
             

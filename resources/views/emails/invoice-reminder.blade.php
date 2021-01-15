@@ -47,7 +47,7 @@ button:focus {
 <div>Hi {{$inv->client->fname}} {{$inv->client->lname}}</div>
 <br>
 
-<p class="inv-heading-text">This is reminder for invoice ({{$inv->invoice_number}}) from {{$inv->user->fname}} {{$inv->user->lname}} @if(!empty($inv->user->company_name))({{$inv->user->company_name}}) @endif for @if($inv->status =="PAID-STRIPE") $0 @else @if($inv->status =="OVERDUE" && $inv->net_amount != $inv->due_amount) ${{$inv->due_amount}} @elseif((!empty($inv->deposit_amount))&& $inv->status !="DEPOSIT_PAID") ${{$inv->deposit_amount}} @else ${{$inv->due_amount}} @endif @endif USD. Your Invoice is Overdue by {{$day}} days, kindly pay at the earliest. Please click See Invoice and Pay Button.</p>
+<p class="inv-heading-text">This is reminder for invoice ({{$inv->invoice_number}}) from {{$inv->user->fname}} {{$inv->user->lname}} @if(!empty($inv->user->company_name))({{$inv->user->company_name}}) @endif for @if($inv->status =="PAID-STRIPE") &#8360; 0 @else @if($inv->status =="OVERDUE" && $inv->net_amount != $inv->due_amount) &#8360; {{$inv->due_amount}} @elseif((!empty($inv->deposit_amount))&& $inv->status !="DEPOSIT_PAID") &#8360; {{$inv->deposit_amount}} @else &#8360; {{$inv->due_amount}} @endif @endif USD. Your Invoice is Overdue by {{$day}} days, kindly pay at the earliest. Please click See Invoice and Pay Button.</p>
 <center>
   <a href="{{env('APP_URL')}}/view-and-pay-invoice/{{$inv->id}}/{{$inv->invoice_number_token}}"><input type="button" name="" class="pay-btn" value="SEE INVOICE AND PAY"></a>
 </center>

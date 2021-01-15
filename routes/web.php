@@ -192,6 +192,7 @@ Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceControlle
 Route::post('/invoice/download-mutli/PDF','InvoiceController@downloadMultiPDF');
 Route::get('/invoice/zip-file-remove/{fileName}','InvoiceController@unlink_on_shutdown');
 Route::get('/invoice/print/PDF/{id}/{invoice_number_token}','InvoiceController@printPDF');
+Route::get('/invoice/whatsapp/{id}','InvoiceController@whatsappPDF');
 // /// invoice copy data /copy-invoice-data/
 Route::get('/invoice/copy/{id}','InvoiceController@copyData');
 // /// Cancel Invoice 

@@ -39,8 +39,7 @@ class PaymentStatus extends Mailable
     public function build()
     {
 
-         $mail = $this->clientData->email;
          $subject = "Payment Status";
-         return $this->from($mail)->subject($subject)->view('emails.payment-status');
+         return $this->subject($subject)->view('emails.payment-status');
     }
 }

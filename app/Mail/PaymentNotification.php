@@ -34,6 +34,6 @@ class PaymentNotification extends Mailable
     {
         $userName = $this->user['name']; 
         $subject = $userName.' '."Payment Recived";
-        return $this->from('hello@billpay.com')->subject($subject)->view('email.Payment-notification');
+        return $this->subject($subject)->view('email.Payment-notification');
     }
 }

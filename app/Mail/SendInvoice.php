@@ -33,9 +33,8 @@ public function __construct($invItem, $inv)
      */
     public function build()
     {
-         $mail = Auth::user()->email;
-         $userName = Auth::user()->fname;
+         $userName = Auth::user()->company_name;
          $subject = "Invoice (".$this->inv->invoice_number.") from ".$userName.""; //"Invoice (IN000211) from Username (company name)";
-         return $this->from($mail)->subject($subject)->view('emails.invoice');
+         return $this->subject($subject)->view('emails.invoice');
     }
 }

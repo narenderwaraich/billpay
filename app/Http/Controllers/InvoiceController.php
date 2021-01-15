@@ -343,13 +343,12 @@ class InvoiceController extends Controller
         $allMail = $mail;
       }
 
-      $invItem = $inv->invoiceItems;
-      Mail::to($allMail)->send(new SendInvoice($invItem, $inv));
+      $invItem = $inv->invoiceItems; 
+      $maill = Mail::to($allMail)->send(new SendInvoice($invItem, $inv));
       if($inv->status =="DRAFT"){
         $status['status'] = "SENT";
         $chk =  Invoice::where('id',$id)->update($status);
       }
-
       return response()->json(['success'=>"Mail Sent successfully."]);
 
     } 
@@ -636,6 +635,35 @@ class InvoiceController extends Controller
     }
 
 
+    public function whatsappPDF($id){
+        $inv = Invoice::find($id); 
+        // $client = Clients::find($inv->client_id);
+        $whatsappNumber = $inv->client->phone;
+        if($whatsappNumber){
+          //$message = "Hi".' '.$inv->client->fname.' '.$inv->client->lname.' '; 
+          $message =$inv->user->fname.' '.$inv->user->lname.' '.$inv->user->company_name.' '.'sent you an invoice ('.$inv->invoice_number.') for'.' ';
+          if($inv->status =="CASH"){
+            $amount = 0;
+          }else{
+            if($inv->status =="OVERDUE" && $inv->net_amount != $inv->due_amount){
+              $amount = $inv->due_amount;
+            }elseif ((!empty($inv->deposit_amount))&& $inv->status !="DEPOSIT_PAID") {
+              $amount = $inv->deposit_amount;
+            }else{
+              $amount = $inv->due_amount;
+            }        
+          }
+          $message .='Rs'.'.'.$amount.' '."that's due on".' '.date('m/d/Y', strtotime($inv->due_date)).'.';
+          $num = "+91".$whatsappNumber;
+          $whatsappLink = "https://wa.me/".$num."/?text=".$message;
+
+        return redirect($whatsappLink);
+        }else{
+          Toastr::error('Sorry number not exists!', 'Error', ["positionClass" => "toast-top-right"]);
+          return back();
+        }
+        
+    }
     // public function removeZipFile(){
     //         // $file = new Filesystem; dd(File::isDirectory('zip'));
     //         // $file->cleanDirectory('zip');

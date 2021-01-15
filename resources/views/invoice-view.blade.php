@@ -71,7 +71,7 @@
           <div class="card-body">
           	<div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
-		          	<a href="#" data-toggle="modal" class="btn-success btn-sm" data-target="#myModal">Send</a>
+		          	<a href="#" data-toggle="modal" class="btn-success btn-sm" data-target="#mailSendModel">Send</a>
 		          	<a href="/invoice/edit/{{$inv->id}}" class="btn-primary btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif">Edit</a>
 		          	<a href="/invoice/download/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-dark btn-sm">Download</a>
 		          	<a href="/invoice/copy/{{$inv->id}}" class="btn-secondary btn-sm">Copy</a>
@@ -85,7 +85,9 @@
 		            <a href="/invoice/print/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" target="_blank" class="btn-info btn-sm" data-Id="{{$inv->id}}">Print</a>
 		            <a href="#" class="btn-dark btn-sm" onclick="goBack()">Back</a>
                 <br><br>
-                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif">Cash Pay Invoice</a>
+                <a href="/invoice/whatsapp/{{$inv->id}}" target="_blank" class="btn-success btn-lg"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                <br><br>
+                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" style="background-color: #204065;border-color: #204065;">Cash Pay Invoice</a>
             	</div>
 		    </div>
         <br>
@@ -135,6 +137,7 @@
                   </div>
                 </div>
               </div>
+              @if($item->item_description)
                <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
@@ -143,6 +146,7 @@
                   </div>
                 </div>
               </div>
+              @endif
              @endforeach
              <hr><br>
               <div class="row">
@@ -270,7 +274,7 @@
 
 
 
-									<div class="modal fade" id="myModal" role="dialog">
+									<div class="modal fade" id="mailSendModel" role="dialog">
                                       <div class="modal-dialog modal-sm">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -365,12 +369,12 @@
                                       $('#mail-button-sending').hide();
                                       $('#send-btn').show();
                                       // $('#hidediv').show();
-                                      $('#myModal').hide();
+                                      $('#mailSendModel').hide();
                                       $(".modal .close").click();
                                           //location.reload();
                             } else if (data['error']) {
                                 toastr.error("Sorry First Connect to Stripe Account","Mail");
-                                $('#myModal').hide();
+                                $('#mailSendModel').hide();
                                 $(".modal .close").click();
                             } else {
                                 alert('Whoops Something went wrong!!');
@@ -432,16 +436,6 @@
                               });
                           });
                           
-                            /// show status div 
-                      		$(document).ready(function () {
-                      			var status = $("#amountStatus").val();
-                      			if(status == "PAID-STRIPE"){
-                      				$("#showStatus").show();
-                      			}else{
-                      				$("#showStatus").hide();
-                      			}
-                      		});
-
 
                           //// copy invoice data
                           // $('.copyInvoice').on('click',function() {

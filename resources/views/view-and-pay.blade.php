@@ -30,11 +30,11 @@
 <!-- sidebar with menu -->
 <div class="sidebar">
   <div class="logo">
-    <a href="#" class="simple-text logo-mini">
-      Mob
+    <a href="#" class="logo-mini">
+      <img src="/public/images/icon/template-mini-logo.svg" alt="Web Logo" class="template-logo">
     </a>
-    <a href="/dashboard" class="simple-text logo-normal">
-      Dashboard
+    <a href="/dashboard" class="logo-normal">
+      <img src="/public/images/icon/template-logo.svg" alt="Web Logo" class="template-logo">
     </a>
   </div>
   <div class="sidebar-wrapper" id="sidebar-wrapper">
@@ -197,6 +197,7 @@
                   </div>
                 </div>
               </div>
+              @if($item->item_description)
                <div class="row">
                 <div class="col-md-5">
                   <div class="form-group">
@@ -205,6 +206,7 @@
                   </div>
                 </div>
               </div>
+              @endif
              @endforeach
              <hr><br>
               <div class="row">

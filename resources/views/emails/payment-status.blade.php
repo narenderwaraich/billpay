@@ -57,7 +57,7 @@ button:focus {
     <hr>
     <br>
     <div class="inv-text">Hi {{$userData->fname}} {{$userData->lname}},</div>
-    <p class="inv-heading-text">{{$clientData->fname}} {{$clientData->lname}} has paid $ <span class="amount-text">{{$pay}} USD</span> for Invoice {{$invData->invoice_number}}.</p> 
+    <p class="inv-heading-text">{{$clientData->fname}} {{$clientData->lname}} has paid &#8360; <span class="amount-text">{{$pay}} INR</span> for Invoice {{$invData->invoice_number}}.</p> 
     <center>
       <a href="{{env('APP_URL')}}/view-and-pay-invoice/{{$invData->id}}/{{$invData->invoice_number_token}}"><input type="button" name="" class="pay-btn" value="SEE INVOICE">
     </center>

@@ -77,6 +77,26 @@ class UserPlanController extends Controller
           $payment = UserPlanPayment::where('id',$id)->first();
           $data['transaction_status'] = 'Success';
           $payment->update($data);
+
+            $userPlan = UserPlan::where('user_id', $payment->user_id)->first();
+
+            $plan = InvoicePlan::where('id',$payment->plan_id)->first();
+            $current = Carbon::now();
+            $expireDate = $current->addDays($plan->access_day);
+
+            $userPlanData['amount'] = $payment->amount;
+            $userPlanData['user_id'] = $payment->user_id;
+            $userPlanData['plan_id'] = $plan->id;
+            $userPlanData['access_date'] = $current;
+            $userPlanData['is_activated'] = 1;
+            $userPlanData['expire_date'] = $expireDate;
+            $userPlanData['get_invoice'] = $plan->invoices;
+
+            if($userPlan){
+                $userPlan->update($userPlanData);
+            }else{
+                UserPlan::create($userPlanData);
+            }
           Toastr::success('Payment manual received successfully', 'Success', ["positionClass" => "toast-bottom-right"]);
             return back();
         }
