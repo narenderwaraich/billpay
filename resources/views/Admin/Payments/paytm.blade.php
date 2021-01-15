@@ -3,7 +3,7 @@
 
     <section class="content-wrapper" style="min-height: 960px;">
         <section class="content-header">
-            <h1>All Payments</h1>
+            <h1>User Plan Payments</h1>
         </section>
 
         <section class="content">
@@ -19,13 +19,13 @@
                                 <button type="button" class="btn btn-default btn-sm" onClick="refreshPage()">
                                     <i class="fa fa-refresh"></i> Refresh
                                 </button>
-                                <a href="/payment/Success/paytm">
+                                <a href="/admin/payment/Success/list">
                                     <button type="button" class="btn btn-success btn-sm">Success</button>
                                 </a>
-                                <a href="/payment/Fields/paytm">
+                                <a href="/admin/payment/Fields/list">
                                     <button type="button" class="btn btn-danger btn-sm">Fields</button>
                                 </a>
-                                <a href="/payment/Pending/paytm">
+                                <a href="/admin/payment/Pending/list">
                                     <button type="button" class="btn btn-warning btn-sm">Pending</button>
                                 </a>
                             </div>
@@ -35,7 +35,7 @@
                             <table class="table table-hover scroll-table-full">
                                 <thead>
                                 <tr>
-                                     <th>Order No.</th>
+                                     <th>Id</th>
                                      <th>Order Id</th>
                                      <th>Name</th>
                                      <th>Method</th>
@@ -51,9 +51,9 @@
                                 <tbody>
                                     @foreach ($payments as $payment)
                                     <tr>
-                                        <td>{{ $payment->order_number }}</td>
+                                        <td>{{ $payment->id }}</td>
                                         <td>{{ $payment->order_id }}</td>
-                                        <td>{{ $payment->userName }}</td>
+                                        <td>{{ $payment->user }} <br> <span style="font-size: 10px;color: #2196F3;">{{ $payment->user_mail }}</td>
                                         <td>{{ $payment->payment_method }}</td>
                                         <td>{{ $payment->bank_name }}</td>
                                         <td>{{ $payment->transaction_id }}</td>
@@ -63,12 +63,14 @@
                                         <td class="status-{{ $payment->transaction_status }}">{{ $payment->transaction_status }}</td>
                                         <td>
                                         @if($payment->transaction_status == "Fields")
-                                            <a href="/user/payment/mark-success/{{$payment->id}}" class="btn btn-success on-mob-table-btn">Mark Success</a>
+                                            <a href="/user/plan/payment/mark-success/{{$payment->id}}" class="btn btn-success on-mob-table-btn">Mark Success</a>
                                         @endif
                                         @if($payment->transaction_status == "Pending")
-                                            <a href="/user/payment/manual/{{$payment->id}}" class="btn btn-success on-mob-table-btn">Manual</a>
+                                            <a href="/user/plan/payment/manual/{{$payment->id}}" class="btn btn-success on-mob-table-btn">Manual</a>
                                         @endif
-                                        <a href="/payment/refund/{{ $payment->id }}"><button class="btn btn-danger">Refund</button></a>
+                                        @if($payment->transaction_status == "Fields")
+                                        <a href="/user/plan/payment/refund/{{ $payment->id }}"><button class="btn btn-danger">Refund</button></a>
+                                        @endif
                                         </td>
                                     </tr>
                                     @endforeach

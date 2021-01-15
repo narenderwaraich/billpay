@@ -16,6 +16,8 @@ use App\User;
 use App\Setting;
 use App\InvoicePlan;
 use App\UserPlanPayment;
+use App\UserPayment;
+use App\Clients;
 
 class UserPlanController extends Controller
 {
@@ -26,7 +28,7 @@ class UserPlanController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -37,6 +39,72 @@ class UserPlanController extends Controller
     public function create()
     {
         
+    }
+
+    public function showPayment()
+    {
+        $id = Auth::id();
+        $payments = UserPlanPayment::where('transaction_status','=','Success')->orderBy('created_at','desc')->paginate(10); //dd($payments);
+        foreach ($payments as $payment) {
+            $user = User::where('id',$payment->user_id)->first();
+            $payment->user = $user ? $user->fname.' '. $user->lname : '';
+            $payment->user_mail = $user ? $user->email : '';
+        }
+        return view('Admin.Payments.paytm',['payments' =>$payments]);
+    }
+
+    public function showPaymentStatus($status)
+    {
+        $id = Auth::id();
+        $payments = UserPlanPayment::where('transaction_status',$status)->orderBy('created_at','desc')->paginate(10); //dd($payments);
+        foreach ($payments as $payment) {
+            $user = User::where('id',$payment->user_id)->first();
+            $payment->user = $user ? $user->fname.' '. $user->lname : '';
+            $payment->user_mail = $user ? $user->email : '';
+        }
+        return view('Admin.Payments.paytm',['payments' =>$payments]);
+    }
+
+    public function userPaymentMarkSuccess($id){
+          $payment = UserPlanPayment::where('id',$id)->first();
+          $data['transaction_status'] = 'Success';
+          $payment->update($data);
+          Toastr::success('Payment mark successfully', 'Success', ["positionClass" => "toast-bottom-right"]);
+            return back();
+        }
+
+    public function userPaymentManual($id){
+          $payment = UserPlanPayment::where('id',$id)->first();
+          $data['transaction_status'] = 'Success';
+          $payment->update($data);
+          Toastr::success('Payment manual received successfully', 'Success', ["positionClass" => "toast-bottom-right"]);
+            return back();
+        }
+
+
+
+    public function showUserPayment()
+    {
+        $id = Auth::id();
+        $payments = UserPayment::where('transaction_status','=','Success')->orderBy('created_at','desc')->paginate(10); //dd($payments);
+        foreach ($payments as $payment) {
+            $client = Clients::where('user_id',$payment->user_id)->first();
+            $payment->user_client = $client ? $client->fname.' '. $client->lname : '';
+            $payment->user_client_mail = $client ? $client->email : '';
+        }
+        return view('Admin.Payments.user',['payments' =>$payments]);
+    }
+
+    public function showUserPaymentStatus($status)
+    {
+        $id = Auth::id();
+        $payments = UserPayment::where('transaction_status',$status)->orderBy('created_at','desc')->paginate(10); //dd($payments);
+        foreach ($payments as $payment) {
+            $client = Clients::where('user_id',$payment->user_id)->first();
+            $payment->user_client = $client ? $client->fname.' '. $client->lname : '';
+            $payment->user_client_mail = $client ? $client->email : '';
+        }
+        return view('Admin.Payments.user',['payments' =>$payments]);
     }
 
     public function buyPlan($id){

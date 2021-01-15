@@ -27,6 +27,12 @@ class ItemController extends Controller
         return view ('show-items')->withItems($items);
     }
 
+    public function allItems()
+    {
+        $items = Item::orderBy('created_at','desc')->paginate(20); //dd($items);
+        return view ('Admin.Items.Show', compact('items'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

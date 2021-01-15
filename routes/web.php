@@ -242,6 +242,7 @@ Route::get('/forget-password','RegistrationsController@forgetPassForm');
 Route::get('/view-and-pay-invoice/{id}/{invoice_number_token}','InvoiceController@viewAndPay');
 
 Route::get('/items','ItemController@index');
+Route::get('/admin/items','ItemController@allItems');
 Route::get('/items/add','ItemController@create');
 Route::post('items/add','ItemController@store');
 Route::get('/items/edit/{id}','ItemController@edit');
@@ -289,3 +290,10 @@ Route::get('/plan/delete/{id}', 'InvoicePlanController@destroy');
 
 Route::get('/buy-plan/{id}','UserPlanController@buyPlan');
 Route::post('/payment-call-back', 'UserPlanController@paytmCallback');
+Route::get('/admin/payment/list', 'UserPlanController@showPayment');
+Route::get('/admin/payment/{status}/list', 'UserPlanController@showPaymentStatus');
+Route::get('/admin/users/payment/list', 'UserPlanController@showUserPayment');
+Route::get('/admin/users/payment/{status}/list', 'UserPlanController@showUserPaymentStatus');
+
+Route::get('/user/plan/payment/mark-success/{id}', 'UserPlanController@userPaymentMarkSuccess');
+Route::get('/user/plan/payment/manual/{id}', 'UserPlanController@userPaymentManual');

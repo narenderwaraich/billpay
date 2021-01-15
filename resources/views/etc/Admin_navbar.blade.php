@@ -43,7 +43,8 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-inr"></i>Payments</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="/payment/paytm">Paytem</a></li>
+                            <li><i class="fa fa-table"></i><a href="/admin/payment/list">Plan Payment</a></li>
+                            <li><i class="fa fa-table"></i><a href="/admin/users/payment/list">User Payment</a></li>
                         </ul>
                     </li>
                      @if(Auth::user()->role == "admin")
