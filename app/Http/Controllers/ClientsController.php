@@ -25,8 +25,15 @@ class ClientsController extends Controller
   }
   public function findClientData(Request $request){
     $phone = $request->phone;
-    $route = "/find-client/".$phone; //dd($route);
-    return redirect()->to($route);
+    $number = $this->filterNumber($phone);
+    if($number){
+      $route = "/find-client/".$number;
+      return redirect()->to($route);
+    }else{
+      Toastr::error('Plz check your enter mobile numper', 'Error', ["positionClass" => "toast-top-right"]);
+        return back();
+    }
+    
   }
 
   public function findClientDataDetails($phone){
@@ -336,7 +343,11 @@ public function SearchData(Request $request){
                       
                             
 
-
+private function filterNumber($number){
+        $number = str_replace(['(',')','-','/','+'],'',$number);
+        $number = (int)$number;
+        return $number;
+    }
                           
                               
 
