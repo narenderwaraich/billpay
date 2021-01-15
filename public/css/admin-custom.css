@@ -239,7 +239,43 @@ span.user-active {
     font-weight: 700;
     color: #CC0000;
 }
-
+.status_deposit_paid{
+color: #808080 !important;
+font-size: 13px !important;
+}
+.status_sent{
+color: #E565F3;
+font-size: 13px;
+}
+.status_cash{
+/*color: #04BF37;*/
+color: #138E60;
+font-size: 13px;
+}
+.status_online{
+color: #718E13;
+font-size: 13px;
+}
+.status_paid-offline{
+color: #59BACD;
+font-size: 13px;
+}
+.status_draft{
+color: #2E59B2;
+font-size: 13px;
+}
+.status_overdue {
+    color: #f37914;
+    font-size: 13px;
+}
+.status_refund{
+    color: #FA3160;
+    font-size: 13px;
+}
+.status_cancel{
+    color: #FA3160;
+    font-size: 13px;
+}
 
 
 
@@ -252,7 +288,7 @@ span.user-active {
         margin-top: 4px !important;
     }
     .navbar .navbar-brand img {
-        width: 140px !important;
+        width: 45px !important;
     }
     .table{
       margin: auto !important;

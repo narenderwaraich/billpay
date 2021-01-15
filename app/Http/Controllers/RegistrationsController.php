@@ -222,10 +222,15 @@ class RegistrationsController extends Controller
                             $state_data = DB::table("states")->select('id','name')->get();
                             $city_data = DB::table("cities")->select('id','name')->get();
                             $userPlan = UserPlan::where('user_id', $userId)->first();
+                            if(!$userPlan){
+                              Toastr::error('Please first choose any invoice plan!', 'Error', ["positionClass" => "toast-top-right"]);
+                                return redirect('/invoice/plans');
+                            }else{
                             $plan = InvoicePlan::where('id', $userPlan->plan_id)->first();
                             $invoice = Invoice::where('user_id', $userId)->get(); //dd($invoice);
                             $totalInvoice = $invoice ? $invoice->count() : 0; //dd($totalInvoice);
                             return view('user_profile',compact('country_data','state_data','city_data','userPlan','plan','totalInvoice'));
+                            }
                           }
               }
                else{

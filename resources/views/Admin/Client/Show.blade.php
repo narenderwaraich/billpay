@@ -66,7 +66,7 @@
                                     <tr class="clickable-row" data-href='/client/{{$client->id}}/view' style="cursor: pointer;">
                                         <td>{{ $client->id }}</td>
                                         <td><input type="checkbox" class="sub_chk" data-id="{{$client->id}}" email-id="{{ $client->email }}">
-                                          {{ $client->name }}</td>
+                                          {{ $client->fname }} {{ $client->lname }}</td>
                                         <td>{{ $client->email }}</td>
                                         <td>{{ $client->phone }}</td>
                                         <td>{{ $client->address }}</td>
@@ -74,7 +74,7 @@
                                         <td>{{ $client->state }}</td>
                                         <td>{{ $client->country }}</td>
                                         <td>{{ $client->zipcode }}</td>
-                                        <td>{{ $client->user }}</td>
+                                        <td>{{ $client->user }} <br> <span style="font-size: 10px;color: #2196F3;">{{ $client->user_mail }}</span></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

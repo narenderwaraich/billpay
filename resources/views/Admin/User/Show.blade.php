@@ -59,11 +59,11 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th><input type="checkbox" id="master"> Name</th>
+                                    <th><input type="checkbox" id="master"> Company Name</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Gender</th>
-                                    <th>Google</th>
-                                    <th>Profile</th>
+                                    <!-- <th>Google</th> -->
+                                    <th>Logo</th>
                                     <th>Status</th>
                                     <th>Role</th>
                                     <th>Online</th>
@@ -77,10 +77,10 @@
                                     <tr class="clickable-row" data-href='/user/{{$userData->id}}/view' style="cursor: pointer;">
                                         <td>{{ $userData->id }}</td>
                                         <td><input type="checkbox" class="sub_chk" data-id="{{$userData->id}}" email-id="{{ $userData->email }}">
-                                          {{ $userData->name }}</td>
+                                          {{ $userData->company_name }}</td>
+                                        <td>{{ $userData->fname }} {{ $userData->lname }}</td>
                                         <td>{{ $userData->email }}</td>
-                                        <td>{{ $userData->gender }}</td>
-                                        <td>{{ $userData->google_id }}</td>
+                                        <!-- <td>{{ $userData->google_id }}</td> -->
                                         <td>
                                           @if($userData->avatar)
                                           <img src="{{asset('/public/images/user/'.$userData->avatar)}}" style="width: 100px;height: 100px;border-radius: 100%;border:2px solid #dc3545;">

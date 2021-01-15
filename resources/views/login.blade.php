@@ -49,7 +49,7 @@
             Submit</button>
             <br><br>
             <div style="float: right;">Don't have account ? 
-              <a href="/SignUp" class="sign-up-link">Sign Up Here</a>
+              <a href="/register" class="sign-up-link">Register Account</a>
             </div>
           </form>
       </div>

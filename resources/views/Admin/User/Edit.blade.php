@@ -16,14 +16,20 @@
 <span class="fa fa-chevron-left"></span> Back</button></a></span></h3>
                             </div>
                             <div class="box-body">
+                              <div class="form-group">
+                                    <label for="title">Company Name</label>
+                                        <input type="text" class="form-control{{ $errors->has('company_name') ? ' is-invalid' : '' }}" name="company_name" placeholder="Enter Company Name" value="{{ $user->company_name }}">
+                                </div>
                                 <div class="form-group">
                                     <label for="title">Name</label>
-                                    <input
-                                            type="text"
-                                            class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            name="name"
-                                            placeholder="Enter Name" value="{{ $user->name }}"
-                                            >
+                                    <div class="row">
+                                      <div class="col-6">
+                                        <input type="text" class="form-control{{ $errors->has('fname') ? ' is-invalid' : '' }}" name="fname" placeholder="Enter First Name" value="{{ $user->fname }}">
+                                      </div>
+                                      <div class="col-6">
+                                        <input type="text" class="form-control{{ $errors->has('lname') ? ' is-invalid' : '' }}" name="lname" placeholder="Enter Last Name" value="{{ $user->lname }}">
+                                      </div>
+                                    </div>
                                 </div>
 
                                  <div class="form-group">
@@ -59,14 +65,6 @@
                                         </span>
                                     @endif
                                   </div>
-                                  <div class="form-group">
-                                    <label for="title">Gender</label>
-                                    <select name="gender" id="select" required class="windows-form-input form-control ">
-                                            <option value="">-- Select Gender--</option>    
-                                            <option value="male" @if ($user->gender == "male") {{ 'selected' }} @endif>Male</option>
-                                            <option value="female" @if ($user->gender == "female") {{ 'selected' }} @endif>Female</option>
-                                    </select>
-                                 </div>
                                  <div class="form-group">
                                     <label for="title">Role</label>
                                       <select class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"  name="role">

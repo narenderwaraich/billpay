@@ -53,9 +53,9 @@
       </div>
       <br>
       <button type="submit" class="btn btn-lg btn-block form-btn">
-      Sign Up</button>
+      Submit</button>
       <br><br>
-      <div style="float: right;">Already have account ? <a href="/login" class="login-link">Sign in</a></div>
+      <div style="float: right;">Already have account ? <a href="/login" class="login-link">Login</a></div>
 
 
     </form>

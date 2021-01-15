@@ -362,8 +362,7 @@ class AdminController extends Controller
 
     public function userView($id){
       $user = User::find($id);
-      $userAddress = UserAddress::where('user_id',$id)->first();
-      return view('Admin.User.View',compact('user','userAddress'));
+      return view('Admin.User.View',compact('user'));
     }
 
     public function envData(){
@@ -483,7 +482,8 @@ class AdminController extends Controller
       $clients = Clients::orderBy('created_at','desc')->paginate(20);
       foreach ($clients as $client) {
         $user = User::where('id',$client->user_id)->first();
-        $client->user = $user ? $user->fname : '';
+        $client->user = $user ? $user->fname.' '. $user->lname : '';
+        $client->user_mail = $user ? $user->email : '';
       }
       return view('Admin.Client.Show',compact('clients'));
      }
@@ -493,8 +493,10 @@ class AdminController extends Controller
       foreach ($invoices as $invoice) {
         $client = Clients::where('id',$invoice->client_id)->first();
         $user = User::where('id',$invoice->user_id)->first();
-        $invoice->client = $client ? $client->fname : '';
-        $invoice->user = $user ? $user->fname : '';
+        $invoice->client = $client ? $client->fname.' '. $client->lname : '';
+        $invoice->client_mail = $client ? $client->email : '';
+        $invoice->user = $user ? $user->fname.' '. $user->lname : '';
+        $invoice->user_mail = $user ? $user->email : '';
       }
       return view('Admin.Invoice.Show',compact('invoices'));
      }                                       

@@ -35,6 +35,10 @@
                                     <td>{{ $user->id }}</td>
                                   </tr>
                                   <tr>
+                                    <td>Company Name</td>
+                                    <td>{{ $user->company_name }}</td>
+                                  </tr>
+                                  <tr>
                                     <td>Name</td>
                                     <td>{{ $user->name }}</td>
                                   </tr>
@@ -47,37 +51,29 @@
                                     <td>{{ $user->phone_no }}</td>
                                   </tr>
                                   <tr>
-                                    <td>Gender</td>
-                                    <td>{{ $user->gender }}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Date of Birth</td>
-                                    <td>{{ $user->date }}</td>
-                                  </tr>
-                                  <tr>
                                     <td>Image</td>
                                     <td>{{ $user->avatar }}</td>
                                   </tr>
                                 
                                   <tr>
                                     <td>Address</td>
-                                    <td>@if(isset($userAddress->address)){{ $userAddress->address }}@endif</td>
+                                    <td>{{ $user->address }}</td>
                                 </tr>
                                 <tr>
                                     <td>Country</td>
-                                    <td>@if(isset($userAddress->country)){{ $userAddress->country }}@endif</td>
+                                    <td>{{ $user->country }}</td>
                                 </tr>
                                 <tr>
                                     <td>State</td>
-                                    <td>@if(isset($userAddress->state)){{ $userAddress->state }}@endif</td>
+                                    <td>{{ $user->state }}</td>
                                 </tr>
                                 <tr>
                                     <td>City</td>
-                                    <td>@if(isset($userAddress->city)){{ $userAddress->city }}@endif</td>
+                                    <td>{{ $user->city }}</td>
                                 </tr>
                                 <tr>
                                     <td>Zipcode</td>
-                                    <td>@if(isset($userAddress->zipcode)){{ $userAddress->zipcode }}@endif</td>
+                                    <td>{{ $user->zipcode }}</td>
                                 </tr>
                                 <tr>
                                     <td>Status</td>

@@ -64,10 +64,10 @@
                                     <tr class="clickable-row" data-href='/client/{{$invoice->id}}/view' style="cursor: pointer;">
                                         <td>{{ $invoice->id }}</td>
                                         <td><input type="checkbox" class="sub_chk" data-id="{{$invoice->id}}"> {{ $invoice->invoice_number}}</td>
-                                        <td>{{ $invoice->client }}</td>
+                                        <td>{{ $invoice->client }} <br> <span style="font-size: 10px;color: #2196F3;">{{ $invoice->user_mail }}</span></td>
                                         <td>{{ date('m/d/Y', strtotime($invoice->issue_date)) }}</td>
                                         <td>{{ date('m/d/Y', strtotime($invoice->due_date)) }}</td>
-                                        <td>{{ $invoice->status}} <br>
+                                        <td class="status_{{ strtolower($invoice->status)}}">{{ $invoice->status}} <br>
                                     @if($invoice->status == "OVERDUE" && $invoice->net_amount != $invoice->due_amount)
                                      <span class="td-inv-amount-status">DEPOSIT PAID ON {{ date('m/d/Y', strtotime($invoice->payment_date)) }}</span>
                                     @endif
@@ -79,7 +79,7 @@
                                    <span class="td-inv-amount-status">DEPOSIT PAID ON {{ date('m/d/Y', strtotime($invoice->payment_date)) }}</span>
                                    @endif</td>
                                         <td>{{ $invoice->net_amount}}</td>
-                                        <td>{{ $invoice->user }}</td>
+                                        <td>{{ $invoice->user }} <br> <span style="font-size: 10px;color: #2196F3;">{{ $invoice->user_mail }}</span></td>
                                     </tr>
                                     @endforeach
                                 </tbody>

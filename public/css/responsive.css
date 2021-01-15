@@ -105,6 +105,9 @@
     }
     .feature-tik-icon {
         font-size: 15px;
+    }
+    .footer-form-section{
+        padding-bottom: 40px;
     }   
 }
 @media (min-width: 991px){
