@@ -28,6 +28,7 @@ use ZipArchive;
 use App\Item;
 use App\UserPlan;
 use App\InvoicePlan;
+use App\UserInvoiceSetting;
 
 class InvoiceController extends Controller
 {
@@ -511,7 +512,12 @@ class InvoiceController extends Controller
         $invDate = $inv->created_at;
         $invoiceDate = $invDate->format('mdY');
         $invNumber = $inv->invoice_number;
-        $pdf = PDF::loadView('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv])->setPaper('A4');
+
+        ///invoice pdf setting
+        $userInvoiceSetting = UserInvoiceSetting::where('user_id',$inv->user_id)->first();
+        $printPaper = $userInvoiceSetting ? $userInvoiceSetting->setPaper : 'A4';
+
+        $pdf = PDF::loadView('invoice-pdf', ['userInvoiceSetting' => $userInvoiceSetting,'invItem' => $invItem, 'inv' => $inv])->setPaper($printPaper);
     //return $pdf->stream();
     //exit();
         return $pdf->download($invNumber.'-'.$invoiceDate.'.pdf');
@@ -521,7 +527,37 @@ class InvoiceController extends Controller
         return redirect()->to('/');
       }
 
-    }  
+    }
+
+
+        /// print html view PDF file
+    public function printHTMLPagePDF($id,$invoice_number_token){
+      $inv = Invoice::findOrFail($id);
+      if($inv->is_deleted ==0){
+        $token = $inv->invoice_number_token; 
+        if($token != $invoice_number_token){
+          Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
+          return back();
+        }
+        $invItem = $inv->invoiceItems;
+    //return view('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv]);
+    //exit();
+        $invDate = $inv->created_at;
+        $invoiceDate = $invDate->format('mdY');
+        $invNumber = $inv->invoice_number;
+
+        ///invoice pdf setting
+        $userInvoiceSetting = UserInvoiceSetting::where('user_id',$inv->user_id)->first();
+        $printPaper = $userInvoiceSetting ? $userInvoiceSetting->setPaper : 'A4';
+
+        return view('invoice-pdf', ['userInvoiceSetting' => $userInvoiceSetting,'invItem' => $invItem, 'inv' => $inv]);
+
+      }else{
+        Toastr::error('Sorry link not exists!', 'Error', ["positionClass" => "toast-top-right"]);
+        return redirect()->to('/');
+      }
+
+    }   
 
 
     /// print PDF file
@@ -539,7 +575,12 @@ class InvoiceController extends Controller
         $invDate = $inv->created_at;
         $invoiceDate = $invDate->format('mdY');
         $invNumber = $inv->invoice_number;
-        $pdf = PDF::loadView('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv])->setPaper('A4');
+
+        ///invoice pdf setting
+        $userInvoiceSetting = UserInvoiceSetting::where('user_id',$inv->user_id)->first();
+        $printPaper = $userInvoiceSetting ? $userInvoiceSetting->setPaper : 'A4';
+
+        $pdf = PDF::loadView('invoice-pdf', ['userInvoiceSetting' => $userInvoiceSetting,'invItem' => $invItem, 'inv' => $inv])->setPaper($printPaper);
         return $pdf->stream();
         exit();
     //return $pdf->download($invNumber.'-'.$invoiceDate.'.pdf');
@@ -575,7 +616,12 @@ class InvoiceController extends Controller
       $invDate = $inv->created_at;
       $invoiceDate = $invDate->format('mdY');
       $invNumber = $inv->invoice_number;
-      $pdf = PDF::loadView('invoice-pdf', ['invItem' => $invItem, 'inv' => $inv])->setPaper('A4');
+
+      ///invoice pdf setting
+      $userInvoiceSetting = UserInvoiceSetting::where('user_id',$inv->user_id)->first();
+      $printPaper = $userInvoiceSetting ? $userInvoiceSetting->setPaper : 'A4';
+
+      $pdf = PDF::loadView('invoice-pdf', ['userInvoiceSetting' => $userInvoiceSetting,'invItem' => $invItem, 'inv' => $inv])->setPaper($printPaper);
 
     // If you want to store the generated pdf to the server then you can use the store function
       $pdf_name = $invNumber.'-'.$invoiceDate.'.pdf';
@@ -691,7 +737,7 @@ class InvoiceController extends Controller
     public function cancelInvoice($id){
       $inv = Invoice::find($id);
       $status = $inv->status;
-      if ($status =="ONLINE") {
+      if ($status =="PAID") {
         $data['is_cancelled'] = 1;
       }
       if ($status =="OVERDUE" && $inv->net_amount != $inv->due_amount) {
@@ -705,6 +751,14 @@ class InvoiceController extends Controller
       Invoice::where('id',$id)->update($data);
       Toastr::success('Cancel Invoice', 'Success', ["positionClass" => "toast-bottom-right"]);
       return back(); 
+    }
+
+     public function billTimeCancelInvoice($id){
+      $inv = Invoice::find($id);
+      $data['status'] = "CANCEL";
+      Invoice::where('id',$id)->update($data);
+      Toastr::success('Cancel Invoice', 'Success', ["positionClass" => "toast-bottom-right"]);
+      return redirect()->to('/dashboard'); 
     }
 
 
@@ -725,7 +779,7 @@ class InvoiceController extends Controller
       $invoiceIds = [];
       foreach ($invoices as $invoice) {
         $chkStatus = $invoice->status;
-        if($chkStatus == "ONLINE" || $chkStatus == "DEPOSIT_PAID" || ($invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
+        if($chkStatus == "PAID" || $chkStatus == "DEPOSIT_PAID" || ($invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
           array_push($invoiceIds, $invoice->invoice_number);
         }else{
           DB::table("invoice_items")->where('invoice_id',$invoice->id)->delete();
@@ -749,7 +803,7 @@ class InvoiceController extends Controller
       $invoiceIds = [];
       foreach ($invoices as $invoice) {
         $chkStatus = $invoice->status;
-        if($chkStatus == "ONLINE" || $chkStatus == "DEPOSIT_PAID" || ($chkStatus == "OVERDUE" && $invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
+        if($chkStatus == "PAID" || $chkStatus == "DEPOSIT_PAID" || ($chkStatus == "OVERDUE" && $invoice->net_amount != $invoice->due_amount) || $chkStatus == "CANCEL"){
           array_push($invoiceIds, $invoice->invoice_number);
         }else{
           DB::table("invoice_items")->where('invoice_id',$invoice->id)->delete();
@@ -793,7 +847,7 @@ class InvoiceController extends Controller
     $pay = $chkData->deposit_amount; // pay amount
     $totalAmount = $chkData->due_amount; /// total amount 
     $pending = $totalAmount - $pay; // total - pay
-    if($chkStatus != "ONLINE"){
+    if($chkStatus != "PAID"){
       $status['status'] = "DEPOSIT_PAID";
       $status['deposit_date'] = Carbon::now();
       $status['payment_date'] = Carbon::now();
@@ -822,12 +876,12 @@ class InvoiceController extends Controller
     $status['deposit_date'] = Carbon::now();
     $status['payment_date'] = Carbon::now();
     $status['due_amount'] = $pending;
-    $status['payment_mode'] = "ONLINE";
+    $status['payment_mode'] = "PAID";
     }else{
-      $status['status'] = "ONLINE";
+      $status['status'] = "PAID";
       $status['payment_date'] = Carbon::now();
       $status['due_amount'] = 0;
-      $status['payment_mode'] = "ONLINE";
+      $status['payment_mode'] = "PAID";
     }
     $chk =  Invoice::whereIn('id',$id)->update($status);
     return response()->json(['success'=>"Mark Online Paid successfully"]);

@@ -200,7 +200,7 @@
                   <div class="row">
                     <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                      <label style="margin-top: 6px;">Discount<span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                      <label style="margin-top: 6px;">Discount<span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<span id="discount-percentage-text-show"></span>%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7 w-50">
@@ -213,7 +213,7 @@
                   <div class="row">
                     <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<span id="tax-percentage-text-show"></span>%)</span></label>
                      </div>
                    </div>
                     <div class="col-md-7 w-50">
@@ -276,6 +276,8 @@
         </div>
       </div>
     </div>
+    <input type="hidden" name="disInPer" id="getValuePerDiscount">
+    <input type="hidden" name="taxInPer"  id="getValuePerTax">
     <input type="hidden" name="disInFlat" id="getValueFlatDiscount">
     <input type="hidden" name="taxInFlat" id="getValueFlatTax">
   </form>
@@ -448,7 +450,7 @@
                           var i=1;  
 
                           $('#addForm').click(function(){    
-                          $('#dynamic_field').append('<div class="row" id="frm'+i+'"><div class="col-md-5"><div class="form-group"><input type="text" name="item_name[]" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div>');
+                          $('#dynamic_field').append('<div class="row" id="frm'+i+'"><div class="col-md-5"><div class="form-group"><input type="text" name="item_name[]" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove invoice-item-delete" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div>');
                                i++;
                           });  
 
@@ -587,6 +589,7 @@
                                 discount = total * disValuePer / 100;
                                 document.getElementById('getValuePerDiscount').value =  disValuePer;
                                 $('#show-percentage-val').show();
+                                $('#discount-percentage-text-show').text(disValuePer);
                               } 
                               if(document.getElementById("tax_flat_radio").checked){
                                 tax = +taxValueFlat;
@@ -596,6 +599,7 @@
                                   tax = total * taxValuePer / 100;
                                   document.getElementById('getValuePerTax').value =  taxValuePer;
                                   $('#show-tax-val').show();
+                                  $('#tax-percentage-text-show').text(taxValuePer);
                                 }
                                 // console.log(discount);
                                 //console.log("Discount :"+discount+" - Tax :"+tax);

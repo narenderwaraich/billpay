@@ -108,6 +108,18 @@
     }
     .footer-form-section{
         padding-bottom: 40px;
+    }
+    .invoice-status-title {
+        margin-top: 0px;
+    }
+    .invoice-item-delete{
+        font-size: 18px;
+        text-align: center;
+        margin: auto;
+        display: block;
+        border: 1px solid #e91e63;
+        border-radius: 4px;
+        padding: 7px 0px;
     }   
 }
 @media (min-width: 991px){

@@ -191,9 +191,9 @@
   height: 350px;
 }
 </style>
-<script src="/amcharts4/core.js"></script>
-<script src="/amcharts4/charts.js"></script>
-<script src="/amcharts4/themes/animated.js"></script>
+<script src="/public/amcharts4/core.js"></script>
+<script src="/public/amcharts4/charts.js"></script>
+<script src="/public/amcharts4/themes/animated.js"></script>
 <script>
 var data = [@if(isset($paids))@foreach ($paids as $paid)
   {

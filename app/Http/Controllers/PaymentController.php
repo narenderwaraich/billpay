@@ -508,7 +508,7 @@ class PaymentController extends Controller
 
                     $invoice = Invoice::where('id',$order->invoice_id)->first();
                     if($amount == $invoice->net_amount){
-                    	$statusUpdate['status'] = "ONLINE";
+                    	$statusUpdate['status'] = "PAID";
                     }else{
                     	$statusUpdate['status'] = "DEPOSIT_PAID";
                     }

@@ -191,12 +191,14 @@ Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceControlle
 //Route::get('/invoice/download/PDF/{id}/{invoice_number_token}','InvoiceController@downloadPDFfile');
 Route::post('/invoice/download-mutli/PDF','InvoiceController@downloadMultiPDF');
 Route::get('/invoice/zip-file-remove/{fileName}','InvoiceController@unlink_on_shutdown');
+Route::get('/invoice/print/PDF/view/{id}/{invoice_number_token}','InvoiceController@printHTMLPagePDF');
 Route::get('/invoice/print/PDF/{id}/{invoice_number_token}','InvoiceController@printPDF');
 Route::get('/invoice/whatsapp/{id}','InvoiceController@whatsappPDF');
 // /// invoice copy data /copy-invoice-data/
 Route::get('/invoice/copy/{id}','InvoiceController@copyData');
 // /// Cancel Invoice 
-// Route::get('/cancel-invoice/{id}','InvoiceController@cancelInvoice');
+Route::get('/cancel-invoice-bill/{id}','InvoiceController@billTimeCancelInvoice');
+Route::get('/cancel-invoice/{id}','InvoiceController@cancelInvoice');
 
 // /// Delete Invoice Controller 
 Route::post('/invoice/delete','DeleteInvoiceController@destroyMulti');
@@ -298,3 +300,9 @@ Route::get('/admin/users/payment/{status}/list', 'UserPlanController@showUserPay
 
 Route::get('/user/plan/payment/mark-success/{id}', 'UserPlanController@userPaymentMarkSuccess');
 Route::get('/user/plan/payment/manual/{id}', 'UserPlanController@userPaymentManual');
+
+
+////invoice pdf setting
+Route::get('/invoice-pdf-setting','UserInvoiceSettingController@index');
+Route::post('/invoice-pdf-setting/change','UserInvoiceSettingController@createOrUpdate');
+Route::get('/invoice-pdf-setting/reset','UserInvoiceSettingController@destroy');

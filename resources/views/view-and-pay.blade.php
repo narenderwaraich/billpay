@@ -134,7 +134,7 @@
           <div class="card-body">
             <div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
-                @if($inv->payment_mode == "Online")
+                @if($inv->payment_mode == "PAID")
                 <a href="/invoice/pay/{{$inv->id}}" class="btn-success btn-lg">Pay</a>
                 @endif
                 <a href="/invoice/download/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-primary btn-lg">Download</a>
@@ -151,11 +151,11 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-header">
-            <h5 class="title">Invoice Items <span>@if($inv->status == "ONLINE")
+            <h5 class="title">Invoice Items <span>@if($inv->status == "PAID")
           HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}. @if($inv->deposit_amount > 0)   DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
           @endif
 
-          @if($inv->status == "ONLINE" || $inv->is_cancelled ==1)
+          @if($inv->status == "PAID" || $inv->is_cancelled ==1)
             HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
           @endif
 
@@ -339,11 +339,11 @@
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
           <div class="invoice-amount-pay-status invoice_payment_status_{{$inv->status}}" style="text-align: left;">
-          @if($inv->status == "ONLINE")
+          @if($inv->status == "PAID")
           HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}. @if($inv->deposit_amount > 0)   DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
           @endif
 
-          @if($inv->status == "ONLINE" || $inv->is_cancelled ==1)
+          @if($inv->status == "PAID" || $inv->is_cancelled ==1)
             HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}}
           @endif
 
@@ -536,9 +536,9 @@
           </div>
             </div>
     </div>
-  @if($inv->payment_mode == "ONLINE")
+  @if($inv->payment_mode == "PAID")
     <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-      @if($inv->status =="ONLINE")
+      @if($inv->status =="PAID")
       <div class="pay-div">
         <div class="form-top-title">Signup for free 30 days trail</div>
         <div class="form-style shadow-lg">
@@ -601,7 +601,7 @@
         </div>
         <div class="col-7 t-l">
           <div class="amount-show-pay-box">
-          @if($inv->status =="ONLINE")
+          @if($inv->status =="PAID")
             $0
             <input type="hidden" name="amount"  value="0">
           @else

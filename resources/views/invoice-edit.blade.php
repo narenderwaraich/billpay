@@ -129,7 +129,7 @@
                 </div>
                 <div class="col-md-1">
                   <div class="form-group">
-                    <span><i class="fa fa-trash btn_remove delete-Item" DeleteId="{{$item->id}}" name="remove" id="{{ $index }}" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;"></i></span>
+                    <span><i class="fa fa-trash btn_remove delete-Item invoice-item-delete" DeleteId="{{$item->id}}" name="remove" id="{{ $index }}"></i></span>
                   </div>
                 </div>
               </div>
@@ -160,7 +160,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                          <textarea class="form-control" rows="8" name="notes" style="width: 50%;">{{$inv->notes}}</textarea>
+                          <textarea class="form-control w-100" rows="8" name="notes" style="width: 50%;">{{$inv->notes}}</textarea>
                           <label>Notes (optional)</label>
                       </div>
                     </div>
@@ -168,7 +168,7 @@
                   <div class="row">
                     <div class="col-md-12">
                      <div class="form-group">
-                          <textarea class="form-control" rows="8" name="terms" style="width: 50%;">{{$inv->terms}}</textarea>
+                          <textarea class="form-control w-100" rows="8" name="terms" style="width: 50%;">{{$inv->terms}}</textarea>
                           <label>Terms</label>
                      </div>
                    </div>
@@ -176,12 +176,12 @@
                 </div>
                 <div class="col-md-3">
                    <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Payment Method</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <select name="payment_mode" class="form-control" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #0c2646;padding: 0;height: unset;width: 75%;" required>
                         <option value="Cash" {{ $inv->payment_mode == 'Cash' ? 'selected' : ''}}>Cash</option>
@@ -192,12 +192,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Sub Total</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                        <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->sub_total}}" class="input-calculation form-control">
                      </div>
@@ -205,38 +205,38 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                      <label style="margin-top: 6px;">Discount <span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                      <label style="margin-top: 6px;">Discount <span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<span id="discount-percentage-text-show"></span>%)</span></label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
-                      <input type="text" name="discount" id="discount" onchange="myFunction()"  readonly value="{{$inv->discount}}" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                      <input type="text" name="discount" id="discount" onchange="myFunction()" value="{{$inv->discount}}" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
                    </div>
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" value="{{$inv->taxInPer}}" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<span id="tax-percentage-text-show"></span>%)</span></label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
-                      <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="{{$inv->tax_rate}}" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
+                      <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()" value="{{$inv->tax_rate}}" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
                    </div>
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Deposit Amount</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="deposit_amount" id="deposit" value="{{$inv->deposit_amount}}" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;border-bottom: 1px solid #0c2646;padding: 0;width: 75%;"  class="input-calculation form-control">
                      </div>
@@ -244,12 +244,12 @@
                  </div>
                  <hr class="hr-color">
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Amount Paid</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="net_amount" id="net_amount" value="{{$inv->net_amount}}"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
                      </div>
@@ -257,12 +257,12 @@
                  </div>
 
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Net Amount Due</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="due_amount" id="duePending"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->due_amount}}" onchange="myFunction()" class="input-calculation form-control">
                      </div>
@@ -282,6 +282,8 @@
         </div>
       </div>
     </div>
+    <input type="hidden" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount">
+    <input type="hidden" name="taxInPer" value="{{$inv->taxInPer}}" id="getValuePerTax">
     <input type="hidden" name="disInFlat" id="getValueFlatDiscount" value="{{$inv->disInFlat}}">
     <input type="hidden" name="taxInFlat" id="getValueFlatTax" value="{{$inv->taxInFlat}}">
   </form>
@@ -430,24 +432,41 @@
               var i=$("#addForm").data('total-items');  
 
               $('#addForm').click(function(){    
-              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove" style="font-size: 22px; color: red;cursor: pointer;margin-top: 6px;" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
+              $('#dynamic_field').append('<div class="frmCount" id="frm'+i+'"><div class="row"><div class="col-md-5"><div class="form-group"><input name="item_name[]" type="text" class="automplete form-control" dataId="'+i+'" onkeyup="initAutoComplete('+i+')" required><label>Item Name</label></div><input type="hidden" name="item_id[]" id="itmId'+i+'"></div><div class="col-md-2"><div class="form-group"><input min="0" name="rate[]" type="text" class="form-control input-amt" id="rate'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Rate</label></div></div><div class="col-md-2"><div class="form-group"><input min="0" name="qty[]" type="text" class="form-control input-amt" id="qty'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" required><label>Quantity <span class="badge badge-success" id="avalible-qty'+i+'" style="display: none;" title="avalible-qty"></span></label></div></div><div class="col-md-2"><div class="form-group"><input type="text" readonly name="total[]" class="tot input-calculation input-amt form-control"  id="total'+i+'" onkeyup="calc(this,'+i+')" onchange="calc(this,'+i+')" value="0" style="background-color: transparent;"><label>Total</label></div></div><div class="col-md-1"><div class="form-group"><span><i class="fa fa-trash btn_remove invoice-item-delete" name="remove" id="'+i+'"></i></span></div></div></div><div class="row"><div class="col-md-5"><div class="form-group"><textarea  class="form-control" rows="2" id="desc'+i+'" name="item_description[]"></textarea><label>Description</label></div></div></div></div>');
                    i++;
               });
 
               //// Check percentage value
-              var percentageStoreValue = $('#getValuePerDiscount').val();
+              var percentageStoreValue = $('#getValuePerDiscount').val(); 
               var taxpStoreValue = $('#getValuePerTax').val();
               if(percentageStoreValue){
                 $('#show-percentage-val').show();
+                $('#discount-percentage-text-show').text(percentageStoreValue);
               }else{
                 $('#show-percentage-val').hide();
+                $('#discount-percentage-text-show').text();
               }
 
               if(taxpStoreValue){
                 $('#show-tax-val').show();
+                $('#tax-percentage-text-show').text(taxpStoreValue);
               }else{
                 $('#show-tax-val').hide();
+                $('#tax-percentage-text-show').text();
               }
+
+              var checkDiscountPer = document.getElementById("disValuePer").value;
+              var checkTaxPer = document.getElementById("taxValuePer").value;
+              if(checkDiscountPer){
+                $('#percentage_radio').prop('checked', true);
+                $("#disValuePer").prop('disabled', false);
+              }
+              if(checkTaxPer){
+                $('#tax_per_radio').prop('checked', true);
+                $("#taxValuePer").prop('disabled', false);
+              }
+
+              myFunction();
 
             });  
 
@@ -479,19 +498,6 @@
                                }
                                  
                           });  
-
-                        $(document).ready(function(){
-                              var checkDiscountPer = document.getElementById("disValuePer").value;
-                              var checkTaxPer = document.getElementById("taxValuePer").value;
-                              if(checkDiscountPer){
-                                $('#percentage_radio').prop('checked', true);
-                                $("#disValuePer").prop('disabled', false);
-                              }
-                              if(checkTaxPer){
-                                $('#tax_per_radio').prop('checked', true);
-                                $("#taxValuePer").prop('disabled', false);
-                              }
-                            });
 
 
                         // discount modal radio button enable or disable
@@ -545,6 +551,7 @@
                                 $("#taxValuePer").prop('disabled', true);
                                 $("#taxValueFlat").prop('disabled', false);
                                 document.getElementById('getValuePerTax').value =  '';
+                                document.getElementById('tax-percentage-text-show').text('');
                                 document.getElementById("taxValuePer").value = '';
                                }else{
                                 $("#taxValueFlat").prop('disabled', true);
@@ -650,14 +657,18 @@
                                 var taxpStoreValue = $('#getValuePerTax').val();
                                 if(percentageStoreValue){
                                   $('#show-percentage-val').show();
+                                  $('#discount-percentage-text-show').text(percentageStoreValue);
                                 }else{
                                   $('#show-percentage-val').hide();
+                                  $('#discount-percentage-text-show').text();
                                 }
 
                                 if(taxpStoreValue){
                                   $('#show-tax-val').show();
+                                  $('#tax-percentage-text-show').text(taxpStoreValue);
                                 }else{
                                   $('#show-tax-val').hide();
+                                  $('#tax-percentage-text-show').text();
                                 }
 
 

@@ -155,7 +155,7 @@
                   @else
                   <div class="avatar border-gray user-profile-logo" id="userImage">
                   </div>
-                  <img src="/public/images/companies-logo/{{Auth::user()->avatar}}" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
+                  <img src="" id="showUpLog" class="avatar border-gray show-user-logo profile-img-tag" style="display: none;">
                     <script type="text/javascript">
                         $(document).ready(function(){
                         var dot = '.';
@@ -183,6 +183,7 @@
                   <div class="client-data">Total Invoices : <span>{{$userPlan->get_invoice}}</span></div>
                   <div class="client-data">Left Invoices : <span>{{$userPlan->get_invoice - $totalInvoice}}</span></div>
                   <div class="client-data">Plan Exp : <span>{{ date('m/d/Y', strtotime($userPlan->expire_date)) }}</span></div>
+                  <div class="client-data">Invoice PDF Custom Setting <a href="/invoice-pdf-setting">click here..</a></div>
                   <br>
                   <a href="/invoice/plans"><button type="button" class="btn btn-info btn-sm">Change Plan</button></a>
                 </div>

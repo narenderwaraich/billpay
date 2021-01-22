@@ -3,7 +3,7 @@
 <!-- top header -->
 <div class="panel-header panel-header-sm">
     <div class="invoice-status-title">
-      @if($inv->status == "CASH" || $inv->status == "ONLINE")
+      @if($inv->status == "CASH" || $inv->status == "PAID")
       HURRAY! PAID IN FULL ON DATE {{ date('m/d/Y', strtotime($inv->payment_date)) }} by {{$inv->client->fname}} {{$inv->client->lname}} @if($inv->deposit_amount > 0)<br> DEPOSIT of {{$inv->deposit_amount}} PAID ON {{ date('m/d/Y', strtotime($inv->deposit_date)) }} BY {{$inv->client->fname}} {{$inv->client->lname}} @endif
       @endif
 
@@ -72,7 +72,7 @@
           	<div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
 		          	<a href="#" data-toggle="modal" class="btn-success btn-sm" data-target="#mailSendModel">Send</a>
-		          	<a href="/invoice/edit/{{$inv->id}}" class="btn-primary btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif">Edit</a>
+		          	<a href="/invoice/edit/{{$inv->id}}" class="btn-primary btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE' || $inv->status == 'CANCEL') disabled-link @endif">Edit</a>
 		          	<a href="/invoice/download/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" class="btn-dark btn-sm">Download</a>
 		          	<a href="/invoice/copy/{{$inv->id}}" class="btn-secondary btn-sm">Copy</a>
 		        </div>
@@ -80,14 +80,14 @@
 		    <br>
 		    <div class="row">
                 <div class="col-lg-12" style="margin: auto;text-align: center;">
-		          	<a href="#" class="cancel_invoice btn-warning btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" CancelId="{{$inv->id}}">Cancel</a>
-		          	<a href="#" class="del_invoice btn-danger btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" DeleteId="{{$inv->id}}">Delete</a>
+		          	<a href="#" class="cancel_invoice btn-warning btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE' || $inv->status == 'CANCEL') disabled-link @endif" CancelId="{{$inv->id}}">Cancel</a>
+		          	<a href="#" class="del_invoice btn-danger btn-sm @if($inv->status == 'CASH' || $inv->status == 'ONLINE' || $inv->status == 'CANCEL') disabled-link @endif" DeleteId="{{$inv->id}}">Delete</a>
 		            <a href="/invoice/print/PDF/{{$inv->id}}/{{$inv->invoice_number_token}}" target="_blank" class="btn-info btn-sm" data-Id="{{$inv->id}}">Print</a>
 		            <a href="#" class="btn-dark btn-sm" onclick="goBack()">Back</a>
                 <br><br>
                 <a href="/invoice/whatsapp/{{$inv->id}}" target="_blank" class="btn-success btn-lg"><i class="fa fa-whatsapp"></i> WhatsApp</a>
                 <br><br>
-                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg @if($inv->status == 'CASH' || $inv->status == 'ONLINE') disabled-link @endif" style="background-color: #204065;border-color: #204065;">Cash Pay Invoice</a>
+                <a href="/invoice/cash/pay/{{$inv->id}}" class="btn-success btn-lg @if($inv->status == 'CASH' || $inv->status == 'ONLINE' || $inv->status == 'CANCEL') disabled-link @endif" style="background-color: #204065;border-color: #204065;">Cash Pay Invoice</a>
             	</div>
 		    </div>
         <br>
@@ -154,7 +154,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                          <textarea class="form-control" rows="8" name="notes" readonly style="background-color: transparent;width: 50%;">{{$inv->notes}}</textarea>
+                          <textarea class="form-control w-100" rows="8" name="notes" readonly style="background-color: transparent;width: 50%;">{{$inv->notes}}</textarea>
                           <label>Notes (optional)</label>
                       </div>
                     </div>
@@ -162,7 +162,7 @@
                   <div class="row">
                     <div class="col-md-12">
                      <div class="form-group">
-                          <textarea class="form-control" rows="8" name="terms" readonly style="background-color: transparent;width: 50%;">{{$inv->terms}}</textarea>
+                          <textarea class="form-control w-100" rows="8" name="terms" readonly style="background-color: transparent;width: 50%;">{{$inv->terms}}</textarea>
                           <label>Terms</label>
                      </div>
                    </div>
@@ -170,12 +170,12 @@
                 </div>
                 <div class="col-md-3">
                    <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Payment Method</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                      	<div style="font-weight: 500;color: #757575;font-size: 10px;">{{$inv->payment_mode}}</div>
                      </div>
@@ -183,12 +183,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Sub Total</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                        <input type="number" name="sub_total" id="total" onchange="myFunction()"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->sub_total}}" class="input-calculation form-control">
                      </div>
@@ -196,12 +196,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                      <label style="margin-top: 6px;">Discount <span class="percentage-text" id="show-percentage-val" style="display: none;margin-left: 5px;">(<input type="text" name="disInPer" value="{{$inv->disInPer}}" id="getValuePerDiscount" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                      <label style="margin-top: 6px;">Discount @if($inv->disInPer)<span class="percentage-text" id="show-percentage-val" style="margin-left: 5px;">(<span id="discount-percentage-text-show">{{$inv->disInPer}}</span>%)</span>@endif</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="discount" id="discount" onchange="myFunction()"  readonly value="{{$inv->discount}}" class="form-control input-calculation" placeholder="0" data-toggle="modal" data-target="#discountModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
@@ -209,12 +209,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
-                       <label style="margin-top: 6px;">Tax<span class="percentage-text" id="show-tax-val" style="display: none;margin-left: 5px;">(<input type="text" name="taxInPer" value="{{$inv->taxInPer}}" id="getValuePerTax" class="invoice-dis-value-input" readonly style="min-width: 17px;max-width: 22px;border: none;">%)</span></label>
+                       <label style="margin-top: 6px;">Tax @if($inv->taxInPer)<span class="percentage-text" id="show-tax-val" style="margin-left: 5px;">(<span id="tax-percentage-text-show">{{$inv->taxInPer}}</span>%)</span>@endif</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="tax_rate" id="tax_rate" onchange="myFunction()"  readonly value="{{$inv->tax_rate}}" class="form-control input-calculation" data-toggle="modal" data-target="#taxModal" readonly style="background-color: transparent;width: 75%;border: none;padding: 0;">
                      </div>
@@ -222,12 +222,12 @@
                  </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 8px;">Deposit Amount</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="text" name="deposit_amount" id="deposit" value="{{$inv->deposit_amount}}" onkeyup="myFunction()" style="border: none;border-bottom-left-radius: 0px;border-bottom-right-radius: 0px;padding: 0;width: 75%;"  class="input-calculation form-control">
                      </div>
@@ -235,12 +235,12 @@
                  </div>
                  <hr class="hr-color">
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Amount Paid</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="net_amount" id="net_amount" value="{{$inv->net_amount}}"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="0" onchange="myFunction()" class="input-calculation form-control">
                      </div>
@@ -248,12 +248,12 @@
                  </div>
 
                   <div class="row">
-                   <div class="col-md-5">
+                   <div class="col-md-5 w-50">
                      <div class="form-group amount-details-title" style="margin-bottom: 10px;">
                       <label style="margin-top: 6px;">Net Amount Due</label>
                      </div>
                    </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 w-50">
                      <div class="form-group" style="margin-bottom: 10px;">
                       <input type="number" name="due_amount" id="duePending"  readonly style="background-color: transparent;width: 75%;border: none;padding: 0;" value="{{$inv->due_amount}}" onchange="myFunction()" class="input-calculation form-control">
                      </div>
@@ -271,7 +271,6 @@
       </div>
     </div>
 </div>
-
 
 
 									<div class="modal fade" id="mailSendModel" role="dialog">

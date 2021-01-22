@@ -1052,13 +1052,8 @@ font-size: 13px !important;
 color: #E565F3;
 font-size: 13px;
 }
-.status_cash{
-/*color: #04BF37;*/
+.status_paid{
 color: #138E60;
-font-size: 13px;
-}
-.status_online{
-color: #718E13;
 font-size: 13px;
 }
 .status_paid-offline{
@@ -1099,7 +1094,7 @@ font-size: 13px;
     position: absolute;
     color: #fff;
     left: 48%;
-    top: 42%;
+    top: 26%;
 }
 .img-change-btn-icon:hover{
     color: #e91e63;
@@ -1520,3 +1515,10 @@ li.bottom-footer-menu-item.active a{
     font-size: 30px;
 }
 /*end*/
+
+.invoice-item-delete{
+     font-size: 22px;
+     color: #e91e63;
+     cursor: pointer;
+     margin-top: 6px;
+}

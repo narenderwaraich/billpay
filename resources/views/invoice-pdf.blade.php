@@ -7,29 +7,94 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Invoice PDF</title>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <?php
+
+  $invoiceLogoEnable = $userInvoiceSetting ? $userInvoiceSetting->logo : 0;
+  $invoiceLogoPosL = $userInvoiceSetting ? $userInvoiceSetting->logo_left : 0;
+  $invoiceLogoPosC = $userInvoiceSetting ? $userInvoiceSetting->logo_center : 0;
+  $invoiceLogoPosR = $userInvoiceSetting ? $userInvoiceSetting->logo_right : 0;
+  $invoiceLogoBg = $userInvoiceSetting ? $userInvoiceSetting->logo_bg : 0;
+  $invoiceLogoOpacity = $userInvoiceSetting ? $userInvoiceSetting->logo_opacity : 1;
+  $invoiceLogoH = $userInvoiceSetting ? $userInvoiceSetting->logo_hight : 90;
+  $invoiceLogoW = $userInvoiceSetting ? $userInvoiceSetting->logo_width : 90;
+  $invoiceFontSize = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_size : 11;
+  $invoiceFontWeight = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_weight : 400;
+  $invoiceFontSizeS = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_size_1 : 11;
+  $invoiceFontSizeM = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_size_2 : 12;
+  $invoiceFontSizeL = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_size_3 : 14;
+  $invoiceFontWeightS = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_weight_1 : 400;
+  $invoiceFontWeightM = $userInvoiceSetting ? $userInvoiceSetting->invoice_font_weight_2 : 700;
+  $invoiceTitleColor = $userInvoiceSetting ? $userInvoiceSetting->invoice_heading_title_color : '#e91e63';
+  $invoiceDateColor = $userInvoiceSetting ? $userInvoiceSetting->invoice_heading_date_color : '#e91e63';
+  $invoiceEmailColor = $userInvoiceSetting ? $userInvoiceSetting->invoice_heading_email_color : '#e91e63';
+  $invoiceGstColor = $userInvoiceSetting ? $userInvoiceSetting->invoice_heading_gst_color : "#e91e63";
+
+  ?>
  <style>
   body{
-    font-size: 11px;
-    font-weight: 400;
+    font-size: <?php echo $invoiceFontSize ?>px;
+    font-weight: <?php echo $invoiceFontWeight ?>;
   }
   .fs-1{
-    font-size: 11px;
+    font-size: <?php echo $invoiceFontSizeS ?>px;
   }
   .fs-2{
-    font-size: 12px;
+    font-size: <?php echo $invoiceFontSizeM ?>px;
   }
   .fs-3{
-    font-size: 14px;
+    font-size: <?php echo $invoiceFontSizeL ?>px;
   }
   .f-w-1{
-    font-weight: 400;
+    font-weight: <?php echo $invoiceFontWeightS ?>;
   }
   .f-w-2{
-    font-weight: 700;
+    font-weight: <?php echo $invoiceFontWeightM ?>;
   }
    .container{
-    /*background-image: url("{{asset('/images/avatar/'.$inv->user->avatar)}}");*/
-    background-position: center;
+    
+   }
+   section{
+    position: relative;
+    z-index: 1;
+   }
+    section .logo-bg{
+      position: absolute;
+/*      background-position: center;
+      background-size: cover;*/
+      opacity: <?php echo $invoiceLogoOpacity ?>;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+   }
+   .company-info{
+    position: relative;
+   }
+   .inv-logo{
+      width: <?php echo $invoiceLogoW ?>px;
+      height: <?php echo $invoiceLogoH ?>px;
+  }
+/*  img{
+    width: 100px;
+    height: auto;
+  }*/
+   .logo-left{
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block !important;
+   }
+   .logo-right{
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block !important;
+   }
+   .logo-center{
+      text-align: center;
+      margin: 10px auto;
+      display: block !important;
    }
    hr{
       box-sizing: content-box;
@@ -59,7 +124,8 @@
     text-align: left;
    }
    .invoice-amount-pay-status{
-    color: #e91e63;
+      color: #e91e63;
+      text-align: left;
     } 
   .table-w{
     width: 100%;
@@ -95,7 +161,7 @@
     height: auto;
   }
   .bill-heading-title{
-    color: #e91e63;
+    color: <?php echo $invoiceTitleColor ?>;
   }
   .item-table-w{
     width: 100%;
@@ -153,19 +219,11 @@
     text-align: right;
   }
   .inv-date{
-  color: #e91e63;
-  }
-/*  .inv-logo{
-      width: 90px;
-    height: 90px;
-  }*/
-  img{
-    width: 100px;
-    height: auto;
+    color: <?php echo $invoiceDateColor ?>;
   }
 .inv-email{
   padding-bottom: 3px;
-  color: #e91e63;
+  color: <?php echo $invoiceEmailColor ?>;
    padding-left: 10px;
 }
 .tr-border-bottom{
@@ -213,7 +271,7 @@ padding-top: 10px;
   margin-left: 150px;
 }
 .GSTIN-number{
-    color: #e91e63;
+    color: <?php echo $invoiceGstColor ?>;
 }
 .user-company-name{
     text-align: center;
@@ -231,8 +289,13 @@ padding-top: 10px;
 </style>
 </head>
 <body>
-  <!-- &#8377; icon &#8360; rs -->
 <div class="container">
+  <section>
+    @if($invoiceLogoEnable == 1)
+      @if($invoiceLogoBg == 1)
+        <img src="{{asset('/public/images/companies-logo/'.$inv->user->avatar)}}" class="logo-bg">
+      @endif
+    @endif
     <div class="row">
         <div class="col-12 t-left">
            Invoice ({{$inv->invoice_number}})
@@ -246,21 +309,28 @@ padding-top: 10px;
             @endif
 
             @if($inv->status == "DEPOSIT_PAID")
-            <div class="invoice-amount-pay-status">DEPOSIT &#x20b9; {{$inv->deposit_amount}} USD PAID ON {{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
+            <div class="invoice-amount-pay-status">DEPOSIT Rs. {{$inv->deposit_amount}} USD PAID ON {{ date('m/d/Y', strtotime($inv->due_date)) }}</div>
             @endif
        </div> 
     </div>
-    <div class="row">
-      <div class="col-12 user-company-name fs-3">{{$inv->user->company_name}}</div>
-    </div>
-    <div class="row">
-      <div class="col-12 company-address f-w-1">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
-    </div>
-    <div class="row">
-      <div class="col-12 title-txt fs-1 f-w-1">E-Mail :<span class="inv-email fs-2 f-w-1">{{$inv->user->email}}</span></div>
-    </div>
-    <div class="row">
-      <div class="col-12 title-txt fs-1 f-w-1">GST/TIN No. <span class="GSTIN-number fs-2 f-w-1">{{$inv->user->gstin_number}}</span></div>
+    <div class="company-info">
+      @if($invoiceLogoEnable == 1)
+        @if($invoiceLogoBg == 0)
+          <img src="{{asset('/public/images/companies-logo/'.$inv->user->avatar)}}" class="inv-logo @if($invoiceLogoPosL ==1) logo-left @endif @if($invoiceLogoPosC ==1) logo-center @endif @if($invoiceLogoPosR ==1) logo-right @endif" style="display: none;">
+        @endif
+      @endif
+      <div class="row">
+        <div class="col-12 user-company-name fs-3">{{$inv->user->company_name}}</div>
+      </div>
+      <div class="row">
+        <div class="col-12 company-address f-w-1">{{$inv->user->address}}, {{$inv->user->city}}, {{$inv->user->state}}, {{$inv->user->country}}</div>
+      </div>
+      <div class="row">
+        <div class="col-12 title-txt fs-1 f-w-1">E-Mail :<span class="inv-email fs-2 f-w-1">{{$inv->user->email}}</span></div>
+      </div>
+      <div class="row">
+        <div class="col-12 title-txt fs-1 f-w-1">GST/TIN No. <span class="GSTIN-number fs-2 f-w-1">{{$inv->user->gstin_number}}</span></div>
+      </div>
     </div>
 
     <hr>
@@ -298,17 +368,17 @@ padding-top: 10px;
         <td class="td-item-name bill-heading-title fs-2 f-w-2">
           Item Name
         </td>
-        <td class="td-item-desc bill-heading-title fs-2">
+        <td class="td-item-desc bill-heading-title fs-2 f-w-2">
            Description
         </td>
-        <td class="td-item-rate bill-heading-title fs-2">
+        <td class="td-item-rate bill-heading-title fs-2 f-w-2">
           Rate
         </td>
-        <td class="td-item-qty bill-heading-title fs-2">
+        <td class="td-item-qty bill-heading-title fs-2 f-w-2">
           Quantity
         </td>
-        <td class="td-item-total bill-heading-title fs-2">
-          Line Total
+        <td class="td-item-total bill-heading-title fs-2 f-w-2">
+          Total
         </td>
       </tr>
        @foreach($invItem as $item)
@@ -326,7 +396,7 @@ padding-top: 10px;
           <span style="margin-left: 15px; width: 100%; height: auto;">{{$item->qty}}</span>
         </td>
         <td class="td-item-total">
-          &#8377;{{$item->total}}
+          Rs.{{$item->total}}
         </td>
       </tr>
       @endforeach
@@ -354,19 +424,20 @@ padding-top: 10px;
 
           <div class="col-6-r">
             <div class="amount-title fs-1">{{$inv->payment_mode}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->sub_total}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->discount}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->tax_rate}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->deposit_amount}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->sub_total}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->discount}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->tax_rate}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->deposit_amount}}</div>
             <hr>
-            <div class="amount-title fs-1">&#8377;{{$inv->net_amount}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->net_amount - $inv->due_amount}}</div>
-            <div class="amount-title fs-1">&#8377;{{$inv->due_amount}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->net_amount}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->net_amount - $inv->due_amount}}</div>
+            <div class="amount-title fs-1">Rs.{{$inv->due_amount}}</div>
           </div>
         </div>
             
           </div>
         </div>
+    </section>
 </div>
 </body>
 </html>

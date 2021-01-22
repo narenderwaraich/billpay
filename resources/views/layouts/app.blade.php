@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/public/css/responsive.css">
     <link rel="stylesheet" href="/public/css/toastr.min.css">
     <link rel="stylesheet" href="/public/css/jquery.auto-complete.css">
+    <link rel="stylesheet" href="/public/bootstrap/css/bootstrap-toggle.min.css">
     <script src="/public/jquery/jquery-3.2.1.min.js"></script>
     <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
@@ -51,6 +52,7 @@
 </div>
 <script src="/public/bootstrap/js/popper.min.js"></script>
 <script src="/public/bootstrap/js/bootstrap.min.js"></script>
+<script src="/public/bootstrap/js/bootstrap-toggle.min.js"></script>
 <script src="/public/js/custom.js"></script>
 <script src="/public/js/toastr.min.js"></script>
 {!! Toastr::message() !!}

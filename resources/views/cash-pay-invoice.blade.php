@@ -72,9 +72,12 @@
                 </div>    
               </div>
               <hr>
-                <button type="button" class="btn btn-success pay-btn" disabled>Pay</button>
-              <div class="button-container">
-
+              <div class="invoice-pay-action-btn">
+                <div class="btn-group btn-group-lg" role="group" aria-label="invoice action button">
+                  <button type="button" class="btn btn-danger cancel-invoice">Cancel</button>
+                  <button type="button" class="btn btn-success pay-btn" disabled>Pay Now</button>
+                  <button type="button" class="btn btn-dark invoice-pay-later">Pay Later</button>
+                </div>
               </div>
             </div>
           </div>
@@ -157,14 +160,9 @@ input[type = text] {
   display: block;
   float: right;
 }
-.pay-btn{
-    margin: auto;
-    display: block;
-    margin-top: 20px;
-    width: 120px;
-    font-weight: 800;
-    font-size: 24px;
-    margin-bottom: 20px;
+.invoice-pay-action-btn {
+    margin: 25px auto;
+    text-align: center;
 }
 .cash-show-title {
     font-size: 22px;
@@ -242,6 +240,19 @@ input[type = text] {
         window.location.href = '/invoice/cash/full/payment/'+Id;
       }
     });
+
+
+   $('.cancel-invoice').on('click', function(){
+      var Id = "{{$invoice->id}}";
+      window.location.href = '/cancel-invoice-bill/'+Id;
+   });
+
+   $('.invoice-pay-later').on('click', function(){
+      var Id = "{{$invoice->id}}";
+      window.location.href = '/invoice/view/'+Id;
+   });
+
+
   });
 </script>                            
 @endsection
